@@ -1,0 +1,585 @@
+{
+    "project":  "Aetheria Codex — História",
+    "generatedAt":  "2026-08-27",
+    "sourceFile":  "Historia/Aetheria_Dados_do_Mundo.md",
+    "totalRegions":  16,
+    "totalCeles":  5,
+    "totalBattles":  5,
+    "totalRaces":  22,
+    "regions":  [
+                    {
+                        "id":  "norte-sub-frost",
+                        "nome":  "O Norte Sub-Frost",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.06,
+                                    "x":  0.42
+                                },
+                        "bioma":  "Tundra Glacial",
+                        "racas":  "01_Humanos",
+                        "cor":  "#4A90D9",
+                        "descricao":  "Tundra implacável acima da Linha de Geada, onde tempestades de neve místicas jamais cessam. Fortalezas de ferro negro pontuam o gelo: campos de prova da infantaria humana e prisões de segurança máxima que guardam segredos que o Império prefere enterrados — literalmente."
+                    },
+                    {
+                        "id":  "norte-vetusto",
+                        "nome":  "O Norte Vetusto",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.25,
+                                    "x":  0.28
+                                },
+                        "bioma":  "Zona Temperada",
+                        "racas":  "01_Humanos",
+                        "cor":  "#4A90D9",
+                        "descricao":  "Coração da civilização humana ao sul da Linha de Geada: cidades-bastião muradas, bacias hidrográficas e as rotas comerciais que abastecem o continente. É aqui que se decide o destino político de Aetheria — e onde a alquimia militar dos Observadores criou raiz mais funda."
+                    },
+                    {
+                        "id":  "cumes-da-tempestade",
+                        "nome":  "Cumes da Tempestade",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.18,
+                                    "x":  0.72
+                                },
+                        "bioma":  "Montanhas de Dente de Dragão",
+                        "racas":  "19_Barbaros",
+                        "cor":  "#CA6F1E",
+                        "descricao":  "Cadeia nordestina de picos afiados sob tempestades elétricas eternas, resquício elementais das guerras antigas. Os clãs bárbaros não têm cidades — têm assentamentos verticais de pedra e osso, e as espadas elementais que os Observadores lhes entregaram na Era de Ouro."
+                    },
+                    {
+                        "id":  "grande-fenda-central",
+                        "nome":  "A Grande Fenda Central",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.42,
+                                    "x":  0.5
+                                },
+                        "bioma":  "Ravinas Arcanas",
+                        "racas":  [
+                                      "02_Mutantes",
+                                      "06_Desconhecidos"
+                                  ],
+                        "cor":  "#7B4D9E",
+                        "descricao":  "Faixa divisória que corta o continente de leste a oeste: uma abóbada afundada de ravinas profundas, solo envenenado por radiação mágica e ruínas arcanas dos antigos laboratórios. Zona livre governada pelos párias mutantes desde a Queda dos Laboratórios Kether — e o lugar onde os Desconhecidos são vistos com mais frequência."
+                    },
+                    {
+                        "id":  "florestas-espirituais",
+                        "nome":  "Florestas Espirituais e Vales de Névoa",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.6,
+                                    "x":  0.24
+                                },
+                        "bioma":  "Floresta de Mana",
+                        "racas":  "17_Meio_Sangue",
+                        "cor":  "#D35400",
+                        "descricao":  "Árvores colossais cujas raízes canalizam o fluxo de mana do planeta, rios cristalinos e pântanos de névoa densa no centro-oeste. As tribos Meio-Sangue vivem em equilíbrio tenso com esse fluxo — quando o mana pulsa, elas sentem primeiro."
+                    },
+                    {
+                        "id":  "necropoles-silenciosas",
+                        "nome":  "As Necrópoles Silenciosas",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.8,
+                                    "x":  0.13
+                                },
+                        "bioma":  "Vales Sepulcrais",
+                        "racas":  "16_Alvamortos",
+                        "cor":  "#BDC3C7",
+                        "descricao":  "Vales cobertos de névoa eterna a sudoeste, onde cidades de mármore cinzento e obsidianas flutuantes formam um reino monástico e sepulcral. Isolados por barreiras de energia espiritual, os Alvamortos guardam os segredos da manipulação de almas — técnica legada diretamente pelos Observadores."
+                    },
+                    {
+                        "id":  "terras-vermelhas",
+                        "nome":  "As Terras Vermelhas \u0026 Picos de Magma",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.78,
+                                    "x":  0.68
+                                },
+                        "bioma":  "Planalto Vulcânico",
+                        "racas":  "21_Demonios_Akuma-Gani",
+                        "cor":  "#DC143C",
+                        "descricao":  "Planalto escaldante retalhado por rios de basalto e fendas de enxofre. As cidadelas Akuma-Gani são escavadas no interior dos próprios vulcões: arquitetura púrpura e rubra, portões colossais decorados com crânios de feras lendárias e forjas que nunca esfriam."
+                    },
+                    {
+                        "id":  "fronteiras-de-magma",
+                        "nome":  "Fronteiras de Magma",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.64,
+                                    "x":  0.86
+                                },
+                        "bioma":  "Transição Selva-Deserto",
+                        "racas":  "18_Canibais",
+                        "cor":  "#A04000",
+                        "descricao":  "Zona de transição entre a selva úmida e o deserto escuro nas bordas das Terras Vermelhas. Arenas de sacrifício e campos de caça pontuam a terra, e a única lei é a sobrevivência do mais forte — tribos de múltiplos braços incluídas."
+                    },
+                    {
+                        "id":  "abismo-das-profundezas",
+                        "nome":  "O Abismo das Profundezas",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.58,
+                                    "x":  0.52
+                                },
+                        "bioma":  "Fenda Cósmica",
+                        "racas":  "11_Seres_Do_Vazio",
+                        "cor":  "#5D6D9E",
+                        "descricao":  "O centro geométrico da Grande Fenda, onde a crosta cedeu por completo e revelou a dimensão corrosiva que dorme sob Aetheria. Não é um lugar — é uma ferida. Toda raça constrói suas defesas voltadas para dentro do solo; desde a Erupção, o mal latente respira de volta."
+                    },
+                    {
+                        "id":  "torres-arcanas",
+                        "nome":  "Torres Arcanas de Vetusto",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.32,
+                                    "x":  0.34
+                                },
+                        "bioma":  "Cidadelas-Torre",
+                        "racas":  "12_Magos",
+                        "cor":  "#16A085",
+                        "descricao":  "Distrito elevado do Norte Vetusto onde as academias de magia defensiva cresceram até virar cidadelas-torre, ligadas por pontes de pedra rúnica. Os Magos catalogam cada vertente de mana do continente — e desconfiam profundamente da \"tecnologia arcana\" dos Observadores, que parece magia sem fonte."
+                    },
+                    {
+                        "id":  "fortalezas-de-juramento",
+                        "nome":  "Fortalezas de Juramento",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.4,
+                                    "x":  0.37
+                                },
+                        "bioma":  "Marca Fronteiriça",
+                        "racas":  "03_Ordens_E_Guerreiros",
+                        "cor":  "#C0392B",
+                        "descricao":  "Linha de fortalezas-monastério erguidas sobre as estradas entre o Vetusto e a Fenda, após a Chacina da Linha de Geada provou que exércitos comuns não bastam. Cada Ordem juramenta uma guarda eterna: seus cavaleiros patrulham a Geada e enterram os mortos de todas as raças com o mesmo ritual."
+                    },
+                    {
+                        "id":  "planalto-dos-colossos",
+                        "nome":  "Planalto dos Colossos",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.48,
+                                    "x":  0.07
+                                },
+                        "bioma":  "Altiplano Ocidental",
+                        "racas":  "07_Gigantes",
+                        "cor":  "#D68910",
+                        "descricao":  "Cadeia montanhosa ocidental esquecida pelos mapas humanos, onde mesetas gigantescas carregam tronos talhados na própria rocha. Os Gigantes são testemunhas vivas da Era da Criação — e desde o Retorno Divino, os mais velhos despertam de sono de séculos para olhar fixamente o céu."
+                    },
+                    {
+                        "id":  "terras-selvagens",
+                        "nome":  "Terras Selvagens",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.4,
+                                    "x":  0.83
+                                },
+                        "bioma":  "Cinturão Bruto",
+                        "racas":  "08_Monstros",
+                        "cor":  "#2E4053",
+                        "descricao":  "Cinturão de biomas brutais entre a Fenda e o litoral leste, onde a fauna mutou fora de controle desde a Primeira Ruptura: bestas de couraça, colossos de caverna e matilhas que caçam por território, não por fome. Exércitos inteiros entram; caravanas de bandeiras saem."
+                    },
+                    {
+                        "id":  "cavernas-de-obsidiana",
+                        "nome":  "Cavernas de Obsidiana",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.9,
+                                    "x":  0.58
+                                },
+                        "bioma":  "Subsolo Vulcânico",
+                        "racas":  "04_Onis",
+                        "cor":  "#E74C3C",
+                        "descricao":  "Rede feudal de galerias e salões sob as bordas oeste das Terras Vermelhas, iluminada por veios de obsidiana espelhada. Cada corte Oni reivindica uma forja ancestral, e a guerra fria entre eles e as cidadelas Akuma-Gani pelo domínio das profundezas esquenta a cada ciclo."
+                    },
+                    {
+                        "id":  "fosso-infernal",
+                        "nome":  "O Fosso Infernal",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.93,
+                                    "x":  0.72
+                                },
+                        "bioma":  "Caldeira Selada",
+                        "racas":  "05_Demonios",
+                        "cor":  "#8E44AD",
+                        "descricao":  "Uma caldeira de basalto no extremo sul, coroada por sete pilares-selo gravados em linguagem anterior aos Deuses. Ali foram aprisionados os nobres infernais nascidos dos pactos de sangue da era pré-Ruptura — e cada guerra no continente acima afrouxa um elo da corrente."
+                    },
+                    {
+                        "id":  "ruinas-do-voto-partido",
+                        "nome":  "Ruínas do Voto Partido",
+                        "camada":  "Mundo",
+                        "pos":  {
+                                    "y":  0.72,
+                                    "x":  0.34
+                                },
+                        "bioma":  "Campo de Ruínas",
+                        "racas":  "20_Amaldiçoados",
+                        "cor":  "#5D6D7E",
+                        "descricao":  "Campo de santuários arruinados no centro-sul onde maldições antigas condensam em névoa visível. Os Amaldiçoados — monges e guerreiros marcados por votos que ninguém deveria fazer — peregrinam até aqui para reforçar os selos menores que mantêm o Vazio longe dos vales habitados."
+                    }
+                ],
+    "celes":  [
+                  {
+                      "id":  "naves-dos-observadores",
+                      "nome":  "Naves-Cidadelas dos Observadores",
+                      "camada":  "Céus",
+                      "pos":  {
+                                  "y":  0.1,
+                                  "x":  0.8
+                              },
+                      "altitude":  "Alta",
+                      "racas":  "10_Os_Observadores",
+                      "cor":  "#1ABC9C",
+                      "descricao":  "Figuras colossais envoltas em halos de luz e tecnologia arcana indecifrável, estacionadas no Vazio Superior. Chegaram como benfeitoras há séculos; hoje suas naves-cidadelas descem em silêncio, planejando sacrificar 80% do continente como escudo de almas contra o Abismo."
+                  },
+                  {
+                      "id":  "retorno-dos-deuses",
+                      "nome":  "Retorno dos Deuses",
+                      "camada":  "Céus",
+                      "pos":  {
+                                  "y":  0.3,
+                                  "x":  0.5
+                              },
+                      "altitude":  "Alta",
+                      "racas":  "13_Deuses",
+                      "cor":  "#F39C12",
+                      "descricao":  "Feixes de luz divina rasgam o céu e avatares como Solkhamun, Mycelium e Kaminari descem em carruagens de fogo e tempestade. O Retorno não é milagre: é resposta de emergência à barreira rompida — os velhos mestres da realidade voltaram para reivindicar posições."
+                  },
+                  {
+                      "id":  "mascaras-na-nevoa",
+                      "nome":  "Máscaras na Névoa",
+                      "camada":  "Céus",
+                      "pos":  {
+                                  "y":  0.88,
+                                  "x":  0.79
+                              },
+                      "altitude":  "Baixa",
+                      "racas":  "14_Demonios_Do_Caos",
+                      "cor":  "#E67E22",
+                      "descricao":  "Remanescentes da primeira invasão do Abismo, presos no plano material quando as fendas se fecharam. Vestem trajes de bufões e máscaras risonhas enquanto rondam os campos de batalha do sul — colhendo a energia da dor e provocando guerras para abrir os portões por baixo."
+                  },
+                  {
+                      "id":  "aspectos-em-marcha",
+                      "nome":  "Os Aspectos em Marcha",
+                      "camada":  "Céus",
+                      "pos":  {
+                                  "y":  0.14,
+                                  "x":  0.46
+                              },
+                      "altitude":  "Média",
+                      "racas":  "15_Os_Aspectos",
+                      "cor":  "#9B59B6",
+                      "descricao":  "Seres conceituais em armaduras lendárias — Convex, Ganion, Eonis — marchando de novo sobre picos imortais e geleiras. Não fazem aliança, não negociam, não poupam: sua única missão é rearmar as defesas do mundo, e quem cruzar essa linha é obstáculo."
+                  },
+                  {
+                      "id":  "sementes-de-ascensao",
+                      "nome":  "Sementes de Ascensão",
+                      "camada":  "Céus",
+                      "pos":  {
+                                  "y":  0.22,
+                                  "x":  0.84
+                              },
+                      "altitude":  "Média",
+                      "racas":  "09_Semi_Deuses",
+                      "cor":  "#F1C40F",
+                      "descricao":  "Fragmentos de poder cósmico lançados pelos Observadores sobre mortais comuns — Humanos, Alvamortos, Meio-Sangue. Cada centelha que acende cria um Semi-Deus: imortalidade parcial, propósito incerto e uma suspeita crescente de que são peões, não campeões."
+                  }
+              ],
+    "battles":  [
+                    {
+                        "id":  "chacina-da-linha-de-geada",
+                        "nome":  "A Chacina da Linha de Geada",
+                        "pos":  {
+                                    "y":  0.15,
+                                    "x":  0.44
+                                },
+                        "regiao":  "norte-sub-frost",
+                        "lados":  [
+                                      [
+                                          "01_Humanos"
+                                      ],
+                                      [
+                                          "15_Os_Aspectos"
+                                      ]
+                                  ],
+                        "resumo":  "A 1ª Divisão de Infantaria Humana cruzou com Os Aspectos emergindo do gelo — e foi obliterada por lâminas cósmicas em horas. A fronteira congelada ficou marcada por armaduras despedaçadas: o primeiro sinal público do fim dos tempos."
+                    },
+                    {
+                        "id":  "tres-picos",
+                        "nome":  "A Batalha dos Três Picos",
+                        "pos":  {
+                                    "y":  0.2,
+                                    "x":  0.74
+                                },
+                        "regiao":  "cumes-da-tempestade",
+                        "lados":  [
+                                      [
+                                          "19_Barbaros"
+                                      ],
+                                      [
+                                          "09_Semi_Deuses"
+                                      ]
+                                  ],
+                        "resumo":  "Sob a maior tempestade elétrica já registrada, os clãs bárbaros resistiram à magia divina e ao voo dos Semi-Deuses enviados pelos Observadores, transformando as gargantas em corredor de sangue. Uma trégua forçada nasceu da interferência de um único Aspecto."
+                    },
+                    {
+                        "id":  "queda-dos-laboratorios-kether",
+                        "nome":  "A Queda dos Laboratórios Kether",
+                        "pos":  {
+                                    "y":  0.35,
+                                    "x":  0.48
+                                },
+                        "regiao":  "grande-fenda-central",
+                        "lados":  [
+                                      [
+                                          "02_Mutantes"
+                                      ],
+                                      [
+                                          "01_Humanos",
+                                          "21_Demonios_Akuma-Gani"
+                                      ]
+                                  ],
+                        "resumo":  "O levante massivo das cobaias destruiu o maior complexo de clonagem e síntese arcana de Aetheria. As habilidades instáveis alimentadas pela energia residual dos experimentos arrasaram as estruturas arcanas — e nasceu ali a zona livre dos párias mutantes."
+                    },
+                    {
+                        "id":  "erupcao-do-abismo",
+                        "nome":  "A Erupção do Abismo",
+                        "pos":  {
+                                    "y":  0.56,
+                                    "x":  0.51
+                                },
+                        "regiao":  "abismo-das-profundezas",
+                        "lados":  [
+                                      [
+                                          "13_Deuses"
+                                      ],
+                                      [
+                                          "11_Seres_Do_Vazio"
+                                      ]
+                                  ],
+                        "resumo":  "Com os selos enfraquecidos pelas guerras mortais, o solo da Fenda cedeu e o Vazio emergiu em névoa cinzenta. No mesmo instante, avatares divinos desceram direto no ponto de impacto — a batalha em curso que rasga a física do continente."
+                    },
+                    {
+                        "id":  "cerco-de-obsidianas",
+                        "nome":  "O Cerco de Obsidianas",
+                        "pos":  {
+                                    "y":  0.84,
+                                    "x":  0.66
+                                },
+                        "regiao":  "terras-vermelhas",
+                        "lados":  [
+                                      [
+                                          "21_Demonios_Akuma-Gani"
+                                      ],
+                                      [
+                                          "14_Demonios_Do_Caos"
+                                      ]
+                                  ],
+                        "resumo":  "Atraídos pela energia acumulada das forjas, os Demônios do Caos invadiram a cidadela vulcânica sobre rios de lava e pontes de basalto. Defendida com fogo puro, a fortaleza resistiu — mas os invasores recuaram satisfeitos, tendo colhido a dor de centenas de mortos."
+                    }
+                ],
+    "races":  [
+                  {
+                      "id":  "01_Humanos",
+                      "nome":  "Humanos",
+                      "cor":  "#4A90D9",
+                      "tipo":  "Territorial",
+                      "regioes":  [
+                                      "norte-sub-frost",
+                                      "norte-vetusto"
+                                  ],
+                      "descricao":  "Donos do Norte Duplo: civilização de bastiões, alquimia militar herdada dos Observadores e a ambição que sustenta — e ameaça — o equilíbrio continental.",
+                      "count":  30
+                  },
+                  {
+                      "id":  "02_Mutantes",
+                      "nome":  "Mutantes",
+                      "cor":  "#7B4D9E",
+                      "tipo":  "Dispersa",
+                      "regioes":  "grande-fenda-central",
+                      "descricao":  "Nascidos de experimentos, adaptações extremas ou rejeição genética; banidos de toda cidade, organizam células rebeldes na única terra que os aceitou: a Fenda.",
+                      "count":  43
+                  },
+                  {
+                      "id":  "03_Ordens_E_Guerreiros",
+                      "nome":  "Ordens e Guerreiros",
+                      "cor":  "#C0392B",
+                      "tipo":  "Territorial",
+                      "regioes":  "fortalezas-de-juramento",
+                      "descricao":  "Cavalaria de juramentos permanentes que guarda a Linha de Geada e as estradas do sul; enterram os mortos de qualquer raça com o mesmo ritual.",
+                      "count":  25
+                  },
+                  {
+                      "id":  "04_Onis",
+                      "nome":  "Onis",
+                      "cor":  "#E74C3C",
+                      "tipo":  "Territorial",
+                      "regioes":  "cavernas-de-obsidiana",
+                      "descricao":  "Cortes feudais demoníacas do subsolo vulcânico, cada uma disputando uma forja ancestral — rivais frios dos Akuma-Gani nas profundezas.",
+                      "count":  29
+                  },
+                  {
+                      "id":  "05_Demonios",
+                      "nome":  "Demônios",
+                      "cor":  "#8E44AD",
+                      "tipo":  "Territorial",
+                      "regioes":  "fosso-infernal",
+                      "descricao":  "Nobres infernais selados desde a era pré-Ruptura numa caldeira de sete pilares; cada guerra no mundo acima afrouxa um elo.",
+                      "count":  42
+                  },
+                  {
+                      "id":  "06_Desconhecidos",
+                      "nome":  "Desconhecidos",
+                      "cor":  "#95A5A6",
+                      "tipo":  "Errante",
+                      "regioes":  "grande-fenda-central",
+                      "descricao":  "Manifestações encapuzadas que aparecem antes de tragédias e ativam monólitos da Era da Criação. Não falam: gravam marcas em pedra.",
+                      "count":  15
+                  },
+                  {
+                      "id":  "07_Gigantes",
+                      "nome":  "Gigantes",
+                      "cor":  "#D68910",
+                      "tipo":  "Territorial",
+                      "regioes":  "planalto-dos-colossos",
+                      "descricao":  "Testemunhas da Era da Criação no altiplano ocidental; desde o Retorno Divino, os mais antigos despertam para olhar o céu.",
+                      "count":  26
+                  },
+                  {
+                      "id":  "08_Monstros",
+                      "nome":  "Monstros",
+                      "cor":  "#2E4053",
+                      "tipo":  "Selvagem",
+                      "regioes":  "terras-selvagens",
+                      "descricao":  "Fauna mutada pela radiação mágica das guerras antigas; caçam por território e transformaram o cinturão leste em terra proibida.",
+                      "count":  37
+                  },
+                  {
+                      "id":  "09_Semi_Deuses",
+                      "nome":  "Semideuses",
+                      "cor":  "#F1C40F",
+                      "tipo":  "Ascensa",
+                      "regioes":  "sementes-de-ascensao",
+                      "descricao":  "Mortais com Sementes de Ascensão injetadas pelos Observadores; imortalidade parcial e a dúvida de serem peões de um tabuleiro maior.",
+                      "count":  31
+                  },
+                  {
+                      "id":  "10_Os_Observadores",
+                      "nome":  "Os Observadores",
+                      "cor":  "#1ABC9C",
+                      "tipo":  "Cósmica",
+                      "regioes":  "naves-dos-observadores",
+                      "descricao":  "Arquitetos silenciosos do Vazio Superior; cada \"presente\" dado às raças foi calibrado para forjar uma linha de frente contra o Abismo.",
+                      "count":  9
+                  },
+                  {
+                      "id":  "11_Seres_Do_Vazio",
+                      "nome":  "Seres do Vazio",
+                      "cor":  "#5D6D9E",
+                      "tipo":  "Abissal",
+                      "regioes":  "abismo-das-profundezas",
+                      "descricao":  "O mal latente sob a crosta: entidades amorfas numa dimensão corrosiva que ninguém jamais visitou e voltou para descrever.",
+                      "count":  20
+                  },
+                  {
+                      "id":  "12_Magos",
+                      "nome":  "Magos",
+                      "cor":  "#16A085",
+                      "tipo":  "Territorial",
+                      "regioes":  "torres-arcanas",
+                      "descricao":  "Catalogadores da mana em cidadelas-torre sobre o Vetusto; desconfiam da tecnologia arcana dos Observadores — magia sem fonte é feitiçaria mentirosa.",
+                      "count":  20
+                  },
+                  {
+                      "id":  "13_Deuses",
+                      "nome":  "Deuses",
+                      "cor":  "#F39C12",
+                      "tipo":  "Divina",
+                      "regioes":  "retorno-dos-deuses",
+                      "descricao":  "O Panteão Ressurrecto, de volta em carruagens de fogo não por milagre, mas por contingência: a barreira está se rompendo.",
+                      "count":  18
+                  },
+                  {
+                      "id":  "14_Demonios_Do_Caos",
+                      "nome":  "Demônios do Caos",
+                      "cor":  "#E67E22",
+                      "tipo":  "Parasita",
+                      "regioes":  "mascaras-na-nevoa",
+                      "descricao":  "Bufões da primeira invasão, alimentam-se de conflito e desespero; ELES NÃO QUEREM A PAZ — guerra é colheita.",
+                      "count":  11
+                  },
+                  {
+                      "id":  "15_Os_Aspectos",
+                      "nome":  "Os Aspectos",
+                      "cor":  "#9B59B6",
+                      "tipo":  "Conceitual",
+                      "regioes":  "aspectos-em-marcha",
+                      "descricao":  "Guardiões conceituais em armaduras lendárias que selaram a grande fenda ancestral; seu retorno é o maior indicativo de tragédia iminente.",
+                      "count":  10
+                  },
+                  {
+                      "id":  "16_Alvamortos",
+                      "nome":  "Alvamortos",
+                      "cor":  "#BDC3C7",
+                      "tipo":  "Territorial",
+                      "regioes":  "necropoles-silenciosas",
+                      "descricao":  "MONGES SEPULCRAIS das necrópoles de mármore e obsidiana flutuante; herdeiros diretos da técnica de manipulação de almas dos Observadores.",
+                      "count":  17
+                  },
+                  {
+                      "id":  "17_Meio_Sangue",
+                      "nome":  "Meio-Sangue",
+                      "cor":  "#D35400",
+                      "tipo":  "Territorial",
+                      "regioes":  "florestas-espirituais",
+                      "descricao":  "Linhagens mistas das florestas de mana; sentem o pulso do planeta primeiro — e pagam o preço de estar na frente.",
+                      "count":  18
+                  },
+                  {
+                      "id":  "18_Canibais",
+                      "nome":  "Canibais",
+                      "cor":  "#A04000",
+                      "tipo":  "Territorial",
+                      "regioes":  "fronteiras-de-magma",
+                      "descricao":  "Tribos de múltiplos braços das arenas de sacrifício; a única lei que reconhecem é a sobrevivência do mais forte.",
+                      "count":  22
+                  },
+                  {
+                      "id":  "19_Barbaros",
+                      "nome":  "Bárbaros",
+                      "cor":  "#CA6F1E",
+                      "tipo":  "Territorial",
+                      "regioes":  "cumes-da-tempestade",
+                      "descricao":  "Clãs nômades das Montanhas de Dente de Dragão, armados com as espadas elementais que os Observadores lhes deram — e que aprenderam a odiar.",
+                      "count":  17
+                  },
+                  {
+                      "id":  "20_Amaldiçoados",
+                      "nome":  "Amaldiçoados",
+                      "cor":  "#5D6D7E",
+                      "tipo":  "Territorial",
+                      "regioes":  "ruinas-do-voto-partido",
+                      "descricao":  "Monges e guerreiros marcados por votos impossíveis; peregrinam entre ruínas reforçando selos menores contra o Vazio.",
+                      "count":  8
+                  },
+                  {
+                      "id":  "21_Demonios_Akuma-Gani",
+                      "nome":  "Demônios Akuma-Gani",
+                      "cor":  "#DC143C",
+                      "tipo":  "Territorial",
+                      "regioes":  "terras-vermelhas",
+                      "descricao":  "Onze fragmentos da vontade do soberano Imu, selado — cada cidadela vulcânica é um domínio dessa vontade partida, forjando guerra eterna.",
+                      "count":  11
+                  },
+                  {
+                      "id":  "22_Bersek",
+                      "nome":  "Bersek",
+                      "cor":  "#8B0000",
+                      "tipo":  "Nômade",
+                      "regioes":  "cumes-da-tempestade",
+                      "descricao":  "Guerreiros moldados pela guerra, pela raiva e por juramentos quebrados — gladiadores, cavaleiros amaldiçoados e fúrias forjadas da própria violência. Vagam pelos campos de batalha abandonados, sem pátria e sem senhor, movidos apenas pela próxima luta.",
+                      "count":  5
+                  }
+              ]
+}
