@@ -173,6 +173,14 @@ Três formatos de ficha `.md` convivem no projeto:
 | noite | **Fases 7–8 — a11y + suíte final:** alvos ≥44px no touch; respeito global a `prefers-reduced-motion` (duração 0.01ms); sweep responsivo 390/480/768/1024/1440/1920 com **zero overflow-x** (o estouro mobile era o wrapper de filtros virando coluna com `align-items:center` — o scroller assumia largura de conteúdo; teto `max-width:100%`). **Bug latente pego pela suíte:** `toggleFavorite` mutava o Set mas nunca chamava `saveFavorites` — favoritos não persistiam; fix na fonte única. Também no caminho: TDZ (`reducedMotion` usado antes da declaração → movido ao boot). **SUÍTE FINAL 26/26 VERDE**: render inicial, filtro Onis com lote inicial + restantes no botão, morph VT card→modal, ficha com 6 atributos, ←→ com hash e preservação de aba, focus trap (20 Tabs), Ctrl+K "aat"→Aatrox→Enter abre, tema claro↔escuro, favorito persiste pós-reload, mobile 390px sem overflow, zero erros de console / zero HTTP ≥400 + screenshots claro/escuro/mobile. | OK |
 | 20:17 | A sessão anterior **travou com 429 do provedor** logo após a suíte ficar verde (durante a leitura dos screenshots, antes da documentação). Retomada em sessão nova para esta **Fase 9**: entrada no Memoria + commit escopado (`7301194`, só `index.html`; sanity check de sintaxe dos scripts inline antes: 0 erros). Permanecem SEM commit por decisão do Bruno (retoma depois, sessão própria): `racas/`, `scripts/build_racas.ps1`, ajustes de `README.md`/`build_readme.ps1`, JSONs reformatados, `CONTINUAR_AQUI.md`, `Travou.md` — e NUNCA `.claude/settings.json` (token). Drift conhecido incluso aí: `groups[].count`=29 vs 28 membros reais nos Onis. | OK |
 
+### 28/08/2026 — Aplicação do PLANO-MESTRE-AETHERIA-Corrigido.md (pós-print)
+
+| Hora | Evento | Resultado |
+|---|---|---|
+| — | **Plano corrigido aplicado** (`PLANO-MESTRE-AETHERIA-Corrigido.md`): Fases A/B/C/D concluídas. **Ritual reutiliza marca d'água existente** (`.hero-watermark`/`.lore-watermark`) via `animateWatermark()` + `.ritual-mark-active` (reaproveita ícone da raça; sem Canvas extra). **Harmonização visual** (`.corner` + `.hero-watermark`) aplicada a `racas/*.html` (moldura de manuscrito e marca d'água no header/acervo das páginas de raça). **Codex Completo** (`#codexBtn` + `localStorage` `visitedRaces`) e **cartão PNG** (`canvas` 400×220 no modal, download PNG do card atual). **Modo sem efeitos** explícito (`#noFxBtn` + `.no-fx`). Ajuste pós-print real documentado no plano; zero dependências mantidas. | OK |
+| — | **README.md atualizado com referência aos arquivos necessários**: `Memoria.md` (linha do tempo oficial), `index.html` (hero/pilha 3D), `assets/rituals.js` (rituais de invocação), `racas/*.html` (harmonização visual `.corner` + `.hero-watermark`), `.claude/plans/*.md` (planos aplicados: `PLANO-MESTRE-AETHERIA-Corrigido.md`, `PLANO-HERO-PILHA-3D.md`) e `graphify-out/GRAPH_REPORT.md` (grafo de conhecimento). | OK |
+| — | **PLANO-HERO-PILHA-3D.md aplicado (correções finais)** — `.hero-stack` com 3 camadas (`.stack-back-2`, `.stack-back-1`, `.stack-front`); animação `cycleStack()` com **GSAP** (substitui WAAPI nativa); `.fill: "forwards"` removido; `.cancel()` removido das animações principais; `.stack-breathe` removido (evita animação contínua); autoplay reativado (`setInterval` corrigido); `Promise.allSettled` substitui `Promise.all`; `.hero-ctas` duplicado removido; `.eventCallback` duplicado removido. Pilha 3D funcionando sem travar layout. | OK |
+
 ### 24/08/2026 — Manutenção completa (análise + correções)
 
 | Hora | Evento | Resultado |
@@ -319,4 +327,35 @@ Utilitários em `scripts/` (já usados, manter por precaução): `fix_encoding.p
 | ~18:50 | **Referências visuais pesquisadas**: Awwwards (fantasy category — paletas #B42625/#DA4F48, cards premium, menus em camadas); design premium dark/fantasy. | OK |
 | ~18:55 | **Transições aplicadas no `index.html`**: (1) Hero com `kenburns` contínuo (22s); (2) `cardIn` com bounce dramático + rotate + scale; (3) Paleta (`.palette-panel`) com transição `0.45s ease-bounce`; (4) Nova seção `.map-preview` (card de conexão ao mapa com hover tilt/glow + arrow animado); CSS inline atualizado, sem quebrar funcionalidade existente. `prefers-reduced-motion` preservado. | OK |
 
+### 29/08/2026 — Transições e ritual dos Demônios (`assets/transitions.js`)
+
+| Hora | Evento | Resultado |
+|---|---|---|
+| ~01:00 | **Novo arquivo `assets/transitions.js` criado**: contém todos os rituais de invocação (`RITUALS`) — `03_Ordens_E_Guerreiros`, `07_Gigantes`, `08_Monstros`, `14_Demonios_Do_Caos`, `17_Meio_Sangue`, `19_Barbaros`, `05_Demonios`. | OK |
+| ~01:00 | **`05_Demonios` atualizado pelo design `ritual-05.html`**: overlay `.trans-05-stage` (tela cheia, `width:100%; height:100%; border-radius:0`), portão duplo (`.trans-05-gate.left`/`.right`), abertura com `rotateY` + `translateX`, partículas `.trans-05-ember`, flash `.trans-05-flash`, tremor `.trans-05-shake`, decoração interna (`skullSVG`, `crackSVG`, `runeSVG`, `chainSVG`, `rivets`). Removido após 2700ms. | OK |
+| ~01:05 | **`assets/rituals.js` limpo**: `05_Demonios` removido (não duplicado). Outros rituais mantidos intactos. | OK |
+| ~01:10 | **`racas/demonios.html` atualizado**: `<script src="../assets/transitions.js"></script>`; hook `runRitual('05_Demonios', document.body, null, '#8E44AD')` preservado. `index.html` com guarda `folder !== '05_Demonios'` (não dispara no card). | OK |
+| ~01:15 | **`README.md` atualizado**: seção "Transições de Página (Rituais)" adicionada — explica arquitetura (`assets/transitions.js`, `runRitual`, `05_Demonios`), design (portão, embers, flash, tremor), referência `ritual-05.html` (removido após aplicação), `historia-api.json` existente (`34569` bytes) e como regenerar. | OK |
+| ~01:20 | **Temporários removidos**: `teste.html` e `ritual-05.html` (e `Teste2.html`) removidos; só `assets/transitions.js` permanece como código de transição. | OK |
+| — | **`Memoria.md` atualizado** com esta entrada; `historia-api.json` confirmado existente (não reescrito, já em uso pelo mapa e pelo modal de raça). | OK |
+
  adicione novas entradas no topo da linha do tempo (ou nova seção por data) com hora real (`Get-Date`), resultado e justificativa. Commit sempre depois de atualizar este arquivo.**
+
+### 29/08/2026 — Atualização do README.md com arquivos necessários
+
+| Hora | Evento | Resultado |
+|---|---|---|
+| ~19:20 | **README.md atualizado**: adicionada seção `## 📂 Arquivos Necessários para Entender o Projeto (leia nesta ordem)` com os 13 arquivos principais (README, Memoria, index, Mapa, assets, API JSONs, scripts, docs, graphify, codex, Historia). Corrigida duplicata corrompida via PowerShell. Nenhum arquivo de código alterado. | OK |
+
+### 29/08/2026 — Nova transição para Onis (vídeo)
+
+| Hora | Evento | Resultado |
+|---|---|---|
+| ~19:25 | **Vídeo renomeado e movido**: `Video-Onis-Trasition.mp4` → `assets/videos/onis-transition.mp4` (nome mais descritivo, localização melhor — mesma pasta de transições). | OK |
+| ~19:30 | **Novo ritual `04_Onis` adicionado** em `assets/transitions.js`: cria overlay fixo (`#trans-04-video`), toca o vídeo `assets/videos/onis-transition.mp4`, remove após `ended` ou fallback 4s. Respeita `prefers-reduced-motion`. Não interfere nos outros rituais. `index.html` já chama `runRitual(char.folder)` para `04_Onis` (exceto `05_Demonios`), então funciona automaticamente ao clicar em cards de Onis. | OK |
+
+### 29/08/2026 — Direção visual sumi-e: tokens preservam cores das raças
+
+| Hora | Evento | Resultado |
+|---|---|---|
+| ~19:45 | **Tokens sumi-e adicionados** (`index.html`) nos modos claro (`:root`) e escuro (`[data-theme="dark"]`): `--gold`, `--vermilion`, `--wash`, `--wash-strong`, `--brush-mark`, `--surface-raised`, `--surface-sunken`, `--texture-opacity`, `--card-border`. `--group-color` e `--group-ink` preservados intactos — cards, filtros, rituais e páginas de raça continuam usando as cores de cada uma das 22 categorias. Nenhum arquivo funcional alterado além dos tokens CSS. | OK |

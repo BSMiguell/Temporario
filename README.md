@@ -1,4 +1,4 @@
-# README - Aetheria Codex
+﻿# README - Aetheria Codex
 
 > 🤖 **Para assistentes de IA (Claude e similares):** ao iniciar uma conversa sobre este projeto, leia este README por inteiro para entender a estrutura, E DEPOIS LEIA [`Memoria.md`](Memoria.md) — é a linha do tempo oficial com todas as alterações, erros já resolvidos, lições técnicas (armadilhas de PowerShell 5.1) e pendências. Ao terminar qualquer manutenção, adicione uma entrada lá com data/hora e commit.
 
@@ -159,6 +159,45 @@ powershell -File scripts\build_historia_api.ps1    # 2. gera historia-api.json a
 powershell -File scripts\build_readme.ps1          # 3. gera README.md a partir da API
 powershell -File scripts\build_racas.ps1           # 4. gera as 22 páginas de raça em racas/
 ```
+
+## Transições de Página (Rituais / `assets/transitions.js`)
+
+O arquivo `assets/transitions.js` guarda todas as transições visuais entre páginas (rituais de invocação). Cada ritual é uma função `fn(cardEl, modalEl, groupColor)` exposta via `window.runRitual(groupKey, ...)`. A arquitetura é:
+
+- `assets/transitions.js` — arquivo único com todos os rituais ativos (`03_Ordens_E_Guerreiros`, `07_Gigantes`, `08_Monstros`, `14_Demonios_Do_Caos`, `17_Meio_Sangue`, `19_Barbaros`, `05_Demonios`).
+- `05_Demonios` — ritual exclusivo da raça dos Demônios. Cria um overlay fixo (`trans-05-stage`) com portão duplo (`.trans-05-gate.left` / `.right`), efeito de abertura (`rotateY` + `translateX`), partículas de brasa (`.trans-05-ember`), flash (`.trans-05-flash`) e vibração (`.trans-05-shake`). Duração total ~2700ms. O design visual é baseado no arquivo de referência `ritual-05.html` (removido após aplicação) — gates, cracks, runes, skull, chains, embers e audio procedural.
+- `racas/demonios.html` — chama `runRitual('05_Demonios', document.body, null, '#8E44AD')` no `DOMContentLoaded`.
+- `index.html` — guarda `char.folder !== '05_Demonios'` impede que o ritual dispare ao clicar no card (apenas na entrada direta da página da raça).
+- `assets/rituals.js` — arquivo antigo; o ritual `05_Demonios` foi removido de lá e migrado para `assets/transitions.js`.
+- `historia-api.json` — existe (`34569` bytes, `26/08/2026`) e é consumido pelo mapa (`Mapa_Aetheria.html`) e pelo modal de raça (`racas/*.html` via payload embutido `#race-data`).
+
+### Como funciona o ritual dos Demônios (`05_Demonios`)
+
+1. **Estilo dinâmico** — inserido uma vez (`#trans-05-style`) com `keyframes` de abertura (`gateLOpen`/`gateROpen`), pulsação (`seamPulse`), brasa ascendente (`rise`), relâmpago (`flash`) e tremor (`shake`).
+2. **Overlay** — `.trans-05-stage` (fixo, `z-index: 9999`, sem interação) contém `.trans-05-portal` (agora `width:100%; height:100%; border-radius:0`).
+3. **Portões** — `.trans-05-gate.left`/`.right` abrem com `rotateY` e `translateX`; dentro, `crackSVG`, `runeSVG`, `rivets`, `skullSVG`, `chainSVG` compõem a decoração.
+4. **Partículas** — 26 `.trans-05-ember` sobem com `animation: rise`.
+5. **Flash + Tremor** — `flash-hit` (opacidade branca) aos 250ms; `shake` aos 300ms; ambos removidos aos 1000ms.
+6. **Remoção** — o estágio inteiro é removido após 2700ms (`runAfter(2700, ...)`).
+
+### Explicação técnica
+
+- **Zero dependências externas**: CSS + JS puro + SVG inline. Nenhuma biblioteca (sem `gsap`, sem `three.js`, sem `canvas` pesados).
+- **Performance**: o `style` é inserido uma vez (`getElementById('trans-05-style')`) e o `stage` removido após a animação, evitando acúmulo no DOM.
+- **Acessibilidade**: `pointer-events: none` no overlay; não bloqueia interação; `prefers-reduced-motion` pula a animação (`return` imediato).
+- **Referência visual**: o arquivo `ritual-05.html` (removido) serviu de base para o design final aplicado em `assets/transitions.js`.
+
+```powershell
+# Regenerar artefatos (inclui transições no código)
+powershell -File scripts\build_api_json.ps1
+powershell -File scripts\build_historia_api.ps1
+powershell -File scripts\build_readme.ps1
+powershell -File scripts\build_racas.ps1
+```
+
+---
+
+*Última atualização: 29/08/2026 — transições atualizadas em `assets/transitions.js`, ritual `05_Demonios` com design completo, arquivo `ritual-05.html` removido, `assets/rituals.js` limpo do ritual antigo, `historia-api.json` mantido como referência.*
 
 ## Resumo Por Categoria
 
@@ -357,3 +396,25 @@ console.log(gigantes.characters.filter((c) => c.folder === "07_Gigantes"));
 ---
 
 *Última geração: 27/08/2026 22:58 por `build_readme.ps1`. Histórico e pendências: [`Memoria.md`](Memoria.md).*
+---
+
+---
+
+## 📂 Arquivos Necessários para Entender o Projeto (leia nesta ordem)
+
+Para compreender completamente este projeto, leia os seguintes arquivos na ordem sugerida:
+
+1. **README.md** (este arquivo) — visão geral, estrutura e funcionamento
+2. **Memoria.md** — linha do tempo oficial, alterações, erros resolvidos e pendências; leia PRIMEIRO em qualquer sessão
+3. **index.html** — site galeria estático (consome `characters-api.json`)
+4. **Mapa_Aetheria.html** — mapa 3D do mundo (consome `historia-api.json`)
+5. **assets/transitions.js** — rituais de transição visual (invocação de cartas/modal)
+6. **assets/rituals.js** — arquivo de rituais antigos (referência)
+7. **characters-api.json** — API estática de personagens (gerada por `scripts/build_api_json.ps1`)
+8. **historia-api.json** — API estática da história / mundo (gerada por `scripts/build_historia_api.ps1`)
+9. **scripts/build_racas.ps1** — script que gera as 22 páginas de raça (`racas/`)
+10. **docs/screenshots/** — capturas de tela para referência visual
+11. **graphify-out/** — grafo de conhecimento (`/graphify`)
+12. **codex/** — fichas `.md` e imagens `.png` dos 464 personagens (fonte primária)
+13. **Historia/** — lore autoral e dados estruturados do mundo
+

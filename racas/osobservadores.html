@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#1ABC9C;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Os Observadores — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Os Observadores: 9 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#1ABC9C">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%91%81%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="osobservadores">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">👁️</span><span class="head-label">Os Observadores</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">👁️</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Os Observadores</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#10_Os_Observadores">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">👁️</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Os Observadores no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"10_Os_Observadores","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","lore":"Arquitetos silenciosos do Vazio Superior; cada \"presente\" dado às raças foi calibrado para forjar uma linha de frente contra o Abismo.","tipo":"Cósmica","regioes":["naves-dos-observadores"],"count":9},"members":[{"number":1,"title":"Auroris","name":"Auroris","id":"Auroris","image":"../codex/10_Os_Observadores/Auroris.png","description":"Um baluarte inamovível encarregado de proteger os limites de Aetheria. Auroris absorve o impacto de anomalias cósmicas e ataques do Vazio com seu escudo sagrado de marfim e ouro.","attributes":{"race":"Guardião do Escudo da Aurora (Corte dos Paladinos de Marfim)","physical":"Bípede robusto, encouraçado, em postura defensiva sustentando machado e escudo pesado.","faceAndHair":"Elmo/Cabeça de carapaça biomecânica de marfim com chifres curvados e núcleo incandescente central.","outfit":"Armadura pesada de placas de marfim com detalhes e ornamentos dourados.","palette":"Branco-marfim, ouro-brilhante e amarelo-solar.","equipment":"Escudo de grande porte em formato de lágrima e machado de guerra ornamental com lâmina dourada."}},{"number":2,"title":"Ecliptus","name":"Ecliptus","id":"Ecliptus","image":"../codex/10_Os_Observadores/Ecliptus.png","description":"A lâmina do julgamento dos Observadores. Ecliptus intercepta seres que tentam violar as leis do cosmos, cortando o tecido dimensional com sua alabarda divina.","attributes":{"race":"Algoz do Eclipse Primitivo (Ordem dos Algozes Celestiais)","physical":"Bípede, musculoso, de porte intimidador segurando uma alabarda/guarda-sol de duas mãos.","faceAndHair":"Cabeça em formato de capacete de placa única com crina rígida e espinhos laterais.","outfit":"Placas articuladas de quitina celestial branca e manoplas/botas reforçadas em ouro.","palette":"Branco-marfim, ouro e cinza-claro.","equipment":"Alabarda de corte pesado de lâmina dourada e placas sobrepostas."}},{"number":3,"title":"Meridianis","name":"Meridianis","id":"Meridianis","image":"../codex/10_Os_Observadores/Meridianis.png","description":"Um guerreiro alado encarregado de patrulhar a estratosfera do mundo. Meridianis utiliza suas asas de carapaça rígida e lança sagrada para banir ameaças que descem das estrelas.","attributes":{"race":"Sentinela do Meridiano Cósmico (Soberania dos Dragões de Marfim)","physical":"Bípede esguio e atlético, ostentando asas rígidas abertas e cauda de dragão.","faceAndHair":"Elmo dracônico esbelto com chifres pontiagudos e visor reluzente.","outfit":"Armadura de placas ajustada ao corpo com ombreiras de marfim.","palette":"Branco-puro, ouro-solar e prata.","equipment":"Lança dupla de combate, asas de placas e cauda reptiliana com espinhos."}},{"number":4,"title":"Nyxaris","name":"Nyxaris","id":"Nyxaris","image":"../codex/10_Os_Observadores/Nyxaris.png","description":"O arquivista das memórias do universo. Nyxaris flutua sobre as câmaras dos Observadores, canalizando fragmentos de estrelas moribundas em seu cajado divino.","attributes":{"race":"Oráculo do Conhecimento Estelar (Ordem dos Magos Observadores)","physical":"Bípede, esguio, postura mística ereta segurando um cajado rúnico em uma mão e cristal na outra.","faceAndHair":"Máscara/Cabeça oval entalhada com padrões estelares sem feições humanas.","outfit":"Túnica de quitina com sobreposição de placas sagradas e cinto ritual.","palette":"Marfim, cinza-pérola e detalhes em ouro.","equipment":"Cajado de madeira divina e marfim com cristal de foco na mão esquerda."}},{"number":5,"title":"Stellaris","name":"Stellaris","id":"Stellaris","image":"../codex/10_Os_Observadores/Stellaris.png","description":"Uma massa de força bruta e autoridade divina. Stellaris é invocado para estabilizar o solo e conter supernovas em expansão através de seu punho devastador.","attributes":{"race":"Titã da Força Tectônica Celestial (Corte dos Colossos de Marfim)","physical":"Colosso bípede, ombros largos e tórax extremamente musculoso em posição de desafio.","faceAndHair":"Cabeça maciça de carapaça em arco com mandíbula denteada reluzente.","outfit":"Braçadeiras e cinto de contenção de ouro sobre corpo de placas de marfim.","palette":"Branco-pérola, ouro e amarelo-fogo.","equipment":"Manoplas pesadas de ouro maciço e placa peitoral com núcleo reluzente."}},{"number":6,"title":"Umbralis","name":"Umbralis","id":"Umbralis","image":"../codex/10_Os_Observadores/Umbralis.png","description":"Um guardião treinado para o combate de curta distância. Umbralis utiliza garras duplas de lâminas rúnicas para desmantelar exércitos que ousam desafiar o trono dos Observadores.","attributes":{"race":"Carrasco da Coroa Divina (Ordem dos Campeões Alados)","physical":"Bípede, musculoso, pernas curvadas em postura de investida rápida.","faceAndHair":"Elmo em forma de coroa de marfim com três pontas e brilho central.","outfit":"Armadura leve de placas de marfim com saia de guerra rúnica e braçadeiras estendidas.","palette":"Branco-marfim, ouro-velho e marrom-terroso.","equipment":"Garras de lâminas duplas acopladas aos antebraços."}},{"number":7,"title":"Vorlaris","name":"Vorlaris","id":"Vorlaris","image":"../codex/10_Os_Observadores/Vorlaris.png","description":"O rastejador e rastreador supremo do panteão. Vorlaris caça demônios e seres do Vazio que se escondem nas dobras do espaço, usando sua adaga de luz para finalizar a presa.","attributes":{"race":"Caçador das Tempestades Astrais (Corte dos Predadores Celestiais)","physical":"Bípede curvo/bestial com asas pequenas nas costas, pronto para dar um salto acrobático.","faceAndHair":"Face estilo máscara alienígena com ranhuras de ventilação e chifres pontiagudos.","outfit":"Proteção peitoral de carapaça de marfim com braço direito inteiramente banhado em ouro.","palette":"Branco-marfim, ouro e cinza-grafite.","equipment":"Adaga e espada curta de combate acelerado e asas de quitina."}},{"number":8,"title":"Abissal","name":"Abissal","id":"Abissal","image":"../codex/10_Os_Observadores/Abissal.png","description":"Nenhuma descrição disponível para este personagem.","attributes":null},{"number":9,"title":"Orbe-Negro","name":"Orbe-Negro","id":"Orbe-Negro","image":"../codex/10_Os_Observadores/Orbe-Negro.png","description":"Nenhuma descrição disponível para este personagem.","attributes":null}],"neighbors":{"prev":{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡"},"next":{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#D35400;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meio-Sangue — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Meio-Sangue: 18 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#D35400">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%A9%B8%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="meiosangue">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">🩸</span><span class="head-label">Meio-Sangue</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">🩸</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Meio-Sangue</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#17_Meio_Sangue">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">🩸</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Meio-Sangue no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"17_Meio_Sangue","label":"Meio-Sangue","color":"#D35400","icon":"🩸","lore":"Linhagens mistas das florestas de mana; sentem o pulso do planeta primeiro — e pagam o preço de estar na frente.","tipo":"Territorial","regioes":["Florestas Espirituais e Vales de Névoa"],"count":18},"members":[{"number":1,"title":"Barba-Branca-V-1, o Almirante dos Mares Distantes","name":"Barba-Branca-V-1","id":"Barba-Branca-V-1","image":"../codex/17_Meio_Sangue/Barba-Branca-V-1.png","description":"Nascido do cruzamento entre um Titã das Marés e uma matriarca das tribos guerreiras do sul, Barba-Branca domina os mares de Aetheria há décadas. Seu lendário bisento é capaz de partir ondas gigantes ao meio e provocar maremotos quando fincado no fundo do mar.","attributes":{"race":"Meio-Sangue Tritão / Gigante (Lorde dos Oceanos)","physical":"Porte suserano e massivo, bigode branco em forma de lua crescente e braços hipertrofiados.","faceAndHair":"Feições austeras, olhos penetrantes e capuz/chapéu militar decorado com crânio.","outfit":"Sobretudo verde com ombreiras amarelas e capa branca de capitão repousando sobre os ombros.","palette":"Branco-puro, verde-esmeralda e dourado.","equipment":"Bisento naval ornamentado e fivela de cinto em marfim."}},{"number":2,"title":"Boreas-V-1, o Titã das Montanhas Geladas","name":"Boreas-V-1","id":"Boreas-V-1","image":"../codex/17_Meio_Sangue/Boreas-V-1.png","description":"Boreas ascendeu das cordilheiras cobertas de neve eterna. Carregando o sangue das feras da geleira e dos demônios da montanha, ele usa um porrete de tronco congelado para esmagar os exércitos que tentam invadir os limites setentrionais de Aetheria.","attributes":{"race":"Meio-Sangue Jotun / Oni (Guardião do Norte)","physical":"Corpo largo, barba densa e esverdeada, postura incansável de guerreiro nórdico.","faceAndHair":"Grandes chifres brancos curvados para cima e olhos dourados gélidos.","outfit":"Traje tribal de couro com forro de pele felpuda azul nas bordas e cinto de ferro.","palette":"Verde-floresta, azul-glaciar e marrom-couro.","equipment":"Porrete colossal de combate e ombreiras de pele de besta."}},{"number":3,"title":"Ibaraki-V-1, o Demônio da Escama Roxa","name":"Ibaraki-V-1","id":"Ibaraki-V-1","image":"../codex/17_Meio_Sangue/Ibaraki-V-1.png","description":"Criado nas profundezas das fendas vulcânicas, Ibaraki possui pele escamosa impenetrável e a fúria incontrolável dos Onis. Ele vagueia pelas ruínas em busca de oponentes dignos, devastando vilas inteiras com seu *Kanabo* cravejado de espinhos de ferro.","attributes":{"race":"Meio-Sangue Dracônico / Oni (Abominação Subterrânea)","physical":"Postura curvada e bestial, garras retráteis e físico coberto de escamas espessas.","faceAndHair":"Rosto abissal com olhos vermelhos flamejantes e chifres carmesim retos.","outfit":"Tanga tática de pano escuro com cordas avermelhadas e protetores de tornozelo.","palette":"Roxo-púrpura, vermelho-sangue e preto.","equipment":"Kanabo (maça de ferro) pesado."}},{"number":4,"title":"Kaido-V-1, o Dragão de Chifres de Touro","name":"Kaido-V-1","id":"Kaido-V-1","image":"../codex/17_Meio_Sangue/Kaido-V-1.png","description":"Kaido é considerado a criatura viva mais resistente de Aetheria. Com sangue de dragão ancestral correndo em suas veias, suas escamas internas o tornam imune a lâminas comuns, permitindo que ele comande legiões de mercenários com punho de ferro.","attributes":{"race":"Meio-Sangue Dracônico / Gigante (Senhor da Guerra)","physical":"Porte descomunal e musculoso, tatuagens dracônicas no braço e abdômen definido.","faceAndHair":"Chifres longos curvados de touro, barba longa negra e olhar aterrorizante.","outfit":"Capa de pele de animal sobre os ombros, calças escuras com cinto de corda e braçadeiras com cravos.","palette":"Marrom-escuro, roxo e marfim.","equipment":"Manguito de metal com cravos e kanabo gigantesco."}},{"number":5,"title":"Kakuzu-V-1, o Tanoeiro de Corações","name":"Kakuzu-V-1","id":"Kakuzu-V-1","image":"../codex/17_Meio_Sangue/Kakuzu-V-1.png","description":"Sobrevivente de um ritual proibido que substituiu suas veias por fios de fumaça e sombras voadoras, Kakuzu estendeu sua vida roubando a essência vital de outros guerreiros. Ele manipula tentáculos de sombras a partir do próprio corpo para estrangular seus inimigos.","attributes":{"race":"Meio-Sangue Espectro / Ninja (Mercenário Imortal)","physical":"Cabelos pretos extremamente volumosos em juba, máscaras flutuantes nas costas.","faceAndHair":"Máscara cobrindo a metade inferior do rosto e olhos sem pupila.","outfit":"Traje ninja escuro, faixas nos braços e calças táticas ajustadas.","palette":"Preto-carvão, cinza-fumaça e branco.","equipment":"Máscaras de espíritos flutuantes e tentáculos de sombra."}},{"number":6,"title":"Kross-V-1, o Pirata do Mar de Sangue","name":"Kross-V-1","id":"Kross-V-1","image":"../codex/17_Meio_Sangue/Kross-V-1.png","description":"Navegando pelas névoas necróticas nos confins do mapa, Kross combina a agilidade vampírica com o poder de fogo de armas pesadas. Suas correntes mágicas aprisionam os alvos enquanto ele prepara o disparo definitivo.","attributes":{"race":"Meio-Sangue Vampiro / Humano (Atirador das Sombras)","physical":"Físico forte, pele acinzentada com cicatrizes e correntes presas aos pulsos.","faceAndHair":"Cabelos escuros desalinhados, presas salientes e olhar desafiador.","outfit":"Calça jeans de combate, cinto com fivela de crânio e colete aberto.","palette":"Cinza-pálido, preto e prata.","equipment":"Bacamarte de cano duplo e correntes de contenção."}},{"number":7,"title":"Kuma-V-1, o Tirano Pacifista","name":"Kuma-V-1","id":"Kuma-V-1","image":"../codex/17_Meio_Sangue/Kuma-V-1.png","description":"Um antigo rei que voluntariamente permitiu que seu corpo fosse modificado com tecnologia ancestral de Aetheria. Suas mãos possuem almofadas mágicas capazes de repelir qualquer ataque, desde golpes físicos a feitiços de destruição em massa.","attributes":{"race":"Meio-Sangue Ciberg / Fera (O Baluarte Inabalável)","physical":"Estrutura corporal colossal em forma de barril, postura imóvel como uma montanha.","faceAndHair":"Gorro com orelhas de urso e óculos de proteção retangulares.","outfit":"Sobretudo escuro com estampa circular de mira peitoral e calças listradas.","palette":"Marrom-escuro, preto e branco.","equipment":"Luvas repelentes e gorro de urso característico."}},{"number":8,"title":"Muscular-V-1, o Berserker das Fibras Vivas","name":"Muscular-V-1","id":"Muscular-V-1","image":"../codex/17_Meio_Sangue/Muscular-V-1.png","description":"Dotado de uma mutação que permite manipular suas fibras musculares fora da pele, Muscular-V-1 consegue envolver seu corpo em uma armadura de carne e tendões vermelhos, aumentando exponencialmente sua força e velocidade.","attributes":{"race":"Meio-Sangue Mutante / Humano (Acrobata da Sangria)","physical":"Físico denso com tentáculos e fibras musculares vermelhas expandindo das costas e ombros.","faceAndHair":"Cabelo loiro arrepiado, tapa-olho no olho esquerdo e sorriso insano.","outfit":"Regata escura e calças de combate com cintas de retenção.","palette":"Vermelho-carne, loiro-dourado e verde-militar.","equipment":"Fibras musculares externas vivas em tom carmesim."}},{"number":9,"title":"Satan-Soul-V-1, a Imperatriz Sucubus","name":"Satan-Soul-V-1","id":"Satan-Soul-V-1","image":"../codex/17_Meio_Sangue/Satan-Soul-V-1.png","description":"Satan-Soul governa as províncias infernais de Aetheria. Ela canaliza a energia das almas capturadas em rajadas de veneno e escuridão, voando pelos céus com suas asas de morcego enquanto ceifa exércitos inteiros.","attributes":{"race":"Meio-Sangue Sucubus / Arqui-Demônio (Rainha da Sedução e Dor)","physical":"Físico curvilíneo e gracioso, asas membranosas de morcego abertas nas costas e cauda fina.","faceAndHair":"Cabelos brancos volumosos espetados para cima, orelhas pontiagudas e olhos radiantes.","outfit":"Maiô de batalha vermelho com detalhes em dourado e botas cano alto.","palette":"Vermelho-rubi, branco-neve e preto.","equipment":"Asas de morcego e cauda com ponta de lança."}},{"number":10,"title":"Solan-V-1, o Guerreiro do Fogo Solar","name":"Solan-V-1","id":"Solan-V-1","image":"../codex/17_Meio_Sangue/Solan-V-1.png","description":"Nascido quando um raio de sol atingiu o sangue de um dragão abatido, Solan possui asas de fogo puro que nunca se apagam. Ele é o guardião das ruínas do templo do sol, queimando qualquer intruso que se aproxime do altar.","attributes":{"race":"Meio-Sangue Elemental / Anjo (Fênix de Sangue)","physical":"Pele bronzeada/escura com marcas tribais incandescentes e chamas ao redor dos pés.","faceAndHair":"Cabelos brancos arrepiados e olhar fixo e ardente.","outfit":"Calças de combate escuras com cinto de couro e braçadeiras de metal.","palette":"Laranja-fogo, bronze e branco.","equipment":"Asas flamejantes gigantes e aura de combustão viva."}},{"number":11,"title":"Tentaku-V-1, o Guardião da Mente Abissal","name":"Tentaku-V-1","id":"Tentaku-V-1","image":"../codex/17_Meio_Sangue/Tentaku-V-1.png","description":"Habitando as trincheiras subaquáticas de Aetheria, Tentaku é um mestre da esgrima mental. Seus tentáculos faciais detectam variações na pressão do ar e na intenção do inimigo, tornando impossível emboscá-lo.","attributes":{"race":"Meio-Sangue Cthulhoide / Humano (Sábio das Profundezas)","physical":"Pele azul-pálida com ventosas, postura calma e disciplinada de samurai.","faceAndHair":"Cabeça em formato de lula/polvo com tentáculos cobrindo a mandíbula e olhos amarelados.","outfit":"Sobretudo escuro listrado sobre kimono tradicional com cinto branco.","palette":"Azul-turquesa, branco e preto.","equipment":"Katana de lâmina prateada e bainha de ébano."}},{"number":12,"title":"Thalrok-V-1, o Rei Tritão do Tridente Sagrado","name":"Thalrok-V-1","id":"Thalrok-V-1","image":"../codex/17_Meio_Sangue/Thalrok-V-1.png","description":"Thalrok governa a cidade submersa de Coral Negro. Seu tridente de ouro puro controla as correntes marítimas e evoca tempestades capazes de afundar frotas inteiras em minutos.","attributes":{"race":"Meio-Sangue Tritão / Lorde do Mar (Soberano dos Abismos)","physical":"Porte imponente de pele rosada/carmesim com barbatana dorsal e crista na cabeça.","faceAndHair":"Crista estilo mohawk rosa e barbatanas laterais no lugar das orelhas.","outfit":"Sobretudo de capitão azul-marinho com acabamentos dourados e cinto com fivela ornamental.","palette":"Rosa-carmesim, azul-marinho e dourado.","equipment":"Tridente dourado de três pontas e jaqueta militar."}},{"number":13,"title":"Thorne-V-1, o Cavaleiro Caído da Asa Negra","name":"Thorne-V-1","id":"Thorne-V-1","image":"../codex/17_Meio_Sangue/Thorne-V-1.png","description":"Um ex-general do exército celestial que aceitou o poder das sombras para salvar seu reino. Ele empunha uma espada de duelo e usa suas asas escuras para realizar avanços rasantes devastadores.","attributes":{"race":"Meio-Sangue Nobre / Anjo Caído (Paladino Obscuro)","physical":"Postura elegante de nobreza com asa de plumas negras dobrada nas costas.","faceAndHair":"Cabelos loiros presos em rabo de cavalo e cicatriz discreta no rosto.","outfit":"Armadura de placas douradas e pretas estilo vitoriano com sobretudo bordado.","palette":"Dourado-antigo, preto e branco-marfim.","equipment":"Espada de duelo ornamental e armadura de peitoral gravada."}},{"number":14,"title":"Vespera-V-1, a Dama da Noite Eterna","name":"Vespera-V-1","id":"Vespera-V-1","image":"../codex/17_Meio_Sangue/Vespera-V-1.png","description":"Vespera domina os feitiços de ilusão e metamorfose. Vestida em trajes de seda negra, ela atrai viajantes desavisados para as névoas das florestas antes de aprisionar suas mentes no espelho das sombras.","attributes":{"race":"Meio-Sangue Bruxa / Sombra (Feiticeira do Crepúsculo)","physical":"Postura graciosa, caminhar silencioso com véu de sombras ao redor dos pés.","faceAndHair":"Cabelos escuros com mechas loiras, maquiagem marcante e olhar enigmático.","outfit":"Vestido gótico escuro rendado com babados e luvas longas.","palette":"Preto-noite, dourado-pálido e roxo.","equipment":"Aura de névoa crepuscular e joias de obsidian."}},{"number":15,"title":"Jax-V-1, o Duelista do Sangue Raro","name":"Jax-V-1","id":"Jax-V-1","image":"../codex/17_Meio_Sangue/Jax-V-1.png","description":"Jax cresceu entre guerras e apostas, aprendendo a medir o valor de uma vitória pelo preço que ela cobra. Ele luta com elegância agressiva e nunca desperdiça um movimento.","attributes":{"race":"Meio-Sangue Mercenário / Espadachim Errante (O Apostador da Lâmina)","physical":"Corpo atlético e postura relaxada, sempre pronto para sacar a arma.","faceAndHair":"Cabelo curto rebelde, cicatriz no queixo e olhar insolente.","outfit":"Casaco de combate gasto com cintos cruzados.","palette":"Marrom, vermelho-escuro e preto.","equipment":"Lâmina longa, cartas marcadas e braceletes de ferro."}},{"number":16,"title":"Kaelia-V-1, a Guardiã das Duas Linhagens","name":"Kaelia-V-1","id":"Kaelia-V-1","image":"../codex/17_Meio_Sangue/Kaelia-V-1.png","description":"Kaelia nasceu para unir duas casas que jamais aceitaram coexistir. Ela carrega tradição e rebeldia em igual medida, defendendo aqueles que não cabem em nenhuma linhagem pura.","attributes":{"race":"Meio-Sangue Nobre / Sentinela Ancestral (A Herdeira do Voto)","physical":"Silhueta elegante com postura de duelista aristocrática.","faceAndHair":"Traços finos, olhos heterocromáticos e cabelo preso.","outfit":"Armadura leve nobre com capa curta bordada.","palette":"Azul-escuro, prata e vinho.","equipment":"Rapieira cerimonial e anel de juramento."}},{"number":17,"title":"Katauri-V-2, a Voz da Noite Profunda","name":"Katauri-V-2","id":"Katauri-V-2","image":"../codex/17_Meio_Sangue/Katauri-V-2.png","description":"Katauri-V-2 usa sua herança para manipular sonhos, reflexos e marés emocionais. Seu canto pode embalar exércitos inteiros ou conduzi-los à loucura silenciosa.","attributes":{"race":"Meio-Sangue Lunar / Encantadora das Sombras (A Cantora do Eclipse)","physical":"Corpo leve, postura ondulante e gestos coreografados.","faceAndHair":"Olhos brilhantes, maquiagem escura e cabelos longos.","outfit":"Vestido de combate em camadas fluidas.","palette":"Roxo, azul-noite e prata.","equipment":"Sino lunar e véu de seda."}},{"number":18,"title":"Saru-V-1, o Herdeiro da Fúria Selvagem","name":"Saru-V-1","id":"Saru-V-1","image":"../codex/17_Meio_Sangue/Saru-V-1.png","description":"Saru aprendeu cedo a transformar instinto em estratégia. Sua ferocidade é guiada por disciplina, e ele protege os seus com a mesma força com que ataca invasores.","attributes":{"race":"Meio-Sangue Bestial / Guerreiro da Selva (O Rugido no Sangue)","physical":"Corpo musculoso e postura de salto pronto.","faceAndHair":"Olhos dourados, dentes afiados e cabelos curtos bagunçados.","outfit":"Faixas de couro, peles leves e proteção nos antebraços.","palette":"Verde-oliva, marrom e dourado.","equipment":"Bastão reforçado e garras retráteis."}}],"neighbors":{"prev":{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀"},"next":{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

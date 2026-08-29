@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#e3491b;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bersek — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Bersek: 5 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#e3491b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%93%81%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="bersek">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">📁</span><span class="head-label">Bersek</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">📁</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Bersek</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#22_Bersek">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">📁</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Bersek no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"22_Bersek","label":"Bersek","color":"#e3491b","icon":"📁","lore":"Guerreiros moldados pela guerra, pela raiva e por juramentos quebrados — gladiadores, cavaleiros amaldiçoados e fúrias forjadas da própria violência. Vagam pelos campos de batalha abandonados, sem pátria e sem senhor, movidos apenas pela próxima luta.","tipo":"Nômade","regioes":["Cumes da Tempestade"],"count":5},"members":[{"number":1,"title":"Ashura","name":"Ashura","id":"Ashura","image":"../codex/22_Bersek/Ashura.png","description":"Ashura era o menor e mais explosivo lutador dos fossos de guerra de Aetheria, um prodígio que aprendeu cedo a transformar dor em impulso. Quando a primeira armadura de punhos dourados foi colocada em seus braços, ele não apenas venceu as arenas: passou a esmagar o medo dos oponentes com a força de um trovão infantil. Dizem que seu nome veio do momento em que ele entrou em fúria e rachou o chão sob os pés de três campeões ao mesmo tempo.","attributes":{"race":"Bersek (Gladiador da Fúria Primordial)","physical":"Corpo curto e extremamente musculoso, tronco compacto de lutador de impacto e postura baixa, pronta para avançar.","faceAndHair":"Pele morena escura, expressão feroz, olhos brancos incandescentes e cabelo branco espesso em grandes espinhos.","outfit":"Calça de combate preta com chamas vermelhas nas laterais, faixa vermelha na cintura, placas douradas na virilha e grevas ornamentadas.","palette":"Branco-osso, dourado-antigo, vermelho-brasa, preto-fumaça e bronze.","equipment":"Manoplas douradas em forma de garras, proteção pesada nos antebraços e marcas tribais negras pelo peito e braços."}},{"number":2,"title":"Guts-V-1","name":"Guts-V-1","id":"Guts-V-1","image":"../codex/22_Bersek/Guts-V-1.png","description":"Guts-V-1 é o nome sussurrado nas trincheiras quando uma batalha já perdeu a esperança e ainda assim alguém continua andando. Ele vaga por campos devastados com uma espada tão pesada que parece ter sido arrancada de uma muralha, e sua armadura negra já absorveu sangue, cinza e lua em quantidade suficiente para virar lenda. Nenhum juramento o prende mais: ele luta apenas porque parar seria pior do que morrer.","attributes":{"race":"Bersek (Cavaleiro da Espada Carniceira)","physical":"Corpo alto e blindado, ombros largos, centro de gravidade firme e postura de quem resiste a qualquer impacto.","faceAndHair":"Rosto oculto por elmo de placas irregulares com viseira vermelha ardente; poucos traços humanos visíveis sob a sombra do capacete.","outfit":"Armadura de placas negras e vinho, capa escura rasgada nas bordas e botas de guerra reforçadas.","palette":"Preto-aço, vinho-sangue, cinza-fuligem, vermelho-brasa e marfim-frio.","equipment":"Espada colossal com lâmina manchada, capa espessa e couraça sobreposta com placas angulares de aparência brutal."}},{"number":3,"title":"Kargan-V-1, o Portador do Voto Quebrado","name":"Kargan-V-1","id":"Kargan-V-1","image":"../codex/22_Bersek/Kargan-V-1.png","description":"Ninguém recorda seu nome verdadeiro, porque o homem que o carregava morreu no instante em que o ritual começou. Kargan-V-1 foi o primeiro sobrevivente do Voto Carmesim, uma cerimônia proibida que remove a carne da dúvida e deixa apenas o instinto de guerra. Ele se tornou um colosso de pele negra e chifres de osso, guiado por uma raiva silenciosa que só cresce quando vê correntes, coroas ou promessas.","attributes":{"race":"Bersek (Híbrido do Ritual Carmesim)","physical":"Porte monstruoso, musculatura densa e simétrica, peito aberto e postura de ameaça contida.","faceAndHair":"Pele negra polida, olhos brancos sem pupila, cabelo alto como chama escura e chifres de marfim surgindo do crânio.","outfit":"Faixa vermelha na cintura, calças escuras amplas e amarrações claras nos braços e antebraços.","palette":"Negro-obsidiana, vermelho-sangue, marfim, dourado-pálido e cinza-batida.","equipment":"Colar de contas grandes, amarrações rituais nos braços e marcas de sangue seco espalhadas pelo tronco."}},{"number":4,"title":"Vhalor-V-1, o Devorador de Juramentos","name":"Vhalor-V-1","id":"Vhalor-V-1","image":"../codex/22_Bersek/Vhalor-V-1.png","description":"Vhalor-V-1 é o tipo de guerreiro que surge depois que a guerra já comeu todo o resto. Diferente do primeiro, ele não parece ter sido quebrado pelo ritual, mas sim coroado por ele: sua força cresce com cada promessa que o mundo descumpre. Quando entra em combate, os sinos do seu colar vibram sozinhos, como se reconhecessem o peso de antigas traições.","attributes":{"race":"Bersek (Titã do Juramento Selvagem)","physical":"Corpo colossal e seco, ombros vastos, braços longos e postura estável de executor.","faceAndHair":"Face negra sem expressão humana visível, olhos claros em foco de predador, cabelo elevado e chifres de marfim mais longos nas laterais.","outfit":"Faixa vermelha central na cintura, calças negras, bandagens claras enroladas no braço direito e no punho.","palette":"Preto-carvão, vermelho-cativo, marfim-antigo, bege-bandagem e branco-luz.","equipment":"Colar de esferas ósseas, bandagens cerimoniais, sinais de sangue pelo peito e proporções de lutador ritual."}},{"number":5,"title":"Xathur-V-1","name":"Xathur-V-1","id":"Xathur-V-1","image":"../codex/22_Bersek/Xathur-V-1.png","description":"Xathur foi forjado para ser a última linha entre um rei e a queda do próprio castelo. Sua armadura lembra um eclipse preso em metal: sombria, afiada e pesada o bastante para anunciar desgraça antes mesmo do golpe. Ele carrega a espada de um juramento morto e veste a guerra como quem veste luto, avançando sem pressa porque sabe que tudo o que toca acaba em ruína.","attributes":{"race":"Bersek (Cavaleiro do Eclipse de Ferro)","physical":"Estrutura alta e imponente, peito blindado, ombros fechados sob o peso da armadura e postura de sentinela ofensiva.","faceAndHair":"Elmo angular com visor luminoso em tom vermelho-alaranjado, cabelo escuro em mechas curtas e silhueta quase inteiramente encoberta.","outfit":"Armadura de placas negras e grafite, manto escuro caído pelas costas e grevas e luvas reforçadas.","palette":"Preto-ferro, grafite, vermelho-ferrugem, prata-gasta e sombra.","equipment":"Espada colossal de lâmina larga, bainha/empunhadura com couro gasto e detalhes de batalha gravados no metal."}}],"neighbors":{"prev":{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑"},"next":{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

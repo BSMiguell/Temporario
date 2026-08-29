@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#E67E22;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demônios do Caos — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Demônios do Caos: 11 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#E67E22">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%94%A5%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="demoniosdocaos">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">🔥</span><span class="head-label">Demônios do Caos</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">🔥</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Demônios do Caos</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#14_Demonios_Do_Caos">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">🔥</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Demônios do Caos no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"14_Demonios_Do_Caos","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","lore":"Bufões da primeira invasão, alimentam-se de conflito e desespero; ELES NÃO QUEREM A PAZ — guerra é colheita.","tipo":"Parasita","regioes":["mascaras-na-nevoa"],"count":11},"members":[{"number":1,"title":"Aetheron","name":"Aetheron","id":"Aetheron","image":"../codex/14_Demonios_Do_Caos/Aetheron.png","description":"Um mestre da ilusão que transforma truques de mágica em espetáculos letais. Aetheron manipula baralhos enfeitiçados para fatiar suas vítimas enquanto solta risadas histéricas.","attributes":{"race":"Bufão Macabro da Ilusão Sangrenta (Corte dos Bobos Insanos)","physical":"Bípede, esguio, postura extravagante com cartas de baralho flutuando ao redor das mãos.","faceAndHair":"Maquiagem branca de palhaço com maquiagem preta nos olhos e sorriso maquiavélico denteado.","outfit":"Traje clássico de bobo da corte bufante em padrões xadrez vermelho e preto, com guizos.","palette":"Vermelho-vivo, preto-ébano e branco-neve.","equipment":"Cartas de baralho afiadas e chapéu tricornado de bobo."}},{"number":2,"title":"Florivax","name":"Florivax","id":"Florivax","image":"../codex/14_Demonios_Do_Caos/Florivax.png","description":"Um espectro de gesso e tecido que se alimenta do desespero alheio. Florixas vaga pelos vilarejos carregando um saco místico repleto de memórias roubadas.","attributes":{"race":"Boneco Mímico Melancólico (Corte das Marionetes Silenciosas)","physical":"Humanoide, pequeno e esguio, curvado sob o peso de um grande saco nas costas.","faceAndHair":"Máscara de porcelana pálida e inexpressiva com buracos negros no lugar dos olhos.","outfit":"Traje bufante em tons de creme e linho cru com botões e babados bordados.","palette":"Branco-pálido, bege-creme e cinza-claro.","equipment":"Saco de pano amarrado e cajado com Guizo na ponta."}},{"number":3,"title":"Garrion-V-1","name":"Garrion-V-1","id":"Garrion-V-1","image":"../codex/14_Demonios_Do_Caos/Garrion-V-1.png","description":"Um assassino da corte do Caos especializado em se esconder nas sombras das festividades. Garrion dobra seu próprio corpo em ângulos impossíveis para surpreender alvos.","attributes":{"race":"Ás das Sombras Bipartido (Ordem dos Bobos Espiões)","physical":"Bípede, esguio, flexível, em postura de infiltração abaixada.","faceAndHair":"Máscara de palhaço roxa/preta estilizada com marcas pontiagudas sob os olhos.","outfit":"Traje justo de bufão em tons de roxo-escuro e preto com babados pontiagudos.","palette":"Roxo-escuro, preto e lilás.","equipment":"Chapéu duplo de bobo da corte com guizos escuros."}},{"number":4,"title":"Jinx-V-1","name":"Jinx-V-1","id":"Jinx-V-1","image":"../codex/14_Demonios_Do_Caos/Jinx-V-1.png","description":"Um sádico das vielas sombrias de Aetheria. Jinx atrai curiosos com luzes e pequenos orbes brilhantes antes de revelar sua machadinha ensanguentada.","attributes":{"race":"Palhaço Açougueiro da Perdição (Corte da Carnificina)","physical":"Bípede, robusto, empunhando machado em uma mão e orbe mágico na outra.","faceAndHair":"Rosto de palhaço enrugado e assustador com olhos vermelhos e dentes afiados.","outfit":"Camisa branca de babados com botões vermelhos e macacão de circo encardido.","palette":"Marrom, bege, amarelo e vermelho-sangue.","equipment":"Machado de lâmina larga e orbe de luz azul-amarelada."}},{"number":5,"title":"Maw-Shin","name":"Maw-Shin","id":"Maw-Shin","image":"../codex/14_Demonios_Do_Caos/Maw-Shin.png","description":"Uma criatura bizarra que mistura partes de ave rovaz com veste de bufão. Maw-Shin arremessa lâminas e penas afiadas ocultas sob suas asas vermelhas.","attributes":{"race":"Harpia Bufona das Lâminas Penadas (Ordem dos Malabaristas Vorazes)","physical":"Bípede com pés de garra, corpo esguio e capa/asas de penas abertas.","faceAndHair":"Máscara de bufão com bico sutil e capuz de chifres longos.","outfit":"Manto nobre com penas vermelhas nas costas e colete bufante decorado.","palette":"Preto, vermelho-escuro e cinza.","equipment":"Facas de arremesso e penas afiadas de arremesso."}},{"number":6,"title":"Maw-Shin-V-1","name":"Maw-Shin-V-1","id":"Maw-Shin-V-1","image":"../codex/14_Demonios_Do_Caos/Maw-Shin-V-1.png","description":"Uma aberração grotesca nascida da fome insaciável do Caos. Maw-Shin-V-1 não possui estômago comum, mas sim uma bocarra incandescente no peito que devora feitiços e matérias.","attributes":{"race":"Demônio Voraz da Bocarra Abdominal (Ordem das Bestas Glutonas)","physical":"Bípede, atarracado, braços longos e musculosos com garras de fera.","faceAndHair":"Cabeça com chifres pequenos e sorriso insano; barriga transformada em bocarra aberta flamejante.","outfit":"Calça escura de artes marciais sem camisa.","palette":"Tom de pele bege-rosado, amarelo-fogo, preto e vermelho.","equipment":"Bocarra incandescente com dentes afiados no abdômen."}},{"number":7,"title":"Nyxar","name":"Nyxar","id":"Nyxar","image":"../codex/14_Demonios_Do_Caos/Nyxar.png","description":"Um conjurador que canaliza energias caóticas de fendas dimensionais. Nyrar rasga o tecido da realidade com as mãos para banir seus oponentes para dimensões de pesadelo.","attributes":{"race":"Feiticeiro das Fendas do Caos (Ordem do Vazio Ilusório)","physical":"Bípede, postura curvada e sinistra, canalizando energia roxa na mão esquerda.","faceAndHair":"Máscara mística com símbolo na testa sob um capuz rúnico longo.","outfit":"Manto amplo roxo com babados pontiagudos e tiras de couro.","palette":"Roxo-místico, preto e lilás-brilhante.","equipment":"Portal/Fenda dimensional miniatura flutuante na mão."}},{"number":8,"title":"Stellaris","name":"Stellaris","id":"Stellaris","image":"../codex/14_Demonios_Do_Caos/Stellaris.png","description":"Duas mentes presas no mesmo corpo de bufão. Stellaris pensa e age de maneira totalmente imprevisível, falando em vozes duplas que enlouquecem quem as ouve.","attributes":{"race":"Gêmeos Siameses da Discórdia (Corte das Anomalias Celestiais)","physical":"Bípede, corpo compacto sustentando duas cabeças de criança/boneco.","faceAndHair":"Duas cabeças idênticas de porcelana com cabelos brancos e olhos pintados.","outfit":"Traje de bufão imperial em padrão xadrez vermelho e dourado.","palette":"Vermelho-imperial, dourado, marrom e branco.","equipment":"Colarinho de babados duplos e chapéu de bobo com guizos."}},{"number":9,"title":"Vespera-Jest-V-1","name":"Vespera-Jest-V-1","id":"Vespera-Jest-V-1","image":"../codex/14_Demonios_Do_Caos/Vespera-Jest-V-1.png","description":"A encarnação do delírio cintilante. Vespera dança pelo campo de batalha deixando um rastro de poeira e esferas explosivas em tons de neon que desintegram os alvos.","attributes":{"race":"Arlequim do Fogo Rosa Neon (Corte da Ilusão Rosa)","physical":"Bípede, esguio e gracioso, em pose de dança ou salto acrobático.","faceAndHair":"Máscara de bobo com símbolos de losango nos olhos e sorriso brilhante.","outfit":"Traje justo neon com pompons, estampa de losangos e sapato pontiagudo.","palette":"Rosa-neon, magenta, preto e branco.","equipment":"Esferas de energia magenta e chapéu triplo de bobo da corte."}},{"number":10,"title":"Harlex-V-1, o Rasgador de Ecos","name":"Harlex-V-1","id":"Harlex-V-1","image":"../codex/14_Demonios_Do_Caos/Harlex-V-1.png","description":"Harlex vive das vozes que sobrarem depois de um massacre. Ele invade pensamentos, distorce memórias e usa o medo alheio como alimento para crescer ainda mais.","attributes":{"race":"Demônio do Caos / Predador Psíquico (O Sussurro que Parte Mentes)","physical":"Corpo alongado, postura torta e movimentos erráticos.","faceAndHair":"Mandíbula tripla e olhos assimétricos cheios de ruído.","outfit":"Farrapos vivos de sombras e membranas rasgadas.","palette":"Roxo-escuro, preto e vermelho-sujo.","equipment":"Garras auditivas e fragmentos de vidro encantado."}},{"number":11,"title":"Mimikor-V-1, a Risada da Ruína","name":"Mimikor-V-1","id":"Mimikor-V-1","image":"../codex/14_Demonios_Do_Caos/Mimikor-V-1.png","description":"Mimikor apareceu nas cortes mais decadentes para espalhar pânico, desordem e humilhação. Ele transforma celebrações em carnificina com truques, explosões e uma alegria completamente doentia.","attributes":{"race":"Demônio do Caos / Bufão Abissal (A Gargalhada Final)","physical":"Corpo magro e inquieto, quase sempre em pose teatral.","faceAndHair":"Sorriso exagerado, olhos arregalados e máscara quebrada.","outfit":"Roupa de bobo rasgada com sinos enferrujados.","palette":"Vermelho-vivo, preto e amarelo-sujo.","equipment":"Bastão explosivo e confetes de lâmina."}}],"neighbors":{"prev":{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟"},"next":{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

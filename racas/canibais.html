@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#A04000;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canibais — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Canibais: 21 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#A04000">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8D%96%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="canibais">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">🍖</span><span class="head-label">Canibais</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">🍖</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Canibais</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#18_Canibais">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">🍖</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Canibais no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"18_Canibais","label":"Canibais","color":"#A04000","icon":"🍖","lore":"Tribos de múltiplos braços das arenas de sacrifício; a única lei que reconhecem é a sobrevivência do mais forte.","tipo":"Territorial","regioes":["Fronteiras de Magma"],"count":21},"members":[{"number":1,"title":"Dokuro-V-1, o Mascarado da Caveira Demoníaca","name":"Dokuro-V-1","id":"Dokuro-V-1","image":"../codex/18_Canibais/Dokuro-V-1.png","description":"Dokuro carrega no rosto uma máscara de Oni esculpida em osso que se fundiu permanentemente à sua carne após anos de banquetes de sangue. Ele caça sozinho nas florestas sombrias de Aetheria, usando seus múltiplos braços para despedaçar presas gigantescas antes que consigam reagir.","attributes":{"race":"Canibal Feraz / Demônio das Sombras (Caçador de Crânios)","physical":"Postura baixa e ameaçadora, garras afiadas e juba volumosa de cabelos brancos.","faceAndHair":"Máscara de osso com chifre cobrindo o lado direito do rosto e olho esquerdo brilhando em vermelho.","outfit":"Tanga de couro desfiado com pele de besta e cordas vermelhas atadas à cintura.","palette":"Branco-cinzento, vermelho-sangue e marrom-terroso.","equipment":"Máscara óssea integrada ao crânio e múltiplos braços musculosos."}},{"number":2,"title":"Ganshu-V-1, o Lutador dos Olhos de Éter","name":"Ganshu-V-1","id":"Ganshu-V-1","image":"../codex/18_Canibais/Ganshu-V-1.png","description":"Treinado em um templo profanado, Ganshu fundiu a disciplina das artes marciais à fome insaciável dos Canibais. Os glifos em formato de olhos tatuados em seus braços não são meras pinturas: são órgãos sensoriais que detectam o fluxo de sangue dos oponentes.","attributes":{"race":"Canibal Monástico / Mutante da Carne (Mestre do Punho Devorador)","physical":"Postura de guarda de boxeador/artes marciais, múltiplos braços flexionados mostrando bíceps.","faceAndHair":"Cabelo curto espetado em tom prata/branco e olhos azuis brilhantes.","outfit":"Calça hakama de artes marciais branca com faixa preta amarrada na cintura.","palette":"Branco-puro, azul-turquesa e tom de pele bronzeado.","equipment":"Tatuagens em forma de olhos cianos nos quatro braços."}},{"number":3,"title":"Goku-Maru-V-1, o Colosso do Estômago do Inferno","name":"Goku-Maru-V-1","id":"Goku-Maru-V-1","image":"../codex/18_Canibais/Goku-Maru-V-1.png","description":"Goku-Maru é a personificação da gula entre os Canibais de Aetheria. Com um corpo massivo e pele avermelhada, dizem que sua digestão é rápida o suficiente para consumir batalhões inteiros durante cercos a fortalezas inimigas.","attributes":{"race":"Canibal Titânico / Oni Rubro (Devorador de Cidades)","physical":"Estrutura corpórea larga estilo lutador de sumô, braços extras emergindo das costas.","faceAndHair":"Pele avermelhada, cabelos ruivos volumosos com topete estilo kabuki e barba curta.","outfit":"Saiote de combate ornamental verde-escuro com cinto trançado e ornamentos dourados.","palette":"Vermelho-terracota, dourado, verde-oliva e marrom.","equipment":"Cinturão ritualístico de campeão com nós cerimoniais."}},{"number":4,"title":"Kultar-V-1, o Wendigo do Chifre Flamejante","name":"Kultar-V-1","id":"Kultar-V-1","image":"../codex/18_Canibais/Kultar-V-1.png","description":"Kultar deixou de ser mortal há séculos, tornando-se entidade pesadelesca. Seu crânio de besta cervina com chifres retorcidos goteja fogo espiritual, e sua mera presença no campo de batalha faz com que os guerreiros fracos enlouqueçam de fome canibal.","attributes":{"race":"Canibal Caótico / Besta Abissal (Espírito da Fome Eterna)","physical":"Silhueta esguia e aterrorizante, múltiplos braços esqueléticos com garras afiadas.","faceAndHair":"Crânio de fera/wendigo com chifres negros e fogo rosa-púrpura emanando do topo.","outfit":"Hakama branco tradicional com bordas rasgadas e faixa escura na cintura.","palette":"Preto-carvão, rosa-magenta incandescente e branco.","equipment":"Cabeça em formato de crânio animalesco e chama viva entre os chifres."}},{"number":6,"title":"Ryogen-V-1, o Punho do Dragão Faminto","name":"Ryogen-V-1","id":"Ryogen-V-1","image":"../codex/18_Canibais/Ryogen-V-1.png","description":"Ryogen canaliza a fúria dos dragões carnívoros. Seus múltiplos braços permitem que ele desfira dezenas de golpes por segundo, despedaçando escudos e armaduras pesadas como se fossem feitos de papel.","attributes":{"race":"Canibal Berserker / Dragão Humanoide (Guardião das Fendas)","physical":"Base de combate aberta e firme, seis braços prontos para o ataque.","faceAndHair":"Cabelos vermelhos chamas arrepiados, tatuagens de espirais de sangue pelo peito.","outfit":"Calça hakama branca com cinto de corda escura e faixas nos tornozelos.","palette":"Vermelho-fogo, branco e tom de pele moreno.","equipment":"Tatuagens espirais no peito e braços duplos adicionais."}},{"number":7,"title":"Soma-V-1, o Carrasco da Garra Branca","name":"Soma-V-1","id":"Soma-V-1","image":"../codex/18_Canibais/Soma-V-1.png","description":"Especialista em emboscadas, Soma usa a estrutura óssea de suas vítimas para criar pequenas lâminas que brotam de sua própria pele. Ele se movimenta sem emitir som, atacando o pescoço de seus alvos antes de se alimentar.","attributes":{"race":"Canibal Caçador / Assassino da Névoa (Lorde das Espinhas)","physical":"Físico magro e hiper-definido, múltiplos braços posicionados defensivamente.","faceAndHair":"Cabelos brancos espetados, plaqueta óssea cobrindo a bochecha direita e olho azul.","outfit":"Top tático preto mangas e hakama branco com marcas de queimadura na barra.","palette":"Branco-neve, preto-carvão e azul-gélido.","equipment":"Placa óssea na bochecha e seis braços ágeis."}},{"number":8,"title":"Sukuna-V-1, o Rei Absoluto das Mutações","name":"Sukuna-V-1","id":"Sukuna-V-1","image":"../codex/18_Canibais/Sukuna-V-1.png","description":"Sukuna é considerado o ancestral direto de toda a raça Canibal de Aetheria. Com quatro olhos, duas bocas e força sobre-humana, sua presença impõe autoridade imediata sobre qualquer outra besta ou demônio.","attributes":{"race":"Canibal Rei / Entidade Primordial (O Imperador da Carne)","physical":"Postura confiante de braços cruzados no peito, capa curta repousando nos ombros.","faceAndHair":"Cabelo curto espetado tom rosa-claro/loiro, tatuagens faciais de maldição e segundo par de olhos.","outfit":"Kimono/hakama branco com detalhes escuros e capa preta sobre os ombros.","palette":"Rosa-pálido, preto e branco.","equipment":"Tatuagens amaldiçoadas faciais e atitude de desprezo com braços cruzados."}},{"number":9,"title":"Zankoku-V-1, o Flagelo dos Oito Braços","name":"Zankoku-V-1","id":"Zankoku-V-1","image":"../codex/18_Canibais/Zankoku-V-1.png","description":"Zankoku desenvolveu a maior quantidade de membros entre todos os membros do clã. Com seis braços totalmente funcionais e força descomunal, ele é capaz de enfrentar exércitos inteiros de uma só vez, agarrando múltiplos inimigos simultaneamente.","attributes":{"race":"Canibal Quimera / Asura da Guerra (O Destruidor Supremo)","physical":"Postura agressiva e expansiva, seis braços bem definidos abertos em leque.","faceAndHair":"Juba longa de cabelos brancos caindo pelas costas, tatuagens pretas em forma de marcas tribais no peito e braços.","outfit":"Calça hakama branca tradicional com cinto preto.","palette":"Branco, preto-grafite e bronze.","equipment":"Seis braços musculosos totalmente visíveis e marcas corporais de guerra."}},{"number":10,"title":"Akashura-V-1, o Ceifador da Fome Rubra","name":"Akashura-V-1","id":"Akashura-V-1","image":"../codex/18_Canibais/Akashura-V-1.png","description":"Akashura é um rastreador que aprendeu a sentir o cheiro do medo nas chamas e no sangue. Ele caça em silêncio absoluto, usando garras ritualísticas para arrancar a presa antes que qualquer grito possa ecoar.","attributes":{"race":"Canibal Predador / Demônio de Caça (Lobo do Banquete)","physical":"Corpo seco e veloz, tronco inclinado para frente em postura de ataque.","faceAndHair":"Cabelos longos escarlates, presas evidentes e olhos amarelos predatórios.","outfit":"Hakama escuro rasgado com cordões vermelhos e ombreiras de couro.","palette":"Vermelho-sangue, preto e dourado apagado.","equipment":"Garras cerimoniais e faixa de caça presa ao braço."}},{"number":11,"title":"Dokan-V-1, o Cronista das Mandíbulas Rachadas","name":"Dokan-V-1","id":"Dokan-V-1","image":"../codex/18_Canibais/Dokan-V-1.png","description":"Dokan interpreta os padrões de ossos quebrados como presságios de guerra. Ele conduz rituais de fome antes das batalhas, convencendo seus aliados de que devorar os caídos é um sacramento sagrado.","attributes":{"race":"Canibal Sacerdote / Oráculo da Carne (Leitor de Ossos)","physical":"Figura magra, costas curvadas e mãos sempre unidas como em oração.","faceAndHair":"Máscara parcial de osso e marcas verticais escuras no rosto.","outfit":"Manto ritualístico de tiras vermelhas e faixa de couro ao redor da cintura.","palette":"Osso-claro, vermelho-escuro e cinza-fumaça.","equipment":"Cetro ósseo gravado com runas de apetite."}},{"number":12,"title":"Fushu-V-1, o Arauto do Banquete Sem Fim","name":"Fushu-V-1","id":"Fushu-V-1","image":"../codex/18_Canibais/Fushu-V-1.png","description":"Fushu possui um corpo moldado por séculos de voracidade. Quando entra em batalha, sua fome cresce junto com a massa muscular, tornando-o uma muralha viva capaz de esmagar linhas inteiras de inimigos.","attributes":{"race":"Canibal Glutão / Colosso Faminto (Executor dos Festins)","physical":"Corpo muito largo, ombros imensos e postura de avanço bruto.","faceAndHair":"Mandíbula pesada, dentes afiados e olhos pequenos e cruéis.","outfit":"Faixas de combate apertadas e saiote de couro reforçado.","palette":"Marrom-terra, carmesim e preto-carvão.","equipment":"Correntes de contenção e talismãs de fome no peito."}},{"number":13,"title":"Gashu-V-1, o Artesão das Lâminas de Osso","name":"Gashu-V-1","id":"Gashu-V-1","image":"../codex/18_Canibais/Gashu-V-1.png","description":"Gashu é conhecido por transformar restos de batalha em armas improvisadas. Ele molda ossos e dentes como se fossem metal, criando lâminas e perfuradores usados pelos canibais mais brutais.","attributes":{"race":"Canibal Artífice / Ferreiro da Carne (Mestre de Cravagem)","physical":"Estrutura compacta, braços fortes e postura inclinada de trabalho.","faceAndHair":"Olhar concentrado, cicatrizes no rosto e mãos marcadas por queimaduras ritualísticas.","outfit":"Avental de couro escurecido e faixas nos antebraços.","palette":"Cinza-osso, marrom-queimado e vermelho ferrugem.","equipment":"Martelo de osso, pinças de forja e estojo de lâminas."}},{"number":14,"title":"Haru-V-1, o Jovem da Garganta Selvagem","name":"Haru-V-1","id":"Haru-V-1","image":"../codex/18_Canibais/Haru-V-1.png","description":"Haru foi criado entre caçadores que mediam valor pela coragem em arrancar a própria comida do campo de batalha. Mesmo ainda jovem, ele luta com instinto feroz e uma velocidade que surpreende veteranos.","attributes":{"race":"Canibal Caçador / Discípulo do Abate (Fera em Formação)","physical":"Corpo ágil, magro e sempre inclinado como uma fera prestes a saltar.","faceAndHair":"Cabelos curtos desgrenhados e expressão selvagem.","outfit":"Túnica curta de combate com tiras de couro e faixa no torso.","palette":"Verde-musgo, marrom e vermelho-sombra.","equipment":"Lâmina curta presa à cintura e braceletes de caça."}},{"number":15,"title":"Kurobane-V-1, o Executor da Asa Negra","name":"Kurobane-V-1","id":"Kurobane-V-1","image":"../codex/18_Canibais/Kurobane-V-1.png","description":"Kurobane caça do alto, mergulhando sobre vítimas isoladas com velocidade brutal. Suas asas negras surgiram após um ritual de sangue e agora servem como símbolo de execução para os clãs canibais.","attributes":{"race":"Canibal Alado / Carrasco Noturno (Predador dos Céus)","physical":"Tronco esguio, postura de mergulho e asas abertas.","faceAndHair":"Cabelos pretos longos, olhos afiados e chifres curtos.","outfit":"Manto leve rasgado sobre armadura mínima de couro.","palette":"Preto-antracite, vermelho escuro e cinza-azulado.","equipment":"Asas membranosas e adaga de caça presa à perna."}},{"number":16,"title":"Mugen-V-1, o Infinito da Carnificina","name":"Mugen-V-1","id":"Mugen-V-1","image":"../codex/18_Canibais/Mugen-V-1.png","description":"Mugen é tratado como uma lenda viva entre os canibais, pois nunca recua e nunca cessa de lutar. Seu corpo parece sobreviver a ferimentos impossíveis, como se a própria fome o mantivesse de pé.","attributes":{"race":"Canibal Imortal / Espírito de Guerra (A Dor que Não Cessa)","physical":"Estrutura alta e resistente, postura vertical e silenciosa.","faceAndHair":"Olhos ocos e cabelo longo preso por cordas escuras.","outfit":"Kimono de combate esfarrapado com faixa larga no peito.","palette":"Preto, vinho e branco sujo.","equipment":"Lâmina longa de combate e talismãs de persistência."}},{"number":17,"title":"Nyxarar, o Senhor do Capuz do Eclipse","name":"Nyxarar","id":"Nyxarar","image":"../codex/18_Canibais/Nyxarar.png","description":"Nyxarar lidera a facção mais refinada e perigosa dos Canibais. Em vez de atacar ferozmente, ele usa táticas militares e feitiçaria de sangue. Sua capa negra absorve a luz ao seu redor, permitindo que ele apareça instantaneamente atrás de seus alvos.","attributes":{"race":"Meio-Canibal Nobre / Senhor da Noite (Soberano dos Sangrentos)","physical":"Postura ereta e imponente, seis braços dispostos em leque ao redor do torso.","faceAndHair":"Cabelos pretos longos espetados, pequenos chifres de demônio e marcas faciais vermelhas.","outfit":"Capa de nobreza escura sobre os ombros, calças roxas e faixa vermelha.","palette":"Preto-obsidiana, roxo-imperial e vermelho-rubi.","equipment":"Capa com forro avermelhado e marcas mágicas espalhadas pelos braços."}},{"number":18,"title":"Reigen-V-1, o Punho do Julgamento Feral","name":"Reigen-V-1","id":"Reigen-V-1","image":"../codex/18_Canibais/Reigen-V-1.png","description":"Reigen domina o combate de impacto, transformando cada soco em uma sentença de morte. Ele foi moldado em arenas de sacrifício onde apenas os mais brutais sobreviviam para continuar o banquete.","attributes":{"race":"Canibal Sacudidor / Executor de Arena (Martelo Vivo)","physical":"Corpo robusto, peito aberto e punhos sempre erguidos.","faceAndHair":"Cabelo branco curto, cicatrizes de batalha e olhar arrogante.","outfit":"Faixa de combate na cintura e ombreiras de couro pesado.","palette":"Cinza-escuro, vermelho ferrugem e branco.","equipment":"Manoplas espinhosas e correntes curtas nos pulsos."}},{"number":19,"title":"Ryouka-V-1, a Caçadora da Lua Esfomeada","name":"Ryouka-V-1","id":"Ryouka-V-1","image":"../codex/18_Canibais/Ryouka-V-1.png","description":"Ryouka se move entre sombras como se a noite fosse um segundo corpo. Ela escolhe alvos isolados, caçando com precisão fria e silenciosa antes de desaparecer com a presa.","attributes":{"race":"Canibal Predadora / Lâmina Lunar (Fúria da Escuridão)","physical":"Silhueta atlética e leve, postura de corrida baixa.","faceAndHair":"Cabelos escuros longos e olhos brilhando em tom rubro.","outfit":"Roupa tática justa com capa curta rasgada.","palette":"Preto, vermelho profundo e prata opaca.","equipment":"Lâminas gêmeas e amuletos de rastreio."}},{"number":20,"title":"Shigoro-V-1, o Devorador de Tambores","name":"Shigoro-V-1","id":"Shigoro-V-1","image":"../codex/18_Canibais/Shigoro-V-1.png","description":"Shigoro conduz o avanço do clã com golpes que lembram tambores de execução. Sua presença ecoa como uma marcha de guerra, esmagando a moral dos inimigos antes do primeiro ataque.","attributes":{"race":"Canibal Brutal / Portador do Ritmo da Guerra (Martelo de Carne)","physical":"Tronco largo, braços grossos e postura de impacto frontal.","faceAndHair":"Maxilar pesado, sobrancelhas cerradas e marcas tribais no rosto.","outfit":"Saiote de couro grosso com tiras cruzadas no peito.","palette":"Marrom escuro, preto e vermelho batido.","equipment":"Martelo de guerra e sinos de combate na cintura."}},{"number":21,"title":"Yatsura-V-1, o Silencioso das Costelas Vivas","name":"Yatsura-V-1","id":"Yatsura-V-1","image":"../codex/18_Canibais/Yatsura-V-1.png","description":"Yatsura aprendeu a matar sem som e sem hesitação. Suas técnicas usam costelas e ossos como proteção e arma, tornando-o um executor quase invisível no meio da carnificina.","attributes":{"race":"Canibal Assassino / Fantasma da Fome (Lâmina Oculta)","physical":"Corpo fino, postura curvada e movimentos contidos.","faceAndHair":"Rosto parcialmente coberto por faixas e olhos frios.","outfit":"Kimono leve escurecido com reforços nos ombros.","palette":"Cinza, preto e branco sujo.","equipment":"Lâminas finas e placas ósseas presas ao antebraço."}},{"number":22,"title":"Ranka-V-1, a Fera do Penhasco Carmesim","name":"Ranka-V-1","id":"Ranka-V-1","image":"../codex/18_Canibais/Ranka-V-1.png","description":"Ranka vive nas bordas das regiões devastadas, onde salta de rochedos para emboscar viajantes e saquear acampamentos. Sua ferocidade é tão grande que os próprios canibais a tratam como um presságio de massacre.","attributes":{"race":"Canibal Selvagem / Besta de Assalto (Caçadora de Ruínas)","physical":"Corpo compacto e musculoso, postura de salto agressivo.","faceAndHair":"Cabelos selvagens, presas expostas e cicatrizes no rosto.","outfit":"Pele curtida sobre um traje de combate curto e rasgado.","palette":"Vermelho-escuro, marrom e preto.","equipment":"Clavas curtas e correntes de caça enroladas nos braços."}}],"neighbors":{"prev":{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸"},"next":{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

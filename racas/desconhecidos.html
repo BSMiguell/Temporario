@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#7F8C8D;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desconhecidos — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Desconhecidos: 15 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#7F8C8D">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%E2%9D%93%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="desconhecidos">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">❓</span><span class="head-label">Desconhecidos</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">❓</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Desconhecidos</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#06_Desconhecidos">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">❓</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Desconhecidos no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"06_Desconhecidos","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","lore":"Manifestações encapuzadas que aparecem antes de tragédias e ativam monólitos da Era da Criação. Não falam: gravam marcas em pedra.","tipo":"Errante","regioes":["A Grande Fenda Central"],"count":15},"members":[{"number":1,"title":"Astra-V-1","name":"Astra-V-1","id":"Astra-V-1","image":"../codex/06_Desconhecidos/Astra-V-1.png","description":"Astra é uma sentinela cósmica encarregada de vigiar as fronteiras entre o reino físico e os céus. Com suas asas emplumadas e sua lança sagrada, ela erradica ameaças abissais antes que alcancem o mundo dos mortais.","attributes":{"race":"Anjo Guardião das Alturas (Ordem do Voo Celestial)","physical":"Bípede, esguia, postura ereta com grandes asas de penas abertas nas costas.","faceAndHair":"Feições humanas, pele morena e cabelos volumosos/cacheados escuros.","outfit":"Uniforme militar leve em tons claros com fivelas de couro e botas de viagem.","palette":"Bege, marrom-terroso, branco e cinza.","equipment":"Lança longa cerimonial de ponta dourada."}},{"number":2,"title":"Aurelion-V-1","name":"Aurelion-V-1","id":"Aurelion-V-1","image":"../codex/06_Desconhecidos/Aurelion-V-1.png","description":"Criado por uma civilização esquecida para canalizar a energia das estrelas, Aurelion é um guerreiro cibernético que vaga pelo cosmos executando ordens antigas e protegendo relíquias celestiais.","attributes":{"race":"Autômato de Luz Estelar (Corte do Aço Sagrado)","physical":"Humanoide mecânico, simétrico, linhas elegantes e postura de guarda.","faceAndHair":"Capacete/Rosto robótico com visores luminosos azuis.","outfit":"Armadura futurista em placas brancas e azuis reluzentes com núcleos de energia.","palette":"Branco-puro, azul-brilhante e detalhes dourados.","equipment":"Núcleo de energia estelar no peito e manoplas tecnomágicas."}},{"number":3,"title":"Corvusgrem-V-1","name":"Corvusgrem-V-1","id":"Corvusgrem-V-1","image":"../codex/06_Desconhecidos/Corvusgrem-V-1.png","description":"Um guerreiro misterioso envolto em penas de corvo que se desloca imperceptivelmente entre as sombras das florestas antigas. Ele executa alvos com suas katanas duplas revestidas de magia sombria.","attributes":{"race":"Assassino da Névoa Plumada (Clã das Sombras de Corvo)","physical":"Bípede, agachado, com asas/capa de penas e olhos pálidos brilhantes.","faceAndHair":"Face sombria com olhos luminosos sob uma máscara de penas.","outfit":"Manto e túnica de plumas roxas e pretas com faixas de couro.","palette":"Roxo-escuro, preto-grafite e rosa.","equipment":"Duas katanas afiadas em punho."}},{"number":4,"title":"Dreadcleaver","name":"Dreadcleaver","id":"Dreadcleaver","image":"../codex/06_Desconhecidos/Dreadcleaver.png","description":"Um guerreiro imponente cuja armadura negra foi temperada em sangue e chamas infernais. Dreadcleaver devasta exércitos inteiros com golpes pesados de sua lâmina denteada.","attributes":{"race":"Colosso da Armadura Espinhosa (Legião do Caos Abissal)","physical":"Bípede, robusto e fortemente encouraçado com garras e espinhos saindo dos ombros.","faceAndHair":"Elmo de ferro negro com fendas incandescentes avermelhadas.","outfit":"Armadura de placas góticas pesadas com detalhes vermelhos em chamas.","palette":"Preto-metálico, cinza e vermelho-sangue.","equipment":"Espada buster gigante denteada e capa de fumaça."}},{"number":5,"title":"Helioth-V-1","name":"Helioth-V-1","id":"Helioth-V-1","image":"../codex/06_Desconhecidos/Helioth-V-1.png","description":"Um sábio ancestral em forma de coruja gigante que guarda os mistérios do tempo e da cosmologia. Suas asas douradas refletem o brilho do sol e protegem santuários esquecidos.","attributes":{"race":"Sacerdote Curuja dos Reinos Antigos (Ordem do Sol Alvo)","physical":"Ser aviário bípede, asas douradas dobradas ao redor do corpo.","faceAndHair":"Face de coruja mística com penugem detalhada e bico curvo.","outfit":"Mantos e cordões de penas sacerdotais sobre o corpo.","palette":"Dourado, bege-marfim, marrom e branco.","equipment":"Auréola/Disco solar ornamentado atrás da cabeça."}},{"number":6,"title":"Kyran-V-1","name":"Kyran-V-1","id":"Kyran-V-1","image":"../codex/06_Desconhecidos/Kyran-V-1.png","description":"Um guerreiro místico coberto por ataduras e fitas rituais que contêm uma chama interior devastadora. Kyran percorre desertos e ruínas caçando demônios com sua katana flamejante.","attributes":{"race":"Espadachim das Fitas Sagradas (Clã do Sol Nascente)","physical":"Bípede, ágil, em posição de ataque com katana empunhada.","faceAndHair":"Rosto envolto em bandagens rituais com olhos e aura incandescentes.","outfit":"Ataduras sagradas cobrindo todo o corpo com cinto de combate marrom.","palette":"Bege-areia, laranja-fogo e marrom.","equipment":"Katana afiada e rolos de pergaminho nas costas."}},{"number":7,"title":"Noxaris","name":"Noxaris","id":"Noxaris","image":"../codex/06_Desconhecidos/Noxaris.png","description":"Uma quimera demoníaca quadrumana com múltiplas cabeças que personifica a fúria e o pavor. Noxaris domina feitiçarias mentais enquanto desmembra oponentes com suas garras afiadas.","attributes":{"race":"Mestre Bestial dos Três Rostos (Clã dos Chifres Alvos)","physical":"Bípede bestial, pele de tom lilás e jubas densas de pelos brancos.","faceAndHair":"Três cabeças/máscaras demoníacas com chifres dourados curvados.","outfit":"Pelagem natural e carapaça corporal.","palette":"Lilás, roxo, branco e dourado.","equipment":"Garras de energia e múltiplas faces de combate."}},{"number":8,"title":"Noxaris-V-1","name":"Noxaris-V-1","id":"Noxaris-V-1","image":"../codex/06_Desconhecidos/Noxaris-V-1.png","description":"A encarnação da destruição vulcânica e da fúria cega. Noxaris-V-1 canaliza a energia do submundo em seu peito, criando ondas de choque de magma e fogo vermelho a cada passo.","attributes":{"race":"Berserker do Vulcão Negro (Legião das Chamas Sombrias)","physical":"Postura agressiva e curvada para frente, musculatura definida e cabelos eriçados.","faceAndHair":"Máscara/Rosto negro com olhos e fendas avermelhadas incandescentes.","outfit":"Marcas corporais de chamas vivas e braceletes de iron.","palette":"Preto-carvão, vermelho-fogo e laranja.","equipment":"Aura de energia flamejante emanando das mãos e corpo."}},{"number":9,"title":"Nyxaris-V-1","name":"Nyxaris-V-1","id":"Nyxaris-V-1","image":"../codex/06_Desconhecidos/Nyxaris-V-1.png","description":"Um ser místico de energia cósmica envolto por chamas roxas e aura espiritual. Nyxaris caminha silenciosamente entre as dimensões manipulando magia de fogo estelar.","attributes":{"race":"Entidade da Chama Purpúrea (Corte da Penumbra Estelar)","physical":"Bípede, vestes de viajante com aura radiante ao redor do corpo.","faceAndHair":"Cabeça de pura energia roxa com olhos brancos brilhantes.","outfit":"Capuz e cachecol de viajante escuro com túnica tática.","palette":"Roxo-vibrante, lilás, preto e magenta.","equipment":"Aura de fogo mágico purpúreo em expansão."}},{"number":10,"title":"Stellaris-V-1","name":"Stellaris-V-1","id":"Stellaris-V-1","image":"../codex/06_Desconhecidos/Stellaris-V-1.png","description":"Um elemental das sombras cósmicas que comanda a energia das estrelas mortas. Stellaris possui asas membranosas de morcego e canaliza constelações em suas palmas.","attributes":{"race":"Senhor do Vazio Estelar (Ordem do Eclipse Profundo)","physical":"Humanoide, bípede, com asas negras abertas e cauda fluida.","faceAndHair":"Cabeça de energia escura com olhos celestes luminosos.","outfit":"Revestimento muscular de sombra densa com núcleo estrela no peito.","palette":"Azul-noite, preto-vazio e branco-estelar.","equipment":"Orbe de luz estelar flutuante na mão direita."}},{"number":11,"title":"Trifacies","name":"Trifacies","id":"Trifacies","image":"../codex/06_Desconhecidos/Trifacies.png","description":"Um soberano enigmático que governa com a sabedoria e a crueldade de três personalidades distintas. Suas máscaras flutuantes representam o Passado, o Presente e o Futuro.","attributes":{"race":"Imperador das Três Faces (Corte das Máscaras Douradas)","physical":"Bípede, imponente, vestindo armadura monumental ornamental.","faceAndHair":"Capacete central encimado por três máscaras dramáticas douradas nos ombros e cabeça.","outfit":"Armadura pesada de placas pretas com golas e brasões em ouro trabalhado.","palette":"Preto-sombra, ouro-reluzente e marfim.","equipment":"Três máscaras teatrais douradas e ornamentos imperiais."}},{"number":12,"title":"Vanek-V-1","name":"Vanek-V-1","id":"Vanek-V-1","image":"../codex/06_Desconhecidos/Vanek-V-1.png","description":"Um cavalheiro sinistro e atirador ágil que caça monstros nas noites de lua cheia. Vanek empunha uma foice curta e uma arma de fogo de cano longo sob seu sobretudo.","attributes":{"race":"Caçador das Sombras de Cartola (Ordem dos Ceifadores)","physical":"Bípede, postura estilosa de duelo, ligeiramente inclinado.","faceAndHair":"Face coberta por lenço e aba de cartola alta.","outfit":"Sobretudo longo de couro escuro, cartola alta, lenço e botas de caçador.","palette":"Marrom-escuro, preto, cinza e bordô.","equipment":"Foice de mão denteada e trabuco/mosquete de caça."}},{"number":13,"title":"Corpus-Karmex-V-1","name":"Corpus-Karmex-V-1","id":"Corpus-Karmex-V-1","image":"../codex/06_Desconhecidos/Corpus-Karmex-V-1.png","description":"Uma entidade esquelética que viaja entre as estrelas para colher a energia vital de mundos em colapso. Seu corpo é um nexo de almas e poeira estelar, mantido unido por uma vontade implacável.","attributes":{"race":"Ceifador Cósmico (Ordem do Vazio Infinito)","physical":"Esquelético, flutuante, com uma aura de energia crepitante.","faceAndHair":"Crânio alongado com chifres e olhos que brilham com a luz de galáxias distantes.","outfit":"Fragmentos de armadura cósmica e um manto feito de nebulosas.","palette":"Preto, roxo, azul e branco.","equipment":"Foice feita de um buraco negro em miniatura."}},{"number":14,"title":"Glorivex-V-1","name":"Glorivex-V-1","id":"Glorivex-V-1","image":"../codex/06_Desconhecidos/Glorivex-V-1.png","description":"Um anjo caído que busca vingança contra os céus que o traíram. Glorivex comanda a luz sagrada de uma forma corrompida, usando-a para punir tanto demônios quanto anjos.","attributes":{"race":"Anjo da Vingança Dourada (Coro da Retribuição Celestial)","physical":"Humanoide, imponente, com asas de luz dourada.","faceAndHair":"Rosto nobre, mas com uma expressão de fúria contida. Olhos que brilham com poder.","outfit":"Armadura dourada ornamentada, mas com rachaduras que revelam uma escuridão interior.","palette":"Dourado, branco, preto e vermelho.","equipment":"Espada de luz que pode se dividir em um chicote de energia."}},{"number":15,"title":"Mimesis-Solar-V-1","name":"Mimesis-Solar-V-1","id":"Mimesis-Solar-V-1","image":"../codex/06_Desconhecidos/Mimesis-Solar-V-1.png","description":"Uma criatura que pode imitar a forma e as habilidades de qualquer ser que banha na luz solar. Mimesis-Solar é um predador perfeito, um camaleão cósmico que caça os mais poderosos guerreiros de Aetheria.","attributes":{"race":"Mímico da Luz Solar (Enxame da Imitação Cósmica)","physical":"Variável, mas geralmente assume uma forma humanoide elegante e andrógina.","faceAndHair":"Rosto que é um espelho, refletindo o observador, mas com um brilho dourado.","outfit":"Nenhum, pois seu corpo é feito de luz solidificada.","palette":"Dourado, amarelo, laranja e branco.","equipment":"Capaz de replicar qualquer arma que vê."}}],"neighbors":{"prev":{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈"},"next":{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

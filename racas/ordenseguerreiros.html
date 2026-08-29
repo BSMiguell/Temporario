@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#C0392B;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ordens e Guerreiros — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Ordens e Guerreiros: 22 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#C0392B">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%E2%9A%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="ordenseguerreiros">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">⚔️</span><span class="head-label">Ordens e Guerreiros</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">⚔️</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Ordens e Guerreiros</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#03_Ordens_E_Guerreiros">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">⚔️</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Ordens e Guerreiros no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"03_Ordens_E_Guerreiros","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","lore":"Cavalaria de juramentos permanentes que guarda a Linha de Geada e as estradas do sul; enterram os mortos de qualquer raça com o mesmo ritual.","tipo":"Territorial","regioes":["Fortalezas de Juramento"],"count":22},"members":[{"number":1,"title":"Frostmourne-V-1","name":"Frostmourne-V-1","id":"Frostmourne-V-1","image":"../codex/03_Ordens_E_Guerreiros/Frostmourne-V-1.png","description":"Guardião das passagens congeladas do norte, Frostmourne veste uma armadura de placas prateadas revestida por pele de urso-polar. Sua espada canaliza o frio absoluto de Niflheim, congelando o sangue dos inimigos ao primeiro impacto.","attributes":{"race":"Cavaleiro da Geada Eterna (Ordem do Vento Glacial)","physical":"Bípede, postura de guarda alta e passos firmes na neve.","faceAndHair":"Elmo totalmente fechado com visor reluzente e capa de pele branca densa sobre os ombros.","outfit":"Armadura de placas góticas prateadas e escuras reforçada com velo térmico.","palette":"Prata-metálico, branco-neve e cinza-aço.","equipment":"Montante de duas mãos de lâmina larga com encanto congelante."}},{"number":2,"title":"Grom-V-1","name":"Grom-V-1","id":"Grom-V-1","image":"../codex/03_Ordens_E_Guerreiros/Grom-V-1.png","description":"Veterano inabalável das guerras de cerco, Grom é uma fortaleza ambulante. Sua armadura de placas maciças é feita de minério negro vulcânico fundido, permitindo-lhe resistir a disparos de canhão e feitiços sem recuar um único passo.","attributes":{"race":"Colosso Encouraçado (Legião de Titânio)","physical":"Físico atarracado, ombros gigantescos e peitoral ultra-reforçado.","faceAndHair":"Elmo tático com fendas de visão reforçadas e placas faciais espessas.","outfit":"Armadura pesada de placas de ferro negro com ombreiras duplas.","palette":"Ferro-negro, cinza-grafite e bronze envelhecido.","equipment":"Machadinha/espada pesada de combate e escudo peitoral integrado."}},{"number":4,"title":"Ironshroud-V-1","name":"Ironshroud-V-1","id":"Ironshroud-V-1","image":"../codex/03_Ordens_E_Guerreiros/Ironshroud-V-1.png","description":"Um paladino decadente cuja alma foi aprisionada dentro de sua própria armadura decorada com espinhos. Ele vaga pelos campos de batalha coletando o aço dos derrotados para reforçar sua estrutura imortal.","attributes":{"race":"Cavaleiro das Espinhos Espirituais (Ordem de Ferro Caído)","physical":"Estatura elevada, esguia e imponente com espinhos sobressaindo dos ombros.","faceAndHair":"Elmo coroado com espinhos pontiagudos e brilho espectral interno.","outfit":"Armadura gótica com espinhos nas ombreiras, braçadeiras e cotovelos, além de capa rasgada.","palette":"Preto-ébano, dourado e prata.","equipment":"Gládio longo de duas mãos decorado com runas de perfuração."}},{"number":5,"title":"Kaldor-Kore","name":"Kaldor-Kore","id":"Kaldor-Kore","image":"../codex/03_Ordens_E_Guerreiros/Kaldor-Kore.png","description":"Kaldor comanda os minérios ancestrais das profundezas da terra. Sua armadura é feita de rocha magmática e ouro escuro, e ele atua como o guardião supremo dos portões do submundo.","attributes":{"race":"Lorde das Rochas Abissais (Guarda Elemental do Núcleo)","physical":"Bípede, compacto e pesado com chifres taurinos pontiagudos.","faceAndHair":"Elmo com múltiplos chifres curvados e orbe azul brilhante no visor.","outfit":"Armadura de placas sobrepostas com textura de rocha esculpida e runas douradas.","palette":"Preto-rocha, ouro-velho e azul-etéreo.","equipment":"Clava/marreta pesada com cabo reforçado."}},{"number":6,"title":"Ksante-V-1","name":"Ksante-V-1","id":"Ksante-V-1","image":"../codex/03_Ordens_E_Guerreiros/Ksante-V-1.png","description":"Ksante utiliza tecnologia cósmica sintetizada com magia abissal. Suas ombreiras absorvem o impacto das energias inimigas e retransmitem rajadas de energia de névoa violeta contra seus adversários.","attributes":{"race":"Guardião Cósmico da Névoa (Ordem Void-Tech)","physical":"Postura ereta, peitoral largo e capas flutuantes em forma de asas.","faceAndHair":"Elmo ovalado sem rosto visível, irradiando brilho estelar neon.","outfit":"Vestes e placas em tom roxo-imperial com aureola de energia neon e ombreiras largas.","palette":"Violeta-neon, preto-cósmico e ciano/verde-limão.","equipment":"Armas de punho de energia e manto astral."}},{"number":7,"title":"Leonidas-V-1","name":"Leonidas-V-1","id":"Leonidas-V-1","image":"../codex/03_Ordens_E_Guerreiros/Leonidas-V-1.png","description":"Imperador das estepes do sul, Leonidas veste uma armadura de bronze gravada com glifos solares e uma juba de fogo. Ele liderou a Lendária Resistência dos 300 contra o avanço das forças da sombra.","attributes":{"race":"Rei Bestial da Falange (Guarda Imperial Leão de Ouro)","physical":"Musculoso, peitoral avantajado e postura de comando indomável.","faceAndHair":"Máscara de leão integrada ao elmo com juba volumosa e vermelha de crina.","outfit":"Armadura de placas de bronze de estilo clássico sobre túnica de batalha.","palette":"Bronze-dourado, vermelho-fogo e terracota.","equipment":"Gládio imperial e saia tática de tiras de couro reforçado."}},{"number":8,"title":"Lord-Kaelthorn","name":"Lord-Kaelthorn","id":"Lord-Kaelthorn","image":"../codex/03_Ordens_E_Guerreiros/Lord-Kaelthorn.png","description":"Lord Kaelthorn é o líder supremo da falange de luz. Sua armadura folheada a ouro puro repele qualquer mácula da sombra, e seu escudo colossal é capaz de criar barreiras impenetráveis.","attributes":{"race":"Grão-Mestre da Ordem Dourada (Criação Divina)","physical":"Imponente, ereto e ostentando um escudo de corpo inteiro na mão esquerda.","faceAndHair":"Elmo completo de cavaleiro com pluma e ornamentos de ouro trabalhado.","outfit":"Armadura pesada de placas de ouro e bronze com entalhes barrocos.","palette":"Dourado-brilhante, bronze e preto.","equipment":"Escudo pavise barroco com espinhos centrais e espada de torneio."}},{"number":9,"title":"Maw-Shin","name":"Maw-Shin","id":"Maw-Shin","image":"../codex/03_Ordens_E_Guerreiros/Maw-Shin.png","description":"Um guerreiro assassino cuja armadura absorve as almas daqueles que ele abate. As fendas de suas placas de ferro emitem uma iluminação carmesim pulsante que aterroriza exércitos inteiros.","attributes":{"race":"Algoz do Voraz Abismo (Ordem da Lâmina Negra)","physical":"Bípede, postura de ataque levemente agachada com garras ativas.","faceAndHair":"Elmo afilado com chifres laterais e visor vermelho brilhante.","outfit":"Armadura de placas pontiagudas pretas com acentos vermelhos de energia.","palette":"Preto-sombra, vermelho-carmesim e cinza-aço.","equipment":"Espada dupla/katana amaldiçoada de energia do abismo."}},{"number":10,"title":"Mortalis-V-1","name":"Mortalis-V-1","id":"Mortalis-V-1","image":"../codex/03_Ordens_E_Guerreiros/Mortalis-V-1.png","description":"Mortalis é o braço direito do Imperador das Sombras. Ele empunha um machado-foice de energia capaz de rasgar a matéria dimensional e drenar o sangue vital de suas vítimas à distância.","attributes":{"race":"Ceifador de Sangue (Ordem do Trono de Espinhos)","physical":"Porte alto, ombreiras maciças e postura de carrasco.","faceAndHair":"Elmo com visor em cruz e orbe de energia no ombro e armas.","outfit":"Placas metálicas de tom roxo e preto com tecido pesado cobrindo o peitoral.","palette":"Roxo-escuro, preto-ébano e magma-carmesim.","equipment":"Machado-alce de grande porte com orbe de energia orbicular na ponta."}},{"number":11,"title":"Nameless-King-V-1","name":"Nameless-King-V-1","id":"Nameless-King-V-1","image":"../codex/03_Ordens_E_Guerreiros/Nameless-King-V-1.png","description":"Um antigo soberano dos céus que abdicou de seu trono para caçar dragões primordiais. Ele manipula relâmpagos através de sua lança-tridente, trajando vestes rúnicas gasta pelo tempo.","attributes":{"race":"Rei Esquecido do Trovão (Senhores dos Céus Antigos)","physical":"Alto, esguio, postura serena porém intimidadora.","faceAndHair":"Cabelos prateados volumosos caindo pelas costas e elmo coroado.","outfit":"Armadura de malha dourada e couro rúnico sobre mantos antigos desfiados.","palette":"Dourado-envelhecido, cinza-prata e bege.","equipment":"Lança-tridente de caçador de dragões e auréola de espinhos."}},{"number":12,"title":"Pyroth-V-1","name":"Pyroth-V-1","id":"Pyroth-V-1","image":"../codex/03_Ordens_E_Guerreiros/Pyroth-V-1.png","description":"Pyroth foi forjado nas chamas do núcleo terrestre. Sua armadura exala um calor tão extremo que derrete o chão onde ele pisa, e seu machado incandescentes parte escudos com facilidade.","attributes":{"race":"Paladino do Fogo Primordial (Ordem da Fênix de Ferro)","physical":"Robusto, pé à frente em posição de bloqueio e contra-ataque.","faceAndHair":"Elmo em forma de cabeça de dragão cuspidor de fogo com capa flamejante.","outfit":"Placas de ferro fundido com gretas de magma interno e capa vermelha.","palette":"Vermelho-fogo, laranja-vibrante e preto-carvão.","equipment":"Machado de lâmina flamejante e escudo denteado de lava."}},{"number":14,"title":"Skull-Knight-V-1","name":"Skull-Knight-V-1","id":"Skull-Knight-V-1","image":"../codex/03_Ordens_E_Guerreiros/Skull-Knight-V-1.png","description":"Um guerreiro místico imortal que combate os Senhores do Abismo há séculos. Sua armadura remete a um esqueleto de cavaleiro divino, e sua espada corta a própria urdidura do espaço.","attributes":{"race":"Guardião do Destino Esquelético (Ordem da Rosa Vermelha)","physical":"Postura elegante de duelo, peitoral estruturado em caixa torácica.","faceAndHair":"Máscara de crânio de ferro com olhos brilhantes e capas esvoaçantes.","outfit":"Armadura de placas em formato ósseo prateado com capa interior clara.","palette":"Prata-aço, branco-ossos e cinza.","equipment":"Espada com guarda ornamentada em forma de rosa e escudo espinhoso."}},{"number":15,"title":"Solano-V-1","name":"Solano-V-1","id":"Solano-V-1","image":"../codex/03_Ordens_E_Guerreiros/Solano-V-1.png","description":"Um guerreiro sagrado abençoado pelo primeiro raio do sol. Sua armadura emite um brilho celestial que cega inimigos corrompidos e cura aliados no campo de batalha.","attributes":{"race":"Arquimago do Sol Aurora (Guarda da Luz Divina)","physical":"Bípede, ereto e sereno com cetro e espada em punho.","faceAndHair":"Elmo aureolado de luz com capa de penas brancas nobres.","outfit":"Armadura de placas de ouro e marfim com bordados e filigranas de luz.","palette":"Dourado-solar, marfim-puro e amarelo-aurora.","equipment":"Bastão arcano de luz e espada sagrada de duelista."}},{"number":16,"title":"Soul-of-Cinder-V-1","name":"Soul-of-Cinder-V-1","id":"Soul-of-Cinder-V-1","image":"../codex/03_Ordens_E_Guerreiros/Soul-of-Cinder-V-1.png","description":"O amálgama de todos os heróis que um dia se sacrificaram para manter o sol aceso. Ele empunha uma espada espiral feita de brasas incandescentes que se adapta ao seu estilo de combate.","attributes":{"race":"Encarnação das Cinzas Ancestrais (Guardiões da Chama)","physical":"Físico alto, levemente inclinado com fagulhas flutuando ao redor.","faceAndHair":"Elmo chamuscado e retorcido pelo calor com visor incandescente.","outfit":"Armadura gótica desgastada e queimada por séculos de combustão.","palette":"Laranja-brasa, vermelho-fogo e cinza-cinza.","equipment":"Espada longa de brasas incandescentes com guarda em espiral."}},{"number":17,"title":"Thrum-V-1","name":"Thrum-V-1","id":"Thrum-V-1","image":"../codex/03_Ordens_E_Guerreiros/Thrum-V-1.png","description":"Um ser lendário com força capaz de derrubar colunas de templos. Thrum funde a ferocidade de uma besta com o treinamento militar de um guerreiro de elite.","attributes":{"race":"Campeão Minotauro das Sombras (Ordem dos Chifres Ancestrais)","physical":"Postura curvada e selvagem, quadris largos e ombros maciços.","faceAndHair":"Grande crânio com chifres curvados gigantescos e juba branca.","outfit":"Placas de ferro bruto presas por tiras de couro e mantos rasgados.","palette":"Marrom-terra, prata-velha e branco.","equipment":"Espada de execução de uma mão e crânios troféus na cintura."}},{"number":18,"title":"Uriel-V-1","name":"Uriel-V-1","id":"Uriel-V-1","image":"../codex/03_Ordens_E_Guerreiros/Uriel-V-1.png","description":"Comandante das milícias celestes encarregadas de expurgar demoníacos do plano mortal. Uriel empunha uma montante de luz e ostenta uma capa adornada com motivos sagrados.","attributes":{"race":"Arcanjo de Guerra Encouraçado (Guarda Celestial)","physical":"Bípede majestoso, passos firmes e peitoral esculpido.","faceAndHair":"Elmo fechado de cavaleiro divino com crista de asas e manto branco.","outfit":"Armadura completa de ouro e prata com manto de veludo claro.","palette":"Ouro-solar, prata-reluzente e branco.","equipment":"Montante de cavaleiro sagrado com ranhura de energia."}},{"number":19,"title":"Vesperion","name":"Vesperion","id":"Vesperion","image":"../codex/03_Ordens_E_Guerreiros/Vesperion.png","description":"Vesperion se move como um fantasma no campo de batalha, deixando apenas rastros de fogo escarlate. Suas duas lâminas gêmeas cortam a matéria com precisão cirúrgica.","attributes":{"race":"Assassino da Lâmina Escarlate (Ordem do Vórtice Sombrio)","physical":"Agil, posture de combate de esgrima dupla com lenço/capa fluida.","faceAndHair":"Elmo escuríssimo envolvido por um longo cachecol/aura vermelha fluida.","outfit":"Traje de couro tático e placas leves pretas para mobilidade máxima.","palette":"Preto-absoluto e vermelho-carmesim brilhante.","equipment":"Par de katanas/lâminas curvas de energia vermelha."}},{"number":20,"title":"Vorgreth","name":"Vorgreth","id":"Vorgreth","image":"../codex/03_Ordens_E_Guerreiros/Vorgreth.png","description":"Um soberano demônio que veste placas forjadas com metal infernal. Vorgreth canaliza o poder do submundo para incinerar linhas inteiras de defesa antes do ataque.","attributes":{"race":"Senhor do Fogo Abissal (Lorde da Ruína)","physical":"Estatura gigante, ombros duplos com espinhos de energia.","faceAndHair":"Elmo horned com múltiplos olhos luminosos e placa peitoral com núcleo de lava.","outfit":"Placas pesadas em ângulos agudos de ferro vulcânico e detalhes em vermelho.","palette":"Vermelho-magma, preto e dourado-escuro.","equipment":"Lança/maça de energia vulcânica."}},{"number":21,"title":"Vorgrim-Ironspine","name":"Vorgrim-Ironspine","id":"Vorgrim-Ironspine","image":"../codex/03_Ordens_E_Guerreiros/Vorgrim-Ironspine.png","description":"Uma abominação biomecânica formada por centenas de lâminas e espinhos. Vorgrim avança como uma tempestade de aço, impalando qualquer inimigo que se aproxime.","attributes":{"race":"Titã de Espinhos Necróticos (Ordem da Espinha de Aço)","physical":"Corpo coberto por dezenas de cristas e espinhos acentuados.","faceAndHair":"Elmo esquelético rodeado por espinhos em formato de coroa morta.","outfit":"Armadura completa em placas serrilhadas e cota de malha de espinhos.","palette":"Cinza-aço, marrom-ferrugem e preto.","equipment":"Cauda de espinhos de osso/metálica e lâminas nos braços."}},{"number":22,"title":"Vulcan-V-1","name":"Vulcan-V-1","id":"Vulcan-V-1","image":"../codex/03_Ordens_E_Guerreiros/Vulcan-V-1.png","description":"Vulcan é o forjador lendário das armas dos deuses. Sua armadura dourada e seus chifres incandescentes mantêm a temperatura necessária para dobrar qualquer metal conhecido.","attributes":{"race":"Mestre da Forja Divina (Ordem do Núcleo Solar)","physical":"Atarracado, robusto com chifres taurinos de chamas solares.","faceAndHair":"Máscara de forjador com chifres e olhos incandescentes.","outfit":"Armadura de placas de bronze solar espessas com avental de couro.","palette":"Laranja-fogo, bronze e vermelho-terroso.","equipment":"Espada/gládio de forja incandescente e marreta."}},{"number":24,"title":"Xerxes","name":"Xerxes","id":"Xerxes","image":"../codex/03_Ordens_E_Guerreiros/Xerxes.png","description":"Xerxes é um nobre meio-dragão que comanda os esquadrões aéreos da capital. Suas asas membranosas de penas roxas e suas vestes de gala ocultam um guerreiro mortal.","attributes":{"race":"Príncipe Dragão dos Céus (Ordem Draconiana Real)","physical":"Bípede, postura graciosa com asas abertas nas costas.","faceAndHair":"Máscara/elmo ornado com coroa de dragão e cabelos roxos/dourados.","outfit":"Túnica de gala carmesim e dourada com placas de armadura leves.","palette":"Dourado, roxo-imperial e vermelho-carmesim.","equipment":"Asas dracônicas e cinto de comandante real."}},{"number":25,"title":"Zephyrus-V-1","name":"Zephyrus-V-1","id":"Zephyrus-V-1","image":"../codex/03_Ordens_E_Guerreiros/Zephyrus-V-1.png","description":"Zephyrus manipula o fogo do plano astral, canalizando chamas avermelhadas e pretas diretamente dos seus punhos para incinerar espíritos e inimigos físicos.","attributes":{"race":"Mestre do Fogo Espiritual (Ordem das Chamas Negras)","physical":"Agachado em base de combate, fumaça e fogo emanando dos punhos.","faceAndHair":"Cabelos volumosos de fogo escuro e máscara tática.","outfit":"Traje tático leve com ataduras e placas de proteção de pulso.","palette":"Vermelho-fogo, preto-ébano e marrom.","equipment":"Aura flamejante ativada nas mãos e ombros."}}],"neighbors":{"prev":{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬"},"next":{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#F39C12;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deuses — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Deuses: 18 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#F39C12">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8C%9F%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="deuses">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">🌟</span><span class="head-label">Deuses</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">🌟</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Deuses</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#13_Deuses">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">🌟</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Deuses no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"13_Deuses","label":"Deuses","color":"#F39C12","icon":"🌟","lore":"O Panteão Ressurrecto, de volta em carruagens de fogo não por milagre, mas por contingência: a barreira está se rompendo.","tipo":"Divina","regioes":["retorno-dos-deuses"],"count":18},"members":[{"number":1,"title":"Bone-Plume-V-1","name":"Bone-Plume-V-1","id":"Bone-Plume-V-1","image":"../codex/13_Deuses/Bone-Plume-V-1.png","description":"Uma divindade ancestral que rege o ciclo da caça e do inevitável declínio da carne. Bone-Plume manifesta-se nos limites da criação para devorar os resquícios de estrelas e mundos mortos.","attributes":{"race":"Deus Bestial da Carcaça Primordial (Panteão da Predação)","physical":"Bestial quadrupedal/bípede curvado, musculatura maciça coberta por placas de osso.","faceAndHair":"Crânio de fera esbranquiçado com mandíbula denteada e fendas oculares sombrias.","outfit":"NENHUM (carapaça óssea e pelagem/plumas escuras integradas).","palette":"Branco-osso, preto-ébano e cinza-grafite.","equipment":"Placas de osso em forma de penas e garras curvadas."}},{"number":2,"title":"Clangoro-V-1","name":"Clangoro-V-1","id":"Clangoro-V-1","image":"../codex/13_Deuses/Clangoro-V-1.png","description":"O guardião dos ecos universais. O repicar do cajado ritual de Clangore vibra através dos planos para guiar as almas perdidas ou anunciar o nascimento e término de eras divinas.","attributes":{"race":"Deus dos Sinos das Almas (Panteão da Ressonância Eternas)","physical":"Humanoide robusto e compacto em pose solene de contemplação.","faceAndHair":"Rosto oculto sob capuz com brilho central de runa sagrada e formato de coruja/espírito.","outfit":"Túnica de pedra/musgo bordada com floreios e flores roxas na base.","palette":"Dourado-envelhecido, azul-turquesa, roxo e marrom.","equipment":"Cajado celestial dourado sustentando múltiplos sinos rituais."}},{"number":3,"title":"Gorvum-V-1","name":"Gorvum-V-1","id":"Gorvum-V-1","image":"../codex/13_Deuses/Gorvum-V-1.png","description":"A personificação da força tectônica irreprimível. Gorvum canaliza a pressão do núcleo do mundo através de seus quatro braços para moldar continentes ou esmagar rebeliões divinas.","attributes":{"race":"Deus Asura dos Quatro Braços de Pedra (Panteão dos Titãs Terrestres)","physical":"Bípede, tórax Largo e musculoso com quatro braços em posição de conjurar impacto.","faceAndHair":"Rosto bestial-divino com jubato de chamas/cabelos vermelhos e dentes afiados.","outfit":"Tanga de couro e metal com pulseiras de ouro pesado e colares rituais.","palette":"Cinza-pedra, roxo, vermelho e ouro.","equipment":"Pulseiras e ornamentos rituais de ouro maciço."}},{"number":4,"title":"Kaminari-V-1","name":"Kaminari-V-1","id":"Kaminari-V-1","image":"../codex/13_Deuses/Kaminari-V-1.png","description":"O senhor do raio cósmico. Kaminari habita o ápice das nuvens divinas, liberando trovões devastadores através dos tambores e lâminas que flutuam ao seu redor.","attributes":{"race":"Deus dos Trovões e Tempestades Nuvens (Panteão dos Céus Furiosos)","physical":"Bípede agachado flutuando em uma densa auréola de nuvens cinzentas.","faceAndHair":"Máscara/Capacete com chifres pontiagudos e crina de nuvens brancas incandescentes.","outfit":"Traje escuro de artes marciais com amarras e faixas.","palette":"Branco-fumaça, cinza, preto e prata.","equipment":"Tambores taiko celestiais e katana do trovão."}},{"number":5,"title":"Oculon-V-1","name":"Oculon-V-1","id":"Oculon-V-1","image":"../codex/13_Deuses/Oculon-V-1.png","description":"Uma massa radiante de energia de pesadelo que tudo vê. Oculon observa o passado, presente e futuro simultaneamente através de seus múltiplos olhos violeta incandescente.","attributes":{"race":"Deus da Visão Entrópica (Panteão dos Olhos Celestiais)","physical":"Forma humanoide amorfa envolvida por tentáculos e projeções de plasma.","faceAndHair":"Sem feições humanas; o corpo inteiro é salpicado por dezenas de olhos brilhantes.","outfit":"NENHUM (energia pura contida em corpo de sombra e plasma).","palette":"Violeta-elétrico, magenta e azul-marinho.","equipment":"Tentáculos de energia e esferas oculares de projeção."}},{"number":6,"title":"Ossuarion-V-1","name":"Ossuarion-V-1","id":"Ossuarion-V-1","image":"../codex/13_Deuses/Ossuarion-V-1.png","description":"O criador das chamas da purificação extrema. Ossuarion surge em momentos de estagnação do universo para incinerar realidades velhas e dar espaço a novos cosmologia.","attributes":{"race":"Deus do Fogo Infernal e Cornos Astrais (Panteão da Devastação)","physical":"Bípede bestial, torso de esqueleto envolto em um vendaval de fogo.","faceAndHair":"Crânio com galhada maciça de cervo/dragão expelindo chamas incandescentes.","outfit":"NENHUM (corpo constituído de brasas, cinzas e ossos abençoados).","palette":"Laranja-fogo, amarelo-solar, preto e marrom.","equipment":"Chifres ramificados incandescentes e aura de chamas solares."}},{"number":7,"title":"Renji-V-1","name":"Renji-V-1","id":"Renji-V-1","image":"../codex/13_Deuses/Renji-V-1.png","description":"O senhor da manipulação de gravidade e espaço. Renji utiliza suas chamas espectrais roxas e azuis para reescrever as leis da física em combates celestiais.","attributes":{"race":"Deus da Magia Cósmica Roxa (Panteão da Mente Imortal)","physical":"Bípede, pose agachada de meditação de combate com aura de energia flutuante.","faceAndHair":"Cabelo espetado de plasma roxo e azul, marcas divinas no rosto.","outfit":"Traje escuro com gola alta e joia focal no peito.","palette":"Azul-ciano, roxo-magenta e preto.","equipment":"Aura de plasma e joia mística de convergência."}},{"number":8,"title":"Saint-Vail-V-1","name":"Saint-Vail-V-1","id":"Saint-Vail-V-1","image":"../codex/13_Deuses/Saint-Vail-V-1.png","description":"O juiz silencioso das almas imortais. Saint-Vail permanece cego para os apelos mortais, empunhando sua espada divina para executar vereditos implacáveis.","attributes":{"race":"Deus Caído do Julgamento Oculto (Panteão da Justiça Sombria)","physical":"Humanoide, esguio e imponente, segurando uma espada longa de corte.","faceAndHair":"Venda negra cobrindo os olhos sob um capuz sagrado.","outfit":"Manto de nobreza com armadura de placas prateadas e capa fluida.","palette":"Prata, preto-ébano e cinza.","equipment":"Espada longa ritual e capuz de isolamento divino."}},{"number":9,"title":"Solkhamun-V-1","name":"Solkhamun-V-1","id":"Solkhamun-V-1","image":"../codex/13_Deuses/Solkhamun-V-1.png","description":"A soberana da ordem celestial e da harmonia do cosmos. Solkhamun irradia uma bênção de ouro que protege Aetheria de invasões do Vazio.","attributes":{"race":"Deusa Solar das Coroas Celestiais (Panteão da Luz Divina)","physical":"Entidade feminina/divina flutuante de vestes luxuosas e braços estendidos.","faceAndHair":"Rosto sereno com maquiagem ritual divina e cabelos dourados longos.","outfit":"Vestido majestoso de seda dourada com capas ornamentadas e pedrarias.","palette":"Ouro-brilhante, amarelo-creme e marfim.","equipment":"Auréola magnânima de luz solar com símbolos celestiais flutuantes."}},{"number":10,"title":"Solvain-V-1","name":"Solvain-V-1","id":"Solvain-V-1","image":"../codex/13_Deuses/Solvain-V-1.png","description":"O governante supremo dos panteões de luz. Solvan ostenta um cajado solar capaz de invocar rajadas de energia de estrelas moribundas para incinerar o mal.","attributes":{"race":"Deus Rei do Sol Dourado (Panteão dos Imperadores Celestiais)","physical":"Bípede, majestoso, empunhando um cetro solar e manto esvoaçante.","faceAndHair":"Feição jovem, imperiosa, com juba de cabelos vermelhos/dourados de fogo.","outfit":"Traje imperial branco com armadura e capa de ouro puro.","palette":"Dourado, vermelho-incandescente e branco-marfim.","equipment":"Cajado do sol com orbe de energia e coroas solares."}},{"number":11,"title":"Ulthar","name":"Ulthar","id":"Ulthar","image":"../codex/13_Deuses/Ulthar.png","description":"O patrono das criaturas subterrâneas e dos mistérios proibidos. Ulthar exige oferendas rituais para conceder visões proféticas aos seus devotos.","attributes":{"race":"Deus Rato dos Ossos e Sacrifício (Panteão dos Segredos Ocultos)","physical":"Bípede, antropomórfico, postura curvada segurando um cetro de osso e adaga.","faceAndHair":"Cabeça de roedor/rato com múltiplos olhos vermelhos brilhantes e coroa de espinhos.","outfit":"Trajes de pano encordoados com crânios e ossos acoplados.","palette":"Cinza-osso, vermelho-sangue e marrom.","equipment":"Adaga ritual de sacrifício e cajado de osso."}},{"number":12,"title":"Valeriana-V-1","name":"Valeriana-V-1","id":"Valeriana-V-1","image":"../codex/13_Deuses/Valeriana-V-1.png","description":"A valquíria suprema dos conflitos imortais. Valenana lidera as hostes celestiais em batalha, usando sua lâmina divina para dividir exércitos inteiros.","attributes":{"race":"Deusa da Guerra e do Sangue Celestial (Panteão das Lâminas Alvas)","physical":"Entidade feminina com pele de leopardo/padrões rúnicos, cabelos vermelhos volumosos.","faceAndHair":"Rosto severo com marcas de guerra e garras afiadas.","outfit":"Armadura de placas de osso e marfim adornada com asas e plumas.","palette":"Branco, vermelho-vinho e dourado.","equipment":"Lâmina colossal serrilhada e ornamento de asas de marfim."}},{"number":13,"title":"Vanek","name":"Vanek","id":"Vanek","image":"../codex/13_Deuses/Vanek.png","description":"Um deus gigante envolto em escuridão e símbolos de vigilância eterna. Vanek pune a arrogância dos mortais com sua Foice do Julgamento Final.","attributes":{"race":"Deus Titan dos Olhos da Noite (Panteão do Abismo Divino)","physical":"Titã colossal de corpo musculoso coberto por padrões de olhos e runas.","faceAndHair":"Chifres maciços e rosto de trevas com múltiplos olhos brilhantes.","outfit":"Saia de batalha militar escura com cinto decorado por crânios.","palette":"Preto, cinza-platina e branco.","equipment":"Foice colossal denteada e capa pesada de fumaça."}},{"number":14,"title":"Vyrn-V-1","name":"Vyrn-V-1","id":"Vyrn-V-1","image":"../codex/13_Deuses/Vyrn-V-1.png","description":"O sentinela dos portões cosmogônicos. Vym veste uma armadura viva feita do próprio tecido do espaço, impedindo que o caos do nada destrua a ordem dos deuses.","attributes":{"race":"Deus do Vazio Encouraçado (Panteão dos Guardiões Eternos)","physical":"Bípede encouraçado em postura solene de guarda.","faceAndHair":"Elmo com coroa de chifres ramificados de marfim/ouro.","outfit":"Armadura pesada de placas douradas e pretas com capa de sombras.","palette":"Preto, dourado-escuro e marfim.","equipment":"Espada do julgamento e armadura rúnica de contenção."}},{"number":15,"title":"Aethon-Sol-V-1, o Pai do Disco Incandescente","name":"Aethon-Sol-V-1","id":"Aethon-Sol-V-1","image":"../codex/13_Deuses/Aethon-Sol-V-1.png","description":"Aethon-Sol-V-1 é lembrado como o deus que acendeu o primeiro amanhecer sobre o mundo. Sua presença inspira reis, sacerdotes e viajantes que buscam orientação contra a escuridão.","attributes":{"race":"Deus Solar Antigo / Guardião do Firmamento (A Primeira Aurora)","physical":"Figura colossal e majestosa, com postura de monarca celestial.","faceAndHair":"Rosto sereno cercado por uma coroa de luz.","outfit":"Armadura cerimonial dourada com mantos de tecido branco.","palette":"Dourado, branco e âmbar.","equipment":"Disco solar atrás da cabeça e cetro de luz."}},{"number":16,"title":"Florivax, a Deusa das Estações Vivas","name":"Florivax","id":"Florivax","image":"../codex/13_Deuses/Florivax.png","description":"Florivax rege o florescimento, a queda das folhas e o retorno da vida. Onde ela pisa, a terra se renova, e os campos lembram que a beleza também pode ser selvagem.","attributes":{"race":"Deusa da Natureza / Soberana dos Ciclos (A Mãe das Florestas em Flor)","physical":"Silhueta graciosa, com postura aberta e acolhedora.","faceAndHair":"Cabelos feitos de pétalas e olhos verdes brilhantes.","outfit":"Vestido de lianas, flores e folhas entrelaçadas.","palette":"Verde, rosa, branco e dourado-claro.","equipment":"Coroa floral e cajado de sementes."}},{"number":17,"title":"Mycelium-V-1, o Deus do Subsolo Silencioso","name":"Mycelium-V-1","id":"Mycelium-V-1","image":"../codex/13_Deuses/Mycelium-V-1.png","description":"Mycelium governa os reinos escondidos sob a superfície, onde raízes e fungos mantêm o ciclo da matéria viva. Ele é venerado por curandeiros e temido por quem despreza a decomposição sagrada.","attributes":{"race":"Deus Fúngico / Senhor do Pólen Oculto (O Coração da Umidade)","physical":"Corpo encurvado e envolto em energia orgânica.","faceAndHair":"Chapéu de cogumelo em vez de coroa e olhos fosforescentes.","outfit":"Manto de fibras úmidas e esporos brilhantes.","palette":"Castanho, verde-musgo e creme.","equipment":"Bastão enraizado e nuvens de esporos."}},{"number":18,"title":"Pyrhen-V-1, o Deus da Cinza Sagrada","name":"Pyrhen-V-1","id":"Pyrhen-V-1","image":"../codex/13_Deuses/Pyrhen-V-1.png","description":"Pyrhen vela sobre fogueiras rituais, cremações e pactos selados pela chama. Ele destrói o que está corrompido, mas também aquece os que ainda têm caminho para o retorno.","attributes":{"race":"Deus da Fogueira / Juiz da Purificação (O Fogo que Julga)","physical":"Corpo alto e magro, com postura austera e implacável.","faceAndHair":"Face parcialmente coberta por brasas e olhos alaranjados.","outfit":"Toga cerimonial que parece feita de fumaça e carvão.","palette":"Laranja-queimado, cinza e preto.","equipment":"Tocha eterna e correntes de cinza viva."}}],"neighbors":{"prev":{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮"},"next":{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>

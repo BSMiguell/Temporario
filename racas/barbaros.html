@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#CA6F1E;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bárbaros — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Bárbaros: 17 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#CA6F1E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%AA%93%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css">
+</head>
+<body data-slug="barbaros">
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">🪓</span><span class="head-label">Bárbaros</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">🪓</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Bárbaros</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          <a class="btn btn-line" id="galleryLink" href="../index.html#19_Barbaros">Ver na galeria ↗</a>
+        </div>
+      </div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
+        </div>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
+
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">🪓</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Bárbaros no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        <div class="timeline-race" aria-label="Linha do tempo da raça">
+          <h3 class="timeline-title">Linha do tempo</h3>
+          <ul class="timeline-events">
+            <li><span class="tl-year">Era Antiga</span> <span class="tl-desc">Origem no mundo de Aetheria.</span></li>
+            <li><span class="tl-year">Era do Conflito</span> <span class="tl-desc">Participação nas grandes batalhas.</span></li>
+            <li><span class="tl-year">Hoje</span> <span class="tl-desc">Presença no códice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"19_Barbaros","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","lore":"Clãs nômades das Montanhas de Dente de Dragão, armados com as espadas elementais que os Observadores lhes deram — e que aprenderam a odiar.","tipo":"Territorial","regioes":["Cumes da Tempestade"],"count":17},"members":[{"number":1,"title":"Dreadhelm-V-1, o Flagelo de Aço","name":"Dreadhelm-V-1","id":"Dreadhelm-V-1","image":"../codex/19_Barbaros/Dreadhelm-V-1.png","description":"Dreadhelm forjou seu próprio elmo nas forjas subterrâneas das Montanhas Desoladas após ter o rosto queimado em combate. Sem nunca revelar sua verdadeira face, ele vaga por Aetheria esmagando batalhões inteiros com seu martelo de guerra de tamanho descomunal.","attributes":{"race":"Bárbaro Armorizado / Colosso de Ferro (Executor dos Ermos)","physical":"Porte físico avantajado, musculatura massiva e postura de investida pesada.","faceAndHair":"Elmo fechado de aço com fendas de visão escuras, ocultando completamente suas feições.","outfit":"Peitoral de couro reforçado, ombreiras de chapa e ombreiras pontiagudas de ferro.","palette":"Cinza-aço, marrom-couro e tom de pele bronzeado.","equipment":"Martelo de guerra titânico de duas mãos e mangual de cravos de ferro."}},{"number":2,"title":"Godfrey-First-Elden-Lord-V-1, o Rei leão dos Ermos","name":"Godfrey-First-Elden-Lord-V-1","id":"Godfrey-First-Elden-Lord-V-1","image":"../codex/19_Barbaros/Godfrey-First-Elden-Lord-V-1.png","description":"Primeiro rei lendário das tribos do norte, Godfrey carrega nas costas a projeção espiritual do Leão Primal, a besta sagrada que modera sua fúria em batalha. Onde ele pisa, a terra estremece sob o peso de sua machadada.","attributes":{"race":"Bárbaro Lorde / Rei Guerreiro (Espírito do Leão Primal)","physical":"Postura majestosa e ereta de rei-guerreiro com barbas e cabeleira dourada/prateada.","faceAndHair":"Rosto maduro com cicatrizes de guerra, barba longa e volumosa.","outfit":"Armadura cerimonial dourada com entalhes reais e capa de pele de fera.","palette":"Dourado-reluzente, marfim e branco-neve.","equipment":"Machado de guerra duplo de tamanho colossal e silhueta espiritual de leão cobrindo seus ombros."}},{"number":3,"title":"Gorak-V-1, o Caçador das Bestas Primordiais","name":"Gorak-V-1","id":"Gorak-V-1","image":"../codex/19_Barbaros/Gorak-V-1.png","description":"Gorak cresceu entre matilhas de bestas selvagens. Ele veste os ossos das feras mais perigosas que abateu com as próprias mãos, usando armas entalhadas em presas gigantescas para caçar aqueles que profanam a natureza.","attributes":{"race":"Bárbaro Tribal / Xamã da Caça (Guardião das Garras)","physical":"Físico ágil e musculoso, base de caçador agachada.","faceAndHair":"Cabelos pretos longos e rebeldes, pinturas de guerra corporais.","outfit":"Vestes de pele de animal, kilt de couro e braçadeiras de osso entalhado.","palette":"Marrom-terroso, bege-osso e preto-carvão.","equipment":"Ombreiras feitas com crânios de feras pré-históricas."}},{"number":4,"title":"Kragnar-V-1, o Carrasco de Sangue","name":"Kragnar-V-1","id":"Kragnar-V-1","image":"../codex/19_Barbaros/Kragnar-V-1.png","description":"Kragnar unificou três clãs guerreiros através da força bruta irresistível. Seu machado carrega a fama de jamais ter falhado em decepar a cabeça de um oponente em duelos de honra.","attributes":{"race":"Bárbaro Warlord / General Sangrento (Mestre do Machado)","physical":"Postura intimidadora com peito largo, braços musculosos descobertos.","faceAndHair":"Barba escura cerrada, olhar feroz de combate.","outfit":"Capa volumosa de pele com acolchoamento vermelho-sangue e saia de couro com fivelas.","palette":"Vermelho-carmesim, marrom-escuro e cinza-aço.","equipment":"Machado de execução de lâmina larga com entalhes de crânios no cinto."}},{"number":5,"title":"Leon-V-1, o Berserker Descorrentado","name":"Leon-V-1","id":"Leon-V-1","image":"../codex/19_Barbaros/Leon-V-1.png","description":"Quando Leon entra em estado de frenesi de batalha, ele perde qualquer noção de dor ou cansaço. Seu rugido de guerra é capaz de ensurdecer os inimigos mais próximos e desorientar a cavalaria adversária.","attributes":{"race":"Bárbaro Feral / Besta Humana (Devastador do Rugido)","physical":"Postura de ataque com braços erguidos e garras abertas, tórax massivo.","faceAndHair":"Juba de cabelo castanho indomável, boca aberta em rugido mostrando dentes afiados.","outfit":"Casaco pesado com revestimento de pele espessa de urso nos punhos e gola.","palette":"Castanho-escuro, bege e tom de pele quente.","equipment":"Expressão de frenesi total e cabeleira estilo juba de leão."}},{"number":6,"title":"Nosferatu-Zodd-V-1, o Ogro dos Picos Nevados","name":"Nosferatu-Zodd-V-1","id":"Nosferatu-Zodd-V-1","image":"../codex/19_Barbaros/Nosferatu-Zodd-V-1.png","description":"Um híbrido lendário entre bárbaros e criaturas das sombras. Zodd habita as passagens montanhosas mais perigosas de Aetheria, onde massacra viajantes e exércitos que ousam invadir seu território sem pagamento de tributo.","attributes":{"race":"Bárbaro Monstruoso / Berserker Noturno (A Besta das Neves)","physical":"Estrutura atarracada e ultra-musculosa, braços longos e pernas curtas e poderosas.","faceAndHair":"Olhos vermelhos brilhantes, orelhas pontiagudas, tez escura e caninos proeminentes.","outfit":"Túnica de pele crua amarrada por tiras grossas de couro.","palette":"Marrom-carvão, vermelho-brilhante nos olhos e cinza-escuro.","equipment":"Olhos vermelhos luminosos e orelhas de criatura abissal."}},{"number":7,"title":"Ragnar-V-1, a Tempestade de Lâminas","name":"Ragnar-V-1","id":"Ragnar-V-1","image":"../codex/19_Barbaros/Ragnar-V-1.png","description":"Conhecido como o Caçador de Dragões do Norte, Ragnar ostenta uma cabeleira branca arrepiada que simboliza os ventos congelantes de sua terra natal. Suas machadinhas gêmeas foram banhadas no sangue de serpentes marinhas.","attributes":{"race":"Bárbaro Nórdico / Matador de Dragões (Fúria do Gelo)","physical":"Postura de combate expansiva com pernas bem abertas e braços erguidos.","faceAndHair":"Juba prateada/branca e espetada em todas as direções, marcas de combate pelo corpo.","outfit":"Ombreiras gigantescas com espinhos de osso e cinto metálico com fivelas.","palette":"Branco-geada, prata e marrom-escuro.","equipment":"Duas machadinhas curvadas de combate rápido e cabeleira congelada em espinhos."}},{"number":8,"title":"Thorgan-Bloodaxe-V-1, o Bárbaro da Lâmina Sangrenta","name":"Thorgan-Bloodaxe-V-1","id":"Thorgan-Bloodaxe-V-1","image":"../codex/19_Barbaros/Thorgan-Bloodaxe-V-1.png","description":"Thorgan forjou seu machado com minério extraído do núcleo de um meteoro caído. A lâmina retém o calor residual do espaço, tornando seus cortes capazes de derreter escudos normais na hora do impacto.","attributes":{"race":"Bárbaro do Abismo / Guerreiro das Forjas (O Mutilador)","physical":"Físico atarracado e denso com ombreiras reforçadas.","faceAndHair":"Cabelos e barba ruivos cobrindo boa parte do rosto severo.","outfit":"Armadura de placas de bronze gravadas com fivelas de crânios de demônio.","palette":"Ruivo-fogo, bronze-envelhecido e marrom-ouro.","equipment":"Machado de combate assimétrico de lâmina única gigantesca."}},{"number":9,"title":"Thorin-V-1, o Guardião de Ferro","name":"Thorin-V-1","id":"Thorin-V-1","image":"../codex/19_Barbaros/Thorin-V-1.png","description":"Thorin combateu em centenas de guerras na linha de frente e viveu para contar a história. Ele combina a ferocidade de um bárbaro com a disciplina tática de um cavaleiro pesado.","attributes":{"race":"Bárbaro Veterano / Escudeiro de Rocha (A Parede de Inverno)","physical":"Postura firme de defesa e contra-ataque rápido.","faceAndHair":"Barba grisalha volumosa, cabelos prateados penteados para trás.","outfit":"Armadura completa de ferro com cota de malha sob o peitoral e ombreiras pontiagudas.","palette":"Prata-escuro, cinza-grafite e preto.","equipment":"Espada curta de lâmina larga e adaga de combate no cinto."}},{"number":10,"title":"Brynja-V-1, a Escudeira da Neve Selvagem","name":"Brynja-V-1","id":"Brynja-V-1","image":"../codex/19_Barbaros/Brynja-V-1.png","description":"Brynja lidera caçadas e resgates nas terras congeladas onde poucos sobrevivem. Ela é famosa por sustentar a linha de frente mesmo ferida, usando coragem como combustível.","attributes":{"race":"Bárbara de Tundra / Protetora de Clã (A Parede Viva)","physical":"Corpo forte e resistente, com postura de guarda avançada.","faceAndHair":"Tranças loiras grossas e expressão determinada.","outfit":"Peles pesadas, couro grosso e ombreiras de ossos.","palette":"Branco-gelo, castanho e cinza.","equipment":"Escudo redondo e machado curto de combate."}},{"number":11,"title":"Grimrok-Ironhide-V-1, o Filho da Pele de Ferro","name":"Grimrok-Ironhide-V-1","id":"Grimrok-Ironhide-V-1","image":"../codex/19_Barbaros/Grimrok-Ironhide-V-1.png","description":"Grimrok ficou conhecido por atravessar muralhas com o próprio corpo e nunca recuar de um cerco. Sua pele endurecida parece metal bruto, e suas investidas derrubam portões como se fossem gravetos.","attributes":{"race":"Bárbaro Colossal / Quebra-Linhas (O Trovejador de Pedra)","physical":"Tronco enorme, ombros altos e marcha pesada.","faceAndHair":"Barba preta, nariz quebrado e olhos de pedra.","outfit":"Couro grosso, correntes e placas improvisadas de ferro.","palette":"Ferro, preto e marrom-escuro.","equipment":"Machado de aríete e braçadeiras reforçadas."}},{"number":12,"title":"Helga-V-1, a Tempestade da Serra","name":"Helga-V-1","id":"Helga-V-1","image":"../codex/19_Barbaros/Helga-V-1.png","description":"Helga escuta os trovões como outros escutam canções. Ela guia seu povo por rotas perigosas e invoca ventos violentos para dispersar inimigos e espíritos hostis.","attributes":{"race":"Bárbara Xamânica / Porta-Trovão (A Voz do Vendaval)","physical":"Corpo robusto e postura ereta, com presença dominante.","faceAndHair":"Cabelos presos, cicatrizes e olhos claros.","outfit":"Vestes de pele com amuletos de osso e cobre.","palette":"Cinza-trovão, marrom e azul-claro.","equipment":"Tambor ritual e machado decorado."}},{"number":13,"title":"Skald-V-1, o Cantor das Guerras Antigas","name":"Skald-V-1","id":"Skald-V-1","image":"../codex/19_Barbaros/Skald-V-1.png","description":"Skald não combate apenas com força, mas com histórias que inflamam exércitos inteiros. Ele viaja de aldeia em aldeia gravando feitos épicos para que nenhum herói morra no esquecimento.","attributes":{"race":"Bárbaro Poeta / Cronista de Batalha (O Memoriador de Sangue)","physical":"Corpo forte, postura aberta e gesto dramático.","faceAndHair":"Barba longa e olhar intenso de contador de lendas.","outfit":"Capa de pele e túnica de viajante marcada por runas.","palette":"Marrom, vermelho e dourado queimado.","equipment":"Lira de guerra e ponta de lança ritual."}},{"number":14,"title":"Torak-V-1, o Rompe-Montanhas","name":"Torak-V-1","id":"Torak-V-1","image":"../codex/19_Barbaros/Torak-V-1.png","description":"Torak nasceu em uma tribo que media valor pela capacidade de abrir caminho para todos os outros. Ele ataca como um deslizamento de rocha, sem recuar até que a linha inimiga quebre.","attributes":{"race":"Bárbaro de Investida / Demolidor Tribal (O Punho do Norte)","physical":"Corpo maciço e postura inclinada para o avanço.","faceAndHair":"Careca, cicatrizes profundas e mandíbula rígida.","outfit":"Couro grosso, ombreiras de madeira e peles de inverno.","palette":"Marrom, cinza e vermelho-terra.","equipment":"Martelo tribal e braceletes de impacto."}},{"number":15,"title":"Ulfar-V-1, o Lobo do Crepúsculo","name":"Ulfar-V-1","id":"Ulfar-V-1","image":"../codex/19_Barbaros/Ulfar-V-1.png","description":"Ulfar vive entre tribos e matas, sempre seguindo a trilha de monstros e saqueadores. Ele luta com a precisão de um predador e a fúria de uma alcateia inteira.","attributes":{"race":"Bárbaro Caçador / Alfa Errante (O Dente da Escuridão)","physical":"Corpo atlético, postura baixa e pronta para o ataque.","faceAndHair":"Cabelos escuros, barba curta e olhos amarelos.","outfit":"Peles de lobo, couro escuro e faixas de braço.","palette":"Preto, marrom e cinza-fumaça.","equipment":"Lança de caça e garras de osso."}},{"number":16,"title":"Ulfr-Wolfclan-V-1, o Herdeiro da Matilha","name":"Ulfr-Wolfclan-V-1","id":"Ulfr-Wolfclan-V-1","image":"../codex/19_Barbaros/Ulfr-Wolfclan-V-1.png","description":"Ulfr-Wolfclan-V-1 carrega juramentos de sangue deixados por gerações de guerreiros da mesma linhagem. Quando entra em combate, ele se torna a própria personificação da matilha.","attributes":{"race":"Bárbaro de Clã / Guerreiro-Lobo (A Fera do Selo Antigo)","physical":"Tronco largo, postura agressiva e passo pesado.","faceAndHair":"Barba grossa, cicatriz no olho e dentes serrilhados.","outfit":"Pelos de lobo, couro trançado e amuletos de osso.","palette":"Castanho-escuro, cinza e branco.","equipment":"Machado de guerra e colar de presas."}},{"number":17,"title":"Varg-V-1, o Alfa da Ruptura","name":"Varg-V-1","id":"Varg-V-1","image":"../codex/19_Barbaros/Varg-V-1.png","description":"Varg lidera saqueadores com disciplina brutal e instinto animal. Ele não busca glória, apenas a vitória total, e seu uivo costuma ser o último som ouvido por seus inimigos.","attributes":{"race":"Bárbaro Predador / Chefe de Guerra (O Uivo que Quebra Formações)","physical":"Corpo espesso, postura de ataque e presença ameaçadora.","faceAndHair":"Olhos ferozes, barba cerrada e cabelos longos soltos.","outfit":"Armadura de couro bruto com peles escuras.","palette":"Preto, marrom e vermelho-escuro.","equipment":"Machado duplo e braçadeiras de bronze."}}],"neighbors":{"prev":{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖"},"next":{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":43},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":27},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":42},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":31},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":18},{"href":"bersek.html","label":"Bersek","color":"#e3491b","icon":"📁","count":5}],"generatedAt":"2026-08-27"}</script>
+<script src="assets/raca.js" defer></script>
+</body>
+</html>
