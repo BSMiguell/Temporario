@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
+
     <style>
       /* ========== TOKENS & RESET ========== */
       *,
@@ -40,6 +41,16 @@
         --vignette: rgba(23, 19, 16, 0.07);
         --grain-opacity: 0.045;
         --scrolled-shadow: 0 12px 32px -20px rgba(23, 19, 16, 0.3);
+        /* tokens adicionais sumi-e (preservando --group-color) */
+        --gold: #a77b3d;
+        --vermilion: #9e3428;
+        --wash: rgba(90, 70, 45, 0.08);
+        --wash-strong: rgba(90, 70, 45, 0.16);
+        --brush-mark: rgba(23, 21, 19, 0.11);
+        --surface-raised: var(--paper-light);
+        --surface-sunken: var(--paper-dark);
+        --texture-opacity: 0.18;
+        --card-border: var(--line);
         --fd: "Fraunces", Georgia, serif;
         --fs: "Space Grotesk", "Helvetica Neue", sans-serif;
         --pad: clamp(1.5rem, 5vw, 5.5rem);
@@ -73,6 +84,15 @@
         --vignette: rgba(0, 0, 0, 0.4);
         --grain-opacity: 0.06;
         --scrolled-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.55);
+        --gold: #c39a55;
+        --vermilion: #b64132;
+        --wash: rgba(230, 215, 188, 0.045);
+        --wash-strong: rgba(230, 215, 188, 0.09);
+        --brush-mark: rgba(241, 235, 221, 0.09);
+        --surface-raised: var(--paper-light);
+        --surface-sunken: var(--paper-dark);
+        --texture-opacity: 0.22;
+        --card-border: var(--line);
         --header-bg: rgba(26, 23, 20, 0.88);
         --card-bg: var(--paper-light);
         --modal-bg: var(--paper);
@@ -205,7 +225,6 @@
       body.has-ambient #ambientGlow {
         opacity: 1;
       }
-
       /* ========== TOAST ========== */
       .toast-container {
         position: fixed;
@@ -949,6 +968,24 @@
         font-style: italic;
         color: var(--ink-muted);
       }
+      .ritual-mark-active { animation: ritualMark 0.7s ease; opacity: 0.85; transform: scale(1.1); }
+      @keyframes ritualMark { 0% { transform: scale(1) rotate(0deg); opacity: 0.3; } 50% { transform: scale(1.25) rotate(12deg); opacity: 1; } 100% { transform: scale(1.1) rotate(-3deg); opacity: 0.85; } }
+      .timeline-event {
+        font: 400 0.78rem var(--fs);
+        color: var(--ink-soft);
+        background: var(--paper-light);
+        border: 1px solid var(--line);
+        border-radius: 1.5rem;
+        padding: 0.25rem 0.7rem;
+        opacity: 0.82;
+      }
+      .hero-canvas {
+        width: 100%;
+        max-width: 420px;
+        height: 80px;
+        opacity: 0.7;
+        margin-top: 0.3rem;
+      }
       .hero-ctas {
         display: flex;
         gap: 0.8rem;
@@ -1097,6 +1134,21 @@
       .feature-reroll:hover {
         transform: rotate(180deg) scale(1.08);
         border-color: var(--hero-color, var(--accent));
+      }
+      /* ===== PILHA 3D — Hero (PLANO-HERO-PILHA-3D.md, passo 2) =====
+         Correção: transform NÃO fica mais na transition CSS (só opacity) —
+         o transform é 100% controlado pelas classes/WAAPI no JS, sem os dois
+         sistemas de animação brigando pela mesma propriedade. */
+      .hero-stack { position: relative; width: 100%; aspect-ratio: 16/10; }
+      .stack-card { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: opacity .3s ease; overflow: hidden; background: var(--paper-light); }
+      .stack-card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .stack-back-1 .stack-card-img, .stack-back-2 .stack-card-img { filter: saturate(.8) brightness(.7); }
+      .stack-front { position: relative; z-index: 3; transform: none; }
+      .stack-back-1 { z-index: 2; transform: translate(10px, 14px) rotate(2deg) scale(.97); opacity: .85; box-shadow: 0 10px 24px rgba(0,0,0,.25); }
+      .stack-back-2 { z-index: 1; transform: translate(20px, 26px) rotate(4deg) scale(.94); opacity: .65; box-shadow: 0 14px 30px rgba(0,0,0,.2); }
+      @media (prefers-reduced-motion: reduce) {
+        .stack-back-1, .stack-back-2 { display: none !important; }
+        .stack-front { z-index: 3; }
       }
 
       /* ===== MAP PREVIEW (conexão ao mapa) ===== */
@@ -2467,6 +2519,80 @@
         }
       }
 
+      /* ===== RITUAIS DE INVOCACAO (Fase A — 6 rituais CSS) ===== */
+      .ritual-03-banner { animation: bannerDown 0.7s ease-out both; }
+      @keyframes bannerDown {
+        from { clip-path: polygon(0 0, 100% 0, 100% 10%, 0 10%); opacity: 0.2; }
+        to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); opacity: 1; }
+      }
+      .ritual-03-modal { animation: bannerReveal 0.6s ease-out both; }
+      @keyframes bannerReveal {
+        from { transform: translateY(-18px) scale(0.98); opacity: 0; }
+        to   { transform: translateY(0) scale(1); opacity: 1; }
+      }
+      .ritual-07-impact { animation: impactShake 0.5s ease-in-out; }
+      @keyframes impactShake {
+        0%, 100% { transform: translate(0,0); }
+        20% { transform: translate(-6px, 3px); }
+        40% { transform: translate(4px, -2px); }
+        60% { transform: translate(-3px, 2px); }
+        80% { transform: translate(2px, -1px); }
+      }
+      .ritual-07-modal { animation: impactRing 0.8s ease-out forwards; }
+      @keyframes impactRing {
+        0% { box-shadow: 0 0 0 0 rgba(227,73,27,0.35); }
+        50% { box-shadow: 0 0 0 35px rgba(227,73,27,0); }
+        100% { box-shadow: 0 0 0 0 rgba(227,73,27,0); }
+      }
+      .ritual-08-jaw { animation: jawOpen 0.75s ease-out both; }
+      @keyframes jawOpen {
+        from { clip-path: polygon(50% 0%, 50% 100%, 50% 0%, 50% 100%); }
+        to   { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+      }
+      .ritual-08-modal { animation: jawReveal 0.6s ease-out both; }
+      @keyframes jawReveal {
+        from { transform: scaleY(0.15); opacity: 0; }
+        to   { transform: scaleY(1); opacity: 1; }
+      }
+      .ritual-14-fracture { animation: fractureSlice 0.85s ease-out both; }
+      @keyframes fractureSlice {
+        0% { clip-path: polygon(0 0, 30% 0, 70% 100%, 30% 100%, 0 0); opacity: 0.4; }
+        50% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0); opacity: 1; }
+        100% { clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%, 0 0); opacity: 1; }
+      }
+      .ritual-14-modal { animation: fractureAlign 0.7s ease-out both; }
+      @keyframes fractureAlign {
+        from { transform: translateX(-12px) rotate(-1deg); opacity: 0.6; }
+        to   { transform: translateX(0) rotate(0deg); opacity: 1; }
+      }
+      .ritual-17-merge { animation: mergeSlide 0.7s ease-out both; }
+      @keyframes mergeSlide {
+        from { clip-path: inset(0 50% 0 50%); }
+        to   { clip-path: inset(0 0% 0 0%); }
+      }
+      .ritual-17-modal { animation: mergeReveal 0.7s ease-out both; }
+      @keyframes mergeReveal {
+        0% { opacity: 0; filter: blur(8px); }
+        60% { opacity: 0.8; filter: blur(2px); }
+        100% { opacity: 1; filter: blur(0px); }
+      }
+      .ritual-19-axe { animation: axeCut 0.8s ease-out both; }
+      @keyframes axeCut {
+        from { clip-path: polygon(0 0, 0 100%, 0 0, 100% 100%); }
+        to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0); }
+      }
+      .ritual-19-modal { animation: axeReveal 0.6s ease-out both; }
+      @keyframes axeReveal {
+        from { transform: translateY(-20px) rotate(-1deg); opacity: 0; }
+        to   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ritual-03-banner, .ritual-07-impact, .ritual-08-jaw,
+        .ritual-14-fracture, .ritual-17-merge, .ritual-19-axe { animation: none !important; }
+        .ritual-03-modal, .ritual-07-modal, .ritual-08-modal,
+        .ritual-14-modal, .ritual-17-modal, .ritual-19-modal { animation: none !important; }
+      }
+
       @media (max-width: 900px) {
         .modal-nav {
           width: 2.4rem;
@@ -2755,6 +2881,8 @@
         .character-card:hover { transform: none !important; }
         .thumb img { transition: none !important; }
       }
+      body.no-fx * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      body.no-fx .ritual-03-banner, body.no-fx .ritual-07-impact, body.no-fx .ritual-08-jaw, body.no-fx .ritual-14-fracture, body.no-fx .ritual-17-merge, body.no-fx .ritual-19-axe { animation: none !important; opacity: 1 !important; transform: none !important; }
       @media (max-width: 560px) {
         .character-card:hover { transform: translateY(-4px) scale(1.01); }
       }
@@ -2788,6 +2916,37 @@
           title="Mapa do Mundo de Aetheria"
           >&#128506;&#65039; Mapa</a
         >
+        <button
+          class="map-link"
+          id="codexBtn"
+          type="button"
+          title="Codex Completo — progresso de exploração"
+          aria-label="Ver progresso do códice"
+        >
+          &#128214; Codex
+        </button>
+        <button
+          class="map-link"
+          id="noFxBtn"
+          type="button"
+          title="Modo sem efeitos"
+          aria-label="Alternar modo sem efeitos"
+          onclick="
+            document.body.classList.toggle('no-fx');
+            localStorage.setItem(
+              'noFx',
+              document.body.classList.contains('no-fx') ? '1' : '0',
+            );
+            showToast(
+              document.body.classList.contains('no-fx')
+                ? 'Modo sem efeitos ativo'
+                : 'Efeitos restaurados',
+              { icon: '◑' },
+            );
+          "
+        >
+          ◑ Efeitos
+        </button>
         <button
           class="palette-trigger"
           id="paletteTrigger"
@@ -2889,6 +3048,18 @@
             <span class="hero-sep" aria-hidden="true">·</span>
             <span class="hero-date" id="statDate">—</span>
           </p>
+          <div
+            id="heroTimeline"
+            class="hero-timeline"
+            aria-label="Linha do tempo da raça destacada"
+          ></div>
+          <canvas
+            id="heroCanvas"
+            class="hero-canvas"
+            aria-label="Constelação do dia"
+            width="420"
+            height="80"
+          ></canvas>
           <div class="hero-ctas">
             <a class="hero-cta" href="Mapa_Aetheria.html">🗺️ Explorar o mapa</a>
             <button class="hero-cta ghost" id="surpriseBtn" type="button">
@@ -2897,16 +3068,30 @@
           </div>
         </div>
         <figure class="hero-feature" id="heroFeature">
-          <button
-            class="feature-media"
-            id="featureMedia"
-            type="button"
-            aria-label="Abrir o personagem em destaque"
-          >
-            <span class="feature-chip"
-              ><span aria-hidden="true">✨</span> Destaque de hoje</span
-            >
-          </button>
+          <div class="hero-stack" id="heroStack">
+            <div class="stack-card stack-back-2" aria-hidden="true">
+              <img class="stack-card-img" id="stackImg2" alt="" />
+            </div>
+            <div class="stack-card stack-back-1" aria-hidden="true">
+              <img class="stack-card-img" id="stackImg1" alt="" />
+            </div>
+            <div class="stack-card stack-front" id="featureMediaFront">
+              <button
+                class="feature-media"
+                id="featureMedia"
+                type="button"
+                aria-label="Abrir o personagem em destaque"
+              >
+                <span class="corner tl" aria-hidden="true"></span>
+                <span class="corner tr" aria-hidden="true"></span>
+                <span class="corner bl" aria-hidden="true"></span>
+                <span class="corner br" aria-hidden="true"></span>
+                <span class="feature-chip"
+                  ><span aria-hidden="true">✨</span> Destaque de hoje</span
+                >
+              </button>
+            </div>
+          </div>
           <figcaption class="feature-caption">
             <span class="feature-name" id="featureName">—</span>
             <a class="feature-race" id="featureRaceLink" href="#">—</a>
@@ -2920,6 +3105,12 @@
               🎲
             </button>
           </figcaption>
+          <span
+            id="featureLive"
+            aria-live="polite"
+            aria-atomic="true"
+            style="position: absolute; left: -9999px"
+          ></span>
         </figure>
       </section>
 
@@ -2929,7 +3120,9 @@
           <a href="Mapa_Aetheria.html" class="map-preview-card">
             <span class="map-preview-icon" aria-hidden="true">🗺️</span>
             <h3 class="map-preview-title">Explorar Aetheria</h3>
-            <p class="map-preview-desc">Navegue pelo mapa 3D interativo — 16 regiões, batalhas e céus.</p>
+            <p class="map-preview-desc">
+              Navegue pelo mapa 3D interativo — 16 regiões, batalhas e céus.
+            </p>
             <span class="map-preview-arrow">↗</span>
           </a>
         </div>
@@ -3399,12 +3592,15 @@
       // ============================================================
       const supportsVT =
         typeof document.startViewTransition === "function" && !reducedMotion;
+      let isTransitionActive = false; // guarda contra duplicata view-transition-name
 
       function openModalWithVT(char, sourceEl) {
+        if (isTransitionActive) return; // evita clique rápido duplicado
         if (!supportsVT) {
           openModal(char);
           return;
         }
+        isTransitionActive = true;
         let artEl = null;
         if (
           sourceEl &&
@@ -3415,10 +3611,20 @@
         }
         if (artEl) artEl.style.viewTransitionName = "char-art";
         modalMedia.style.viewTransitionName = char.image ? "char-art" : "";
+        // === RITUAL DE INVOCACAO (Fase A) ===
+        if (window.runRitual && char && char.folder && char.folder !== '05_Demonios') {
+          window.runRitual(
+            char.folder,
+            sourceEl || document.querySelector(".character-card"),
+            modalPanel,
+            getGroupTheme(char.folder).color,
+          );
+        }
         const vt = document.startViewTransition(() => openModal(char));
         vt.finished.finally(() => {
           if (artEl) artEl.style.viewTransitionName = "";
           modalMedia.style.viewTransitionName = "";
+          isTransitionActive = false;
         });
       }
 
@@ -3513,6 +3719,11 @@
         const container = document.getElementById("toastContainer");
         let icon = opts.icon || "";
         let msg = String(message);
+        // Se uma chave de grupo é fornecida e a mensagem é uma chave de micro-copy, substitui
+        if (opts.group) {
+          const themed = themeMicro(opts.group, msg);
+          if (themed) msg = themed;
+        }
         if (!icon) {
           const m = msg.match(/^([^\p{L}\p{N}\s"'“(](?:️)?)\s*(.*)$/u);
           if (m && m[1].trim()) {
@@ -3656,6 +3867,151 @@
         raceLink.href = `racas/${slugify(char.folder)}.html`;
         raceLink.style.setProperty("--group-color", theme.color);
         raceLink.style.setProperty("--group-ink", bestInk(theme.color));
+        // Timeline de lore (Fase C) — eventos relacionados à raça
+        const tlEl = document.getElementById("heroTimeline");
+        tlEl.innerHTML = "";
+        if (historiaData && historiaData.battles && char.folder) {
+          const folderSlug = char.folder;
+          const related = historiaData.battles
+            .filter((b) => {
+              const sides = Array.isArray(b.lados)
+                ? b.lados.flat()
+                : b.lados
+                  ? [b.lados]
+                  : [];
+              return sides.some((s) => s === folderSlug || s === char.folder);
+            })
+            .slice(0, 3);
+          if (related.length === 0 && historiaData.races) {
+            const raceInfo = historiaData.races.find(
+              (r) => r.id === folderSlug || r.id === char.folder,
+            );
+            if (raceInfo && raceInfo.descricao) {
+              tlEl.innerHTML = `<span class="timeline-event">${raceInfo.descricao.slice(0, 120)}${raceInfo.descricao.length > 120 ? "..." : ""}</span>`;
+            } else {
+              tlEl.innerHTML = `<span class="timeline-event">Lenda: ${prettyGroup(folderSlug || char.folder)}</span>`;
+            }
+          } else {
+            tlEl.innerHTML = related
+              .map(
+                (b) =>
+                  `<span class="timeline-event" title="${escapeHTML(b.resumo || "")}">${escapeHTML(b.nome || b.id || "Evento")}</span>`,
+              )
+              .join("");
+          }
+        } else {
+          tlEl.innerHTML = `<span class="timeline-event">Lenda de ${prettyGroup(char.folder)}</span>`;
+        }
+        // Constelação do dia (Fase C) — desenho leve no hero
+        const canvas = document.getElementById("heroCanvas");
+        if (canvas) {
+          const ctx = canvas.getContext("2d");
+          const w = canvas.width || 420;
+          const h = canvas.height || 80;
+          ctx.clearRect(0, 0, w, h);
+          const color = theme.color || "#e3491b";
+          const count = 5; // 5-6 pontos relacionados
+          const points = [];
+          for (let i = 0; i < count; i++) {
+            points.push({
+              x: 40 + (w - 80) * (0.15 + 0.7 * ((i + 1) / count)),
+              y: h / 2 + (Math.random() - 0.5) * 30,
+            });
+          }
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.2;
+          ctx.globalAlpha = 0.35;
+          for (let i = 0; i < points.length - 1; i++) {
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[i + 1].x, points[i + 1].y);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 0.9;
+          for (const p of points) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+          }
+        }
+        const live = document.getElementById("featureLive");
+        if (live)
+          live.textContent = `Destaque: ${char.name}, ${prettyGroup(char.folder || "")}`;
+      }
+
+      // ===== PILHA 3D — fila real de personagens + animação no reroll =====
+      // stackQueue[0] = quem já está espiando em stack-back-1 (vira o próximo destaque)
+      // stackQueue[1] = quem está espiando em stack-back-2 (mais escondido)
+      let stackQueue = [];
+
+      function pickRandomWithImage(exclude = []) {
+        const excludeIds = new Set(
+          exclude.filter(Boolean).map((c) => c.id || c.name || c.title),
+        );
+        const pool = allCharacters.filter(
+          (c) => c.image && !excludeIds.has(c.id || c.name || c.title),
+        );
+        const src = pool.length ? pool : allCharacters.filter((c) => c.image);
+        return src.length ? src[Math.floor(Math.random() * src.length)] : null;
+      }
+
+      function paintBackCard(imgEl, char) {
+        if (!imgEl) return;
+        if (char && char.image) {
+          imgEl.src = char.image;
+          imgEl.alt = char.name || "";
+        } else {
+          imgEl.removeAttribute("src");
+          imgEl.alt = "";
+        }
+      }
+
+      function ensureStackQueue() {
+        while (stackQueue.length < 2) {
+          const c = pickRandomWithImage([featuredChar, ...stackQueue]);
+          if (!c) break;
+          stackQueue.push(c);
+        }
+        paintBackCard(document.getElementById("stackImg1"), stackQueue[0]);
+        paintBackCard(document.getElementById("stackImg2"), stackQueue[1]);
+      }
+
+      let rerollCooldown = false;
+      function cycleStack() {
+        if (reducedMotion) {
+          const c = pickRandomWithImage([featuredChar]);
+          if (c) renderFeature(c);
+          return;
+        }
+        if (rerollCooldown) return;
+        const front = document.getElementById("featureMediaFront");
+        const b1 = document.querySelector(".stack-back-1");
+        const b2 = document.querySelector(".stack-back-2");
+        if (!front || !b1 || !b2) {
+          const c = pickRandomWithImage([featuredChar]);
+          if (c) renderFeature(c);
+          return;
+        }
+        ensureStackQueue();
+        if (!stackQueue.length) return; // sem personagens com imagem — nada a fazer
+        rerollCooldown = true;
+        const nextChar = stackQueue.shift();
+        const freshChar = pickRandomWithImage([
+          featuredChar,
+          nextChar,
+          ...stackQueue,
+        ]);
+        if (freshChar) stackQueue.push(freshChar);
+        renderFeature(nextChar);
+        paintBackCard(document.getElementById("stackImg1"), stackQueue[0]);
+        paintBackCard(document.getElementById("stackImg2"), stackQueue[1]);
+        // animação simples de "biblioteca" — translate leve
+        const media = document.getElementById("featureMediaFront");
+        if (media) {
+          gsap.fromTo(media, { x: -10, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "ease" });
+        }
+        rerollCooldown = false;
       }
 
       window.cardImgErrorFeature = function (img) {
@@ -3690,16 +4046,22 @@
             .split("-")
             .map(Number);
           const dt = new Date(y, m - 1, d);
+          const today = new Date();
+          const daysAgo = Math.round((today - dt) / (1000 * 60 * 60 * 24));
+          const dateStr = dt.toLocaleDateString("pt-BR", {
+            day: "numeric",
+            month: "long",
+          });
           document.getElementById("statDate").textContent =
-            "atualizado em " +
-            dt.toLocaleDateString("pt-BR", {
-              day: "numeric",
-              month: "long",
-            });
+            daysAgo <= 7
+              ? `atualizado há ${daysAgo} dia${daysAgo === 1 ? "" : "s"}`
+              : "atualizado em " + dateStr;
         } catch (_) {
           /* data ausente: mantém o travessão */
         }
         renderFeature(allCharacters[dayPickIndex(allCharacters.length)]);
+        stackQueue = []; // reseta a fila (o array de personagens acabou de chegar)
+        ensureStackQueue(); // já pinta stack-back-1/2 com personagens reais e distintos
       }
 
       document.getElementById("surpriseBtn").addEventListener("click", () => {
@@ -3710,14 +4072,14 @@
       document.getElementById("featureMedia").addEventListener("click", () => {
         if (featuredChar) openModalWithVT(featuredChar, null);
       });
-      document
-        .getElementById("featureReroll")
-        .addEventListener("click", randomFeatured);
-
+      document.getElementById("featureReroll").addEventListener("click", () => {
+        if (rerollCooldown) return; // debounce ~400ms via animação
+        cycleStack();
+      });
       // ===== AUTOPLAY ALEATÓRIO DO HERO-CODEX =====
-      // Troca o personagem em destaque a cada 7 segundos (se a aba estiver visível)
+      // Troca o personagem a cada 7 segundos (se a aba estiver visível)
       setInterval(() => {
-        if (document.visibilityState === "visible") randomFeatured();
+        if (document.visibilityState === "visible") cycleStack();
       }, 7000);
 
       // ============================================================
@@ -4194,7 +4556,9 @@
           if (item.type === "char") {
             const c = item.char;
             const theme = getGroupTheme(c.folder);
-            visual = c.image ? `<img class="pal-art" src="${c.image}" alt="" style="--group-color:${theme.color};" />` : `<span class="pal-ph" style="--group-color:${theme.color};--group-ink:${bestInk(theme.color)};">${firstLetter(c.name)}</span>`;
+            visual = c.image
+              ? `<img class="pal-art" src="${c.image}" alt="" style="--group-color:${theme.color};" />`
+              : `<span class="pal-ph" style="--group-color:${theme.color};--group-ink:${bestInk(theme.color)};">${firstLetter(c.name)}</span>`;
             name = escapeHTML(c.name);
             sub = escapeHTML((c.title ? c.title + " · " : "") + c.groupName);
           } else if (item.type === "race") {
@@ -4462,7 +4826,7 @@
               <p class="empty-title">Nenhum personagem encontrado${
                 searchTerm ? ` para <em>“${escapeHTML(searchTerm)}”</em>` : ""
               }</p>
-              <p class="empty-hint">Tente um destes caminhos</p>
+              <p class="empty-hint">${selectedGroup && selectedGroup !== "__all__" ? themeMicro(selectedGroup, "empty") || "Tente um destes caminhos" : "Tente um destes caminhos"}</p>
               <div class="empty-suggestions">
                 ${
                   searchTerm
@@ -5007,9 +5371,119 @@
       window.addEventListener("load", updateFilterArrows);
 
       // ============================================================
+      //  MICRO-COPY TEMÁTICO (Fase B) — mensagens por raça
+      // ============================================================
+      const MICRO_COPY = {
+        "03_Ordens_E_Guerreiros": {
+          empty: "Nenhum guerreiro encontrado nesta terra.",
+          toast: "A ordem está registrada.",
+        },
+        "07_Gigantes": {
+          empty: "Nenhum gigante avistado nas montanhas.",
+          toast: "Passo retumbante registrado.",
+        },
+        "08_Monstros": {
+          empty: "Nenhum monstro nas sombras.",
+          toast: "Mandíbula selada.",
+        },
+        "14_Demonios_Do_Caos": {
+          empty: "Nenhum caos encontrado neste vazio.",
+          toast: "Fratura contida.",
+        },
+        "17_Meio_Sangue": {
+          empty: "Nenhum sangue misto nesta busca.",
+          toast: "Duas metades unidas.",
+        },
+        "19_Barbaros": {
+          empty: "Nenhum bárbaro nesta terra.",
+          toast: "Machado abaixado.",
+        },
+      };
+      function themeMicro(groupKey, type) {
+        const entry =
+          MICRO_COPY[groupKey] || MICRO_COPY[Object.keys(MICRO_COPY)[0]] || {};
+        return entry[type] || entry.empty || entry.toast || "";
+      }
+      // ============================================================
+      //  CODEX COMPLETO (Fase D) — progresso de exploração local
+      // ============================================================
+      (function initCodexComplete() {
+        const btn = document.getElementById("codexBtn");
+        if (!btn) return;
+        btn.addEventListener("click", () => {
+          let visited = JSON.parse(
+            localStorage.getItem("visitedRaces") || "[]",
+          );
+          const group =
+            selectedGroup && selectedGroup !== "__all__" ? selectedGroup : null;
+          if (group && !visited.includes(group)) {
+            visited.push(group);
+            localStorage.setItem("visitedRaces", JSON.stringify(visited));
+          }
+          const total = groups.length || 22;
+          const progress = visited.length;
+          showToast(`Codex Completo: ${progress}/${total} raças exploradas`, {
+            icon: "📖",
+          });
+        });
+      })();
+
+      // ============================================================
+      //  CARTÃO COMPARTILHÁVEL (Fase D) — canvas PNG do card atual
+      // ============================================================
+      document
+        .getElementById("modalShareBtn")
+        .addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(location.href);
+            showToast("🔗 Link do personagem copiado!");
+          } catch (_) {
+            showToast("Não consegui copiar o link 😅");
+          }
+        });
+      // Botão extra no modal: gerar cartão PNG
+      const shareBtn = document.getElementById("modalShareBtn");
+      if (shareBtn) {
+        const cardBtn = document.createElement("button");
+        cardBtn.type = "button";
+        cardBtn.className = "hero-cta ghost";
+        cardBtn.style.marginTop = "0.5rem";
+        cardBtn.textContent = "📇 Gerar cartão PNG";
+        cardBtn.addEventListener("click", () => {
+          if (!currentModalChar) return;
+          const c = document.createElement("canvas");
+          c.width = 400;
+          c.height = 220;
+          const ctx = c.getContext("2d");
+          ctx.fillStyle = "#1d1916";
+          ctx.fillRect(0, 0, 400, 220);
+          const theme = getGroupTheme(currentModalChar.folder);
+          ctx.fillStyle = theme.color || "#e3491b";
+          ctx.fillRect(0, 0, 400, 6);
+          ctx.fillStyle = "#f0ece4";
+          ctx.font = "bold 22px 'Fraunces', serif";
+          ctx.fillText(currentModalChar.name, 20, 55);
+          ctx.font = "14px 'Space Grotesk', sans-serif";
+          ctx.fillStyle = "#b8b0a4";
+          ctx.fillText(currentModalChar.title || theme.label, 20, 80);
+          ctx.fillStyle = "#b8b0a4";
+          ctx.font = "12px 'Space Grotesk', sans-serif";
+          ctx.fillText("Aetheria Codex · " + new Date().getFullYear(), 20, 105);
+          const a = document.createElement("a");
+          a.href = c.toDataURL("image/png");
+          a.download = currentModalChar.name + "_card.png";
+          a.click();
+          showToast("📇 Cartão PNG gerado!", { icon: "📇" });
+        });
+        shareBtn.parentNode.appendChild(cardBtn);
+      }
+
+      // ============================================================
       //  INICIALIZAÇÃO
       // ============================================================
       loadData();
     </script>
+    <script src="assets/rituals.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   </body>
 </html>
