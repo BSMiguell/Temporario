@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR" data-theme="light">
   <head>
     <meta charset="UTF-8" />
@@ -105,6 +105,7 @@
           background-color 0.5s var(--ease),
           color 0.5s var(--ease);
       }
+      body::before { content: ""; position: fixed; inset: 0; z-index: 9998; pointer-events: none; background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(57,39,22,0.08) 100%), radial-gradient(ellipse at 20% 10%, rgba(90,70,45,0.06), transparent 40%), radial-gradient(ellipse at 80% 80%, rgba(90,70,45,0.05), transparent 35%); opacity: 0.55; mix-blend-mode: multiply; }
       body {
         font-family: var(--fs);
         font-size: 20px;
@@ -169,7 +170,7 @@
         background-image:
           linear-gradient(90deg, var(--line-faint) 1px, transparent 1px),
           linear-gradient(180deg, var(--line-faint) 1px, transparent 1px);
-        background-size: 72px 72px;
+        background-size: 96px 96px; opacity: 0.35;
         transition: background-image 0.5s var(--ease);
       }
       .grid-lines::after {
@@ -464,6 +465,7 @@
         letter-spacing: 0.08em;
         color: var(--ink-muted);
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-bottom-width: 2px;
         border-radius: 0.45rem;
         padding: 0.25rem 0.7rem;
@@ -505,6 +507,7 @@
         width: min(840px, 100%);
         background: var(--modal-bg, var(--paper));
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-radius: var(--radius);
         box-shadow: 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         overflow: hidden;
@@ -581,6 +584,7 @@
         border-radius: 50%;
         object-fit: cover;
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         flex-shrink: 0;
         background: var(--paper-dark);
       }
@@ -599,6 +603,7 @@
         color: color-mix(in srgb, var(--group-color, #e3491b) 65%, var(--ink));
         font: italic 600 1.4rem var(--fd);
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
       }
       .pal-race-dot {
         width: 53px;
@@ -625,6 +630,7 @@
         font-size: 1.05rem;
         background: var(--paper-dark);
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         flex-shrink: 0;
       }
       .pal-main {
@@ -665,6 +671,7 @@
       .palette-foot kbd {
         font: inherit;
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-bottom-width: 2px;
         border-radius: 0.35rem;
         padding: 0.08rem 0.35rem;
@@ -883,6 +890,8 @@
       }
       /* ========== HERO DO CÓDICE ========== */
       .hero-codex {
+        border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         position: relative;
         display: grid;
         grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
@@ -891,6 +900,7 @@
         padding: clamp(1.7rem, 3.6vw, 3rem) clamp(1.5rem, 3.4vw, 3.2rem);
         margin-bottom: 2.4rem;
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-radius: calc(var(--radius-lg) + 6px);
         background:
           radial-gradient(
@@ -975,6 +985,7 @@
         color: var(--ink-soft);
         background: var(--paper-light);
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-radius: 1.5rem;
         padding: 0.25rem 0.7rem;
         opacity: 0.82;
@@ -1037,6 +1048,7 @@
         border-radius: var(--radius-lg);
         overflow: hidden;
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         cursor: pointer;
         padding: 0;
         background: var(--paper-dark);
@@ -1237,6 +1249,7 @@
         text-transform: uppercase;
         color: var(--ink-soft);
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-radius: 2rem;
         padding: 0.48rem 1.05rem;
         background: var(--paper-light);
@@ -1245,6 +1258,8 @@
       /* --- Hero responsivo: empilha abaixo de 1100px --- */
       @media (max-width: 1100px) {
         .hero-codex {
+        border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
           grid-template-columns: 1fr;
           gap: 1.5rem;
         }
@@ -1255,6 +1270,8 @@
       }
       @media (max-width: 600px) {
         .hero-codex {
+        border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
           padding: 1.3rem 1.1rem;
           margin-bottom: 1.6rem;
           border-radius: var(--radius-lg);
@@ -1403,7 +1420,7 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        box-shadow: var(--shadow-sm), var(--shadow-inset);
+        box-shadow: var(--shadow-sm), var(--shadow-inset), inset 0 0 0 1px rgba(90, 70, 45, 0.1);
         /* Tilt 3D da carta: JS alimenta --crx/--cry/--clift no hover */
         transform: perspective(1100px) rotateX(var(--crx, 0deg))
           rotateY(var(--cry, 0deg)) translateY(var(--clift, 0px));
@@ -2276,6 +2293,7 @@
         color: var(--ink-soft);
         background: var(--paper-light);
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-radius: 2rem;
         padding: 0.42rem 1rem;
         cursor: pointer;
@@ -2299,6 +2317,7 @@
         gap: 0.25rem;
         padding: 0.28rem;
         border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 30px 80px -20px rgba(23, 19, 16, 0.45);
         border-radius: 2rem;
         background: var(--paper-light);
         align-self: flex-start;
@@ -5487,3 +5506,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   </body>
 </html>
+
