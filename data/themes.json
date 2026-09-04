@@ -1,0 +1,26 @@
+{
+  "themes": [
+    { "label": "Humanos",              "color": "#4A90D9", "icon": "🧑" },
+    { "label": "Mutantes",             "color": "#7B4D9E", "icon": "🧬" },
+    { "label": "Ordens e Guerreiros",  "color": "#C0392B", "icon": "⚔️" },
+    { "label": "Onis",                 "color": "#E74C3C", "icon": "👹" },
+    { "label": "Demônios",             "color": "#8E44AD", "icon": "😈" },
+    { "label": "Desconhecidos",        "color": "#7F8C8D", "icon": "❓" },
+    { "label": "Gigantes",             "color": "#D68910", "icon": "🗿" },
+    { "label": "Monstros",             "color": "#2E4053", "icon": "👾" },
+    { "label": "Semideuses",           "color": "#F1C40F", "icon": "⚡" },
+    { "label": "Os Observadores",      "color": "#1ABC9C", "icon": "👁️" },
+    { "label": "Seres do Vazio",       "color": "#34495E", "icon": "🌀" },
+    { "label": "Magos",                "color": "#16A085", "icon": "🔮" },
+    { "label": "Deuses",               "color": "#F39C12", "icon": "🌟" },
+    { "label": "Demônios do Caos",     "color": "#E67E22", "icon": "🔥" },
+    { "label": "Os Aspectos",          "color": "#9B59B6", "icon": "🎭" },
+    { "label": "Alvamortos",           "color": "#BDC3C7", "icon": "💀" },
+    { "label": "Meio-Sangue",          "color": "#BC4F00", "icon": "🩸" },
+    { "label": "Canibais",             "color": "#A04000", "icon": "🍖" },
+    { "label": "Bárbaros",             "color": "#CA6F1E", "icon": "🪓" },
+    { "label": "Amaldiçoados",         "color": "#5D6D7E", "icon": "🌑" },
+    { "label": "Demônios Akuma-Gani",  "color": "#AD1457", "icon": "👑" },
+    { "label": "Bersek",               "color": "#6E2C00", "icon": "🪓" }
+  ]
+}

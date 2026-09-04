@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://bsmiguell.github.io/Temporario/data/characters.schema.json",
+  "title": "Aetheria Codex - Personagem",
+  "description": "Schema de validacao para uma entrada de personagem no characters-api.json. Cada personagem deve ter no minimo nome, id e folder (pasta).",
+  "type": "object",
+  "required": ["name", "id", "folder"],
+  "additionalProperties": true,
+  "properties": {
+    "number":      { "type": "integer", "minimum": 1, "description": "Numero de ordem dentro da pasta (1, 2, 3, ...)" },
+    "title":       { "type": "string",  "description": "Titulo/epiteto (ex: 'Aatrox, o Tirano de Sangue')" },
+    "name":        { "type": "string",  "minLength": 1, "description": "Nome base (sem o numero de variante). Usado como chave." },
+    "id":          { "type": "string",  "minLength": 1, "description": "Identificador unico (slug do nome, sem prefixo numerico da pasta)" },
+    "file":        { "type": "string",  "pattern": "^Aetheria_Codex_de_.+\\.md$", "description": "Arquivo .md fonte dentro da pasta" },
+    "folder":      { "type": "string",  "pattern": "^\\d{2}_.+$", "description": "Pasta de origem (formato NN_Nome)" },
+    "image":       { "type": ["string", "null"], "description": "Caminho relativo da imagem PNG (codex/<folder>/<name>.png)" },
+    "imageWebp":   { "type": ["string", "null"], "description": "Caminho relativo da imagem WebP (codex/<folder>/<name>.webp) - presente quando o WebP ja foi gerado" },
+    "description": { "type": "string",  "description": "Descricao resumida (1-3 paragrafos)" },
+    "attributes":  {
+      "type": "object",
+      "description": "Atributos da ficha (alinhamento, reino, status, etc) - chaves livres, valores string",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "examples": [{
+    "number": 1,
+    "title": "Aatrox, o Tirano de Sangue",
+    "name": "Aatrox",
+    "id": "aatrox",
+    "file": "Aetheria_Codex_de_Demonios.md",
+    "folder": "05_Demonios",
+    "image": "codex/05_Demonios/Aatrox.png",
+    "imageWebp": "codex/05_Demonios/Aatrox.webp",
+    "description": "Um demonio antigo amaldiçoado...",
+    "attributes": {
+      "alinhamento": "Caótico Maligno",
+      "reino": "Abismo Carmesim",
+      "status": "Ativo"
+    }
+  }]
+}
