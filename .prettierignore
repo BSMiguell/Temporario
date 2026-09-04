@@ -1,0 +1,9 @@
+node_modules/
+graphify-out/
+codex/
+racas/
+Temporario.md
+characters-api.json
+historia-api.json
+package-lock.json
+sw.js

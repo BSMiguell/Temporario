@@ -1,11 +1,12 @@
 {
     "project":  "Aetheria Codex — História",
-    "generatedAt":  "2026-08-27",
+    "generatedAt":  "2026-09-03",
     "sourceFile":  "Historia/Aetheria_Dados_do_Mundo.md",
     "totalRegions":  16,
     "totalCeles":  5,
     "totalBattles":  5,
     "totalRaces":  22,
+    "totalRituais":  10,
     "regions":  [
                     {
                         "id":  "norte-sub-frost",
@@ -303,6 +304,8 @@
                                           "15_Os_Aspectos"
                                       ]
                                   ],
+                        "era":  "I",
+                        "data":  "Inverno Eterno, ano 0",
                         "resumo":  "A 1ª Divisão de Infantaria Humana cruzou com Os Aspectos emergindo do gelo — e foi obliterada por lâminas cósmicas em horas. A fronteira congelada ficou marcada por armaduras despedaçadas: o primeiro sinal público do fim dos tempos."
                     },
                     {
@@ -321,6 +324,8 @@
                                           "09_Semi_Deuses"
                                       ]
                                   ],
+                        "era":  "II",
+                        "data":  "Primavera dos Cumes, ano 3",
                         "resumo":  "Sob a maior tempestade elétrica já registrada, os clãs bárbaros resistiram à magia divina e ao voo dos Semi-Deuses enviados pelos Observadores, transformando as gargantas em corredor de sangue. Uma trégua forçada nasceu da interferência de um único Aspecto."
                     },
                     {
@@ -340,6 +345,8 @@
                                           "21_Demonios_Akuma-Gani"
                                       ]
                                   ],
+                        "era":  "III",
+                        "data":  "Outono da Fenda, ano 7",
                         "resumo":  "O levante massivo das cobaias destruiu o maior complexo de clonagem e síntese arcana de Aetheria. As habilidades instáveis alimentadas pela energia residual dos experimentos arrasaram as estruturas arcanas — e nasceu ali a zona livre dos párias mutantes."
                     },
                     {
@@ -358,6 +365,8 @@
                                           "11_Seres_Do_Vazio"
                                       ]
                                   ],
+                        "era":  "IV",
+                        "data":  "Verão do Vazio, ano 12",
                         "resumo":  "Com os selos enfraquecidos pelas guerras mortais, o solo da Fenda cedeu e o Vazio emergiu em névoa cinzenta. No mesmo instante, avatares divinos desceram direto no ponto de impacto — a batalha em curso que rasga a física do continente."
                     },
                     {
@@ -376,6 +385,8 @@
                                           "14_Demonios_Do_Caos"
                                       ]
                                   ],
+                        "era":  "IV",
+                        "data":  "Verão do Vazio, ano 12 (clímax)",
                         "resumo":  "Atraídos pela energia acumulada das forjas, os Demônios do Caos invadiram a cidadela vulcânica sobre rios de lava e pontes de basalto. Defendida com fogo puro, a fortaleza resistiu — mas os invasores recuaram satisfeitos, tendo colhido a dor de centenas de mortos."
                     }
                 ],
@@ -390,7 +401,7 @@
                                       "norte-vetusto"
                                   ],
                       "descricao":  "Donos do Norte Duplo: civilização de bastiões, alquimia militar herdada dos Observadores e a ambição que sustenta — e ameaça — o equilíbrio continental.",
-                      "count":  30
+                      "count":  24
                   },
                   {
                       "id":  "02_Mutantes",
@@ -399,7 +410,7 @@
                       "tipo":  "Dispersa",
                       "regioes":  "grande-fenda-central",
                       "descricao":  "Nascidos de experimentos, adaptações extremas ou rejeição genética; banidos de toda cidade, organizam células rebeldes na única terra que os aceitou: a Fenda.",
-                      "count":  43
+                      "count":  48
                   },
                   {
                       "id":  "03_Ordens_E_Guerreiros",
@@ -408,7 +419,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "fortalezas-de-juramento",
                       "descricao":  "Cavalaria de juramentos permanentes que guarda a Linha de Geada e as estradas do sul; enterram os mortos de qualquer raça com o mesmo ritual.",
-                      "count":  25
+                      "count":  22
                   },
                   {
                       "id":  "04_Onis",
@@ -417,7 +428,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "cavernas-de-obsidiana",
                       "descricao":  "Cortes feudais demoníacas do subsolo vulcânico, cada uma disputando uma forja ancestral — rivais frios dos Akuma-Gani nas profundezas.",
-                      "count":  29
+                      "count":  31
                   },
                   {
                       "id":  "05_Demonios",
@@ -426,7 +437,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "fosso-infernal",
                       "descricao":  "Nobres infernais selados desde a era pré-Ruptura numa caldeira de sete pilares; cada guerra no mundo acima afrouxa um elo.",
-                      "count":  42
+                      "count":  41
                   },
                   {
                       "id":  "06_Desconhecidos",
@@ -462,7 +473,7 @@
                       "tipo":  "Ascensa",
                       "regioes":  "sementes-de-ascensao",
                       "descricao":  "Mortais com Sementes de Ascensão injetadas pelos Observadores; imortalidade parcial e a dúvida de serem peões de um tabuleiro maior.",
-                      "count":  31
+                      "count":  30
                   },
                   {
                       "id":  "10_Os_Observadores",
@@ -489,7 +500,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "torres-arcanas",
                       "descricao":  "Catalogadores da mana em cidadelas-torre sobre o Vetusto; desconfiam da tecnologia arcana dos Observadores — magia sem fonte é feitiçaria mentirosa.",
-                      "count":  20
+                      "count":  23
                   },
                   {
                       "id":  "13_Deuses",
@@ -516,7 +527,7 @@
                       "tipo":  "Conceitual",
                       "regioes":  "aspectos-em-marcha",
                       "descricao":  "Guardiões conceituais em armaduras lendárias que selaram a grande fenda ancestral; seu retorno é o maior indicativo de tragédia iminente.",
-                      "count":  10
+                      "count":  9
                   },
                   {
                       "id":  "16_Alvamortos",
@@ -525,7 +536,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "necropoles-silenciosas",
                       "descricao":  "MONGES SEPULCRAIS das necrópoles de mármore e obsidiana flutuante; herdeiros diretos da técnica de manipulação de almas dos Observadores.",
-                      "count":  17
+                      "count":  20
                   },
                   {
                       "id":  "17_Meio_Sangue",
@@ -543,7 +554,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "fronteiras-de-magma",
                       "descricao":  "Tribos de múltiplos braços das arenas de sacrifício; a única lei que reconhecem é a sobrevivência do mais forte.",
-                      "count":  22
+                      "count":  21
                   },
                   {
                       "id":  "19_Barbaros",
@@ -570,7 +581,7 @@
                       "tipo":  "Territorial",
                       "regioes":  "terras-vermelhas",
                       "descricao":  "Onze fragmentos da vontade do soberano Imu, selado — cada cidadela vulcânica é um domínio dessa vontade partida, forjando guerra eterna.",
-                      "count":  11
+                      "count":  30
                   },
                   {
                       "id":  "22_Bersek",
@@ -579,7 +590,99 @@
                       "tipo":  "Nômade",
                       "regioes":  "cumes-da-tempestade",
                       "descricao":  "Guerreiros moldados pela guerra, pela raiva e por juramentos quebrados — gladiadores, cavaleiros amaldiçoados e fúrias forjadas da própria violência. Vagam pelos campos de batalha abandonados, sem pátria e sem senhor, movidos apenas pela próxima luta.",
-                      "count":  5
+                      "count":  9
                   }
-              ]
+              ],
+    "rituais":  [
+                    {
+                        "id":  "rt-demon-pacto",
+                        "raca":  "05_Demonios",
+                        "titulo":  "Pacto Rubro",
+                        "estrofe":  "Pelos sete pilares eu juro: meu sangue, minha chama, minha palavra. Tomo o que me deve e devolvo o que me toma. Que a voz do pacto me siga até onde nem a noite alcança.",
+                        "duracao_ms":  3800,
+                        "estilo":  "pacto",
+                        "icon":  "🔥"
+                    },
+                    {
+                        "id":  "rt-demon-massacre",
+                        "raca":  "05_Demonios",
+                        "titulo":  "Massacre Inominável",
+                        "estrofe":  "Que o silêncio reine. Que o último grito seja meu. Eu não perdoo — eu permito que o outro exista enquanto me pertence.",
+                        "duracao_ms":  4200,
+                        "estilo":  "massacre",
+                        "icon":  "⚔"
+                    },
+                    {
+                        "id":  "rt-demon-ressurreicao",
+                        "raca":  "05_Demonios",
+                        "titulo":  "Ressurreição Púrpura",
+                        "estrofe":  "O que a terra engole, o sangue devolve. O que a cinza esquece, a chama nomeia. Levanta, que o senhor não te permite partir.",
+                        "duracao_ms":  4000,
+                        "estilo":  "ressurreicao",
+                        "icon":  "✦"
+                    },
+                    {
+                        "id":  "rt-oni-devoracao",
+                        "raca":  "04_Onis",
+                        "titulo":  "Devoração Vermelha",
+                        "estrofe":  "Açoito o ar, parto o ferro, trago a presa. O que a forja cospe, a forja engole. Pelo sangue de meus pais, a fome me basta.",
+                        "duracao_ms":  3600,
+                        "estilo":  "devoracao",
+                        "icon":  "🩸"
+                    },
+                    {
+                        "id":  "rt-oni-honra",
+                        "raca":  "04_Onis",
+                        "titulo":  "Honra Ancestral",
+                        "estrofe":  "Ajoelho diante dos meus. Ergo-me diante dos meus. Entre o primeiro e o último suspiro, mantenho o nome limpo e a lâmina inteira.",
+                        "duracao_ms":  4000,
+                        "estilo":  "honra",
+                        "icon":  "⚜"
+                    },
+                    {
+                        "id":  "rt-hum-selo",
+                        "raca":  "01_Humanos",
+                        "titulo":  "Selo da Forja",
+                        "estrofe":  "Pela bigorna, pela lâmina, pelo nome que assino. Tudo o que foi forjado aqui resiste. Tudo o que jurou, permanece.",
+                        "duracao_ms":  3600,
+                        "estilo":  "selo",
+                        "icon":  "⚒"
+                    },
+                    {
+                        "id":  "rt-semi-raio",
+                        "raca":  "09_Semi_Deuses",
+                        "titulo":  "Raio Ascendente",
+                        "estrofe":  "Não me peças mansidão. Carrego o trovão no peito e a semente no sangue. Onde eu piso, a centelha acorda; onde eu olho, o céu responde.",
+                        "duracao_ms":  3200,
+                        "estilo":  "raio",
+                        "icon":  "⚡"
+                    },
+                    {
+                        "id":  "rt-deus-flash",
+                        "raca":  "13_Deuses",
+                        "titulo":  "Clarão Divino",
+                        "estrofe":  "Que a luz revele o que a noite escondeu. Que a noite engula o que a luz não soube absolver. A verdade não se escolhe — se permite.",
+                        "duracao_ms":  2400,
+                        "estilo":  "flash",
+                        "icon":  "☀"
+                    },
+                    {
+                        "id":  "rt-monstro-mandibula",
+                        "raca":  "08_Monstros",
+                        "titulo":  "Mandíbula que se Abre",
+                        "estrofe":  "A trilha se cala. O vento recua. O que eu mordo não se levanta, o que eu engole não se nomeia. Devoro, logo existo.",
+                        "duracao_ms":  3500,
+                        "estilo":  "mandibula",
+                        "icon":  "🦷"
+                    },
+                    {
+                        "id":  "rt-meio-fusao",
+                        "raca":  "17_Meio_Sangue",
+                        "titulo":  "Fusão de Linhagens",
+                        "estrofe":  "O sangue lembra o que a boca esquece. Herdei a ira do lobo e a promessa do homem. Sou a ponte, sou a fenda, sou o justo-meio que sangra dos dois lados.",
+                        "duracao_ms":  3400,
+                        "estilo":  "fusao",
+                        "icon":  "☯"
+                    }
+                ]
 }

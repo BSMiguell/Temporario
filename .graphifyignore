@@ -1,0 +1,12 @@
+# Capturas de tela do site: artefatos de apresentacao, sem valor semantico
+# para o grafo de conhecimento (evita extracao de visao em cada JPG).
+docs/screenshots/
+
+# Paginas GERADAS pelo build_racas.ps1: conteudo 100% derivado das fichas em
+# codex/ - extrair delas so duplica nos. Os assets escritos a mao continuam.
+racas/*.html
+characters-api.json
+historia-api.json
+
+# Configuracao local (contem credenciais) - nunca entra no grafo.
+.claude/
