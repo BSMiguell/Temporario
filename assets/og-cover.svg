@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a120e"/>
+      <stop offset="100%" stop-color="#3a2820"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.3" cy="0.4" r="0.7">
+      <stop offset="0%" stop-color="#8E44AD" stop-opacity="0.4"/>
+      <stop offset="60%" stop-color="#E74C3C" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#171310" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f1c40f"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+
+  <!-- fundo -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- grid decorativo -->
+  <g opacity="0.04" stroke="#f1c40f" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- vinheta -->
+  <radialGradient id="vig" cx="0.5" cy="0.5" r="0.7">
+    <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#000" stop-opacity="0.6"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#vig)"/>
+
+  <!-- moldura de canto -->
+  <g stroke="url(#gold)" stroke-width="3" fill="none" opacity="0.7">
+    <path d="M40,40 L40,90 M40,40 L90,40"/>
+    <path d="M1160,40 L1160,90 M1160,40 L1110,40"/>
+    <path d="M40,590 L40,540 M40,590 L90,590"/>
+    <path d="M1160,590 L1160,540 M1160,590 L1110,590"/>
+  </g>
+
+  <!-- "Æ" central -->
+  <text x="600" y="280" text-anchor="middle"
+        font-family="Georgia, serif" font-size="240" font-weight="600" font-style="italic"
+        fill="url(#gold)" opacity="0.95">Æ</text>
+
+  <!-- Título -->
+  <text x="600" y="400" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="600"
+        fill="#faf8f3" letter-spacing="2">Aetheria Codex</text>
+
+  <!-- Sub-título -->
+  <text x="600" y="450" text-anchor="middle"
+        font-family="Georgia, serif" font-size="22" font-style="italic"
+        fill="#d4c5a9" opacity="0.9">Códice de 489 personagens · 22 raças</text>
+
+  <!-- Decoração inferior -->
+  <line x1="450" y1="510" x2="750" y2="510" stroke="url(#gold)" stroke-width="1" opacity="0.6"/>
+  <text x="600" y="540" text-anchor="middle"
+        font-family="Georgia, serif" font-size="16" font-style="italic"
+        fill="#8a7d5e" letter-spacing="4">— 22 raças · 5 batalhas · 1 mundo —</text>
+</svg>

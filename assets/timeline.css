@@ -1,0 +1,292 @@
+/* timeline.css — estilos da pagina Linha_do_Tempo.html
+   Reusa tokens de assets/codex.css (--paper, --ink, --accent, --line).
+   Sem heranca de racas/*; padrao proprio. */
+
+/* ========== HERO de abertura ========== */
+.timeline-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 1.5rem;
+  text-align: center;
+}
+.timeline-hero h1 {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+.timeline-hero p {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+/* ========== RAIL horizontal (4 eras) ========== */
+.timeline-rail {
+  display: flex;
+  gap: 1.75rem;
+  padding: 1.5rem;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* hint visual de scroll horizontal */
+  background:
+    linear-gradient(to right, var(--paper) 0%, transparent 24px),
+    linear-gradient(to left, var(--paper) 0%, transparent 24px);
+  background-attachment: local, local;
+}
+.timeline-rail::-webkit-scrollbar {
+  height: 10px;
+}
+.timeline-rail::-webkit-scrollbar-track {
+  background: var(--paper-dark);
+  border-radius: 5px;
+}
+.timeline-rail::-webkit-scrollbar-thumb {
+  background: var(--ink-muted);
+  border-radius: 5px;
+}
+
+.era-group {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 3px solid var(--era-color, var(--line));
+  padding-top: 1rem;
+}
+
+.era-header {
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  padding: 0.5rem 0 0.5rem;
+  z-index: 1;
+}
+.era-header h2 {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 0.15rem;
+  color: var(--era-color, var(--ink));
+}
+.era-header .era-num {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+/* ========== CARD de evento ========== */
+.event-card {
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+  box-shadow: 0 1px 0 var(--line-faint);
+}
+.event-card:hover,
+.event-card:focus-within {
+  transform: translateY(-2px);
+  border-color: var(--era-color, var(--accent));
+  box-shadow: 0 8px 24px -16px rgba(23, 19, 16, 0.35);
+}
+.event-card .kicker {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--era-color, var(--ink-soft));
+}
+.event-card h3 {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0;
+}
+.event-card .resumo {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.event-card .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: 0.25rem;
+}
+.event-card .cta:hover,
+.event-card .cta:focus-visible {
+  text-decoration: underline;
+}
+
+/* ========== Modificadores por era (cor da borda e do kicker) ========== */
+.era-I {
+  --era-color: #9bb5d4;
+}
+.era-II {
+  --era-color: #dba66b;
+}
+.era-III {
+  --era-color: #a25bb6;
+}
+.era-IV {
+  --era-color: #5b8b8e;
+}
+
+/* ========== Mobile: rail vira coluna, snap-y ========== */
+@media (max-width: 720px) {
+  .timeline-rail {
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 80vh;
+    scroll-snap-type: y mandatory;
+  }
+  .era-group {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  .era-header {
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* ========== Reduced motion: sem snap forcado ========== */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-rail {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+  .event-card {
+    transition: none;
+  }
+}
+
+/* ========== Header replicado (mesmo padrao de racas/*.html) ========== */
+.site-head {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.site-head .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.site-head .brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 0.4rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.05em;
+}
+.site-head .head-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.site-head .head-link {
+  display: inline-flex;
+  align-items: center;
+  height: 2.4rem;
+  padding: 0 0.85rem;
+  border: 1.5px solid var(--line);
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 500;
+  background: transparent;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+.site-head .head-link:hover,
+.site-head .head-link:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.site-head .head-link[aria-current="page"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ========== Footer simples ========== */
+.site-foot {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--line);
+}
+.site-foot a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ========== Skip-link (replicado) ========== */
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "Space Grotesk", "Helvetica Neue", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 12px 32px -12px rgba(23, 19, 16, 0.4);
+  transform: translateY(-200%);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

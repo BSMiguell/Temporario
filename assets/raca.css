@@ -1,0 +1,25 @@
+/* raca.css - estilos compartilhados das paginas /racas/*.html
+   Os estilos especificos ficam inline em cada HTML (legado). */
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background: #171310;
+  color: #faf8f3;
+  font-family: "Space Grotesk", "Helvetica Neue", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 12px 32px -12px rgba(23, 19, 16, 0.4);
+  transform: translateY(-200%);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid #e3491b;
+  outline-offset: 2px;
+}
