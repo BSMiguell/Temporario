@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a120e" />
+    <title>Offline — Aetheria Codex</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          "Space Grotesk",
+          -apple-system,
+          system-ui,
+          sans-serif;
+        background: linear-gradient(135deg, #1a120e 0%, #3a2820 100%);
+        color: #faf8f3;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+      }
+      .offline-card {
+        max-width: 480px;
+        background: rgba(244, 240, 232, 0.06);
+        border: 1px solid rgba(244, 240, 232, 0.16);
+        border-radius: 1.5rem;
+        padding: 3rem 2rem;
+        backdrop-filter: blur(8px);
+      }
+      .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.02em;
+      }
+      p {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        opacity: 0.85;
+        margin-bottom: 1.5rem;
+      }
+      .retry-btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: #e3491b;
+        color: #faf8f3;
+        text-decoration: none;
+        border-radius: 0.6rem;
+        font-weight: 600;
+        border: 0;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .retry-btn:hover {
+        background: #b8350e;
+      }
+      .note {
+        font-size: 0.85rem;
+        opacity: 0.6;
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="offline-card">
+      <div class="icon" aria-hidden="true">📜</div>
+      <h1>Você está offline</h1>
+      <p>
+        Esta página ainda não foi visitada, então não está em cache. Visite a página inicial pelo
+        menos uma vez para que ela fique disponível offline.
+      </p>
+      <a href="./" class="retry-btn">← Voltar ao início</a>
+      <p class="note">Aetheria Codex · Funciona offline após a primeira visita</p>
+    </div>
+  </body>
+</html>

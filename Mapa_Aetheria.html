@@ -1,0 +1,3877 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Aetheria · Mapa do Mundo</title>
+    <meta
+      name="description"
+      content="Mapa 3D interativo do continente de Aetheria: regiões, grandes batalhas e entidades celestes do códice."
+    />
+    <!-- Favicon embutido (evita requisição externa / 404 no console) -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1l5 7-5 7-5-7z' fill='%23C9A227'/%3E%3C/svg%3E"
+    />
+    <!-- Fonte de título (com fallback serif gracioso: offline o mapa segue 100% funcional) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
+   MESA DE GUERRA ARCANA — estilos
+   ============================================================ */
+      :root {
+        --fundo: #070b14;
+        --fundo2: #0d1424;
+        --painel: rgba(16, 24, 40, 0.95); /* #101828F2 */
+        --ouro: #c9a227; /* ouro envelhecido */
+        --ouro-borda: rgba(201, 162, 39, 0.33);
+        --texto: #e8e3d5;
+        --batalha: #e2483d;
+        --ceus: #7fbfb0;
+        --fonte-display: "Cinzel", Georgia, "Times New Roman", serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: radial-gradient(
+          120% 90% at 50% 42%,
+          var(--fundo2) 0%,
+          var(--fundo) 60%,
+          #04060c 100%
+        );
+        color: var(--texto);
+        overflow: hidden;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Arial,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ---- palco 3D ---- */
+      #mapa {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+        cursor: grab;
+        outline: none;
+      }
+      #mapa.arrastando {
+        cursor: grabbing;
+      }
+      #mapa.sobre-pino {
+        cursor: pointer;
+      }
+      #mapa:focus-visible {
+        outline: 1px solid var(--ouro-borda);
+        outline-offset: -8px;
+      }
+
+      /* vinheta por cima do canvas, abaixo da HUD */
+      #vinheta {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        background: radial-gradient(
+          118% 88% at 50% 44%,
+          transparent 52%,
+          rgba(3, 5, 10, 0.62) 100%
+        );
+      }
+
+      /* ---- HUD comum ---- */
+      .hud {
+        position: fixed;
+        z-index: 10;
+      }
+
+      .hud-titulo {
+        top: 22px;
+        left: 26px;
+        pointer-events: none;
+        user-select: none;
+      }
+      .hud-titulo h1 {
+        font-family: var(--fonte-display);
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.34em;
+        color: var(--ouro);
+        text-shadow: 0 0 22px rgba(201, 162, 39, 0.32);
+      }
+      .hud-titulo h1 span {
+        letter-spacing: 0.34em;
+        margin-right: -0.34em;
+      } /* compensa o espaçamento final */
+      .hud-titulo p {
+        margin-top: 5px;
+        font-size: 11.5px;
+        letter-spacing: 0.16em;
+        color: rgba(232, 227, 213, 0.62);
+        text-transform: uppercase;
+      }
+
+      /* ---- chips de camada + redefinir (topo-direita) ---- */
+      .hud-controles {
+        top: 22px;
+        right: 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        transition:
+          right 0.45s cubic-bezier(0.22, 0.8, 0.24, 1),
+          opacity 0.25s ease,
+          visibility 0.25s;
+      }
+      /* Painel aberto em telas largas: shift fixo deixa o chip mais largo inteiro
+   fora do painel (painel começa a vw-390; chips passam a terminar em vw-430) */
+      @media (min-width: 1094px) {
+        body.com-painel .hud-controles {
+          right: 410px;
+        }
+      }
+      /* Faixa intermediária (721–1093): não há vão limpo entre o título e o painel —
+   os chips descem para a base-esquerda em coluna (cabe até no 768 retrato),
+   e a legenda decorativa sai de cena enquanto o painel está aberto */
+      @media (min-width: 721px) and (max-width: 1093px) {
+        body.com-painel .hud-controles {
+          top: auto;
+          bottom: 20px;
+          left: 22px;
+          right: auto;
+          align-items: flex-start;
+        }
+        body.com-painel .hud-controles .chips {
+          flex-direction: column;
+          align-items: flex-start;
+          flex-wrap: nowrap;
+        }
+        body.com-painel .hud-legenda {
+          opacity: 0;
+        }
+      }
+      /* Mobile: a bottom-sheet cobre os chips — ficam ocultos e sem clique */
+      @media (max-width: 720px) {
+        body.com-painel .hud-controles {
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+        }
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        border: 1px solid var(--ouro-borda);
+        background: rgba(16, 24, 40, 0.74);
+        color: var(--texto);
+        font-size: 12.5px;
+        letter-spacing: 0.06em;
+        cursor: pointer;
+        font-family: inherit;
+        transition:
+          border-color 0.2s,
+          opacity 0.2s,
+          background 0.2s;
+        backdrop-filter: blur(3px);
+      }
+      .chip svg {
+        width: 12px;
+        height: 12px;
+        flex: none;
+        display: block;
+      }
+      .chip .sel {
+        display: none;
+      }
+      .chip.ativo {
+        border-color: var(--ouro);
+      }
+      .chip.ativo .sel {
+        display: block;
+      }
+      .chip.ativo .nao-sel {
+        display: none;
+      }
+      .chip.sem-camada {
+        opacity: 0.5;
+      }
+      .chip:not(.ativo) {
+        opacity: 0.62;
+      }
+      .chip:hover {
+        background: rgba(29, 40, 64, 0.9);
+        opacity: 1;
+      }
+      .chip:focus-visible {
+        outline: 1px solid var(--ouro);
+      }
+
+      #api-status {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(232, 227, 213, 0.55);
+      }
+      #api-status.visivel {
+        display: inline-flex;
+      }
+      .spin {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(201, 162, 39, 0.25);
+        border-top-color: var(--ouro);
+        animation: girar 1s linear infinite;
+        flex: none;
+      }
+      @keyframes girar {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ---- legenda (base-esquerda) ---- */
+      .hud-legenda {
+        left: 26px;
+        bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        color: rgba(232, 227, 213, 0.58);
+        pointer-events: none;
+        user-select: none;
+        transition: opacity 0.25s ease;
+      }
+      .leg-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .leg-item svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+
+      /* ---- tooltip de hover ---- */
+      #tooltip {
+        position: fixed;
+        z-index: 20;
+        pointer-events: none;
+        display: none;
+        background: rgba(16, 24, 40, 0.94);
+        border: 1px solid var(--ouro-borda);
+        color: var(--texto);
+        font-size: 12.5px;
+        letter-spacing: 0.03em;
+        padding: 5px 11px;
+        border-radius: 8px;
+        max-width: 250px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ---- painel lateral ---- */
+      /* Altura acompanha o conteúdo (max-height), sem esticar até o rodapé */
+      #painel {
+        position: fixed;
+        z-index: 30;
+        top: 18px;
+        right: 18px;
+        bottom: auto;
+        max-height: calc(100vh - 36px);
+        width: min(372px, calc(100vw - 36px));
+        background: var(--painel);
+        border: 1px solid var(--ouro-borda);
+        border-radius: 14px;
+        padding: 26px 26px 18px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        transform: translateX(calc(100% + 40px));
+        visibility: hidden;
+        transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.24, 1);
+        box-shadow:
+          0 14px 50px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.045);
+        scrollbar-width: thin;
+        scrollbar-color: rgba(201, 162, 39, 0.35) transparent;
+      }
+      #painel.aberto {
+        transform: translateX(0);
+        visibility: visible;
+      }
+      #painel::-webkit-scrollbar {
+        width: 8px;
+      }
+      #painel::-webkit-scrollbar-thumb {
+        background: rgba(201, 162, 39, 0.3);
+        border-radius: 4px;
+      }
+
+      #fechar {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: rgba(232, 227, 213, 0.68);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #fechar:hover {
+        border-color: var(--ouro-borda);
+        color: var(--texto);
+      }
+      #fechar svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      #p-kicker {
+        font-size: 10.5px;
+        letter-spacing: 0.26em;
+        font-weight: 600;
+        color: var(--ouro);
+        margin-bottom: 12px;
+      }
+      #painel[data-tipo="batalha"] #p-kicker {
+        color: var(--batalha);
+      }
+      #painel[data-tipo="ceu"] #p-kicker {
+        color: var(--ceus);
+      }
+
+      #p-nome {
+        font-family: var(--fonte-display);
+        font-weight: 700;
+        font-size: 25px;
+        line-height: 1.22;
+        color: var(--ouro);
+        margin-bottom: 13px;
+        padding-right: 26px;
+      }
+      #p-desc {
+        font-size: 14px;
+        line-height: 1.68;
+        color: rgba(232, 227, 213, 0.88);
+        margin-bottom: 22px;
+      }
+
+      #p-racas-titulo {
+        font-size: 10.5px;
+        letter-spacing: 0.24em;
+        font-weight: 600;
+        color: rgba(201, 162, 39, 0.78);
+        margin-bottom: 11px;
+      }
+      .raca-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      .vs {
+        font-family: var(--fonte-display);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        color: rgba(232, 227, 213, 0.45);
+        padding: 0 2px;
+      }
+      .raca-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px 6px 9px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.035);
+        color: var(--texto);
+        text-decoration: none;
+        font-size: 12.5px;
+        transition:
+          border-color 0.2s,
+          background 0.2s,
+          transform 0.15s;
+      }
+      .raca-chip:hover,
+      .raca-chip:focus-visible {
+        border-color: var(--cor, var(--ouro));
+        background: rgba(255, 255, 255, 0.07);
+        transform: translateY(-1px);
+      }
+      .raca-chip .ponto {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--cor, #888);
+        box-shadow: 0 0 8px var(--cor, #888);
+        flex: none;
+      }
+      .raca-chip .contagem {
+        font-variant-numeric: tabular-nums;
+        color: rgba(232, 227, 213, 0.55);
+        font-size: 11.5px;
+      }
+
+      #painel footer {
+        margin-top: 28px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(201, 162, 39, 0.16);
+        font-size: 11.5px;
+        letter-spacing: 0.06em;
+        color: rgba(232, 227, 213, 0.5);
+      }
+
+      /* ---- utilidades ---- */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      /* ---- responsivo: painel vira bottom-sheet ---- */
+      @media (max-width: 720px) {
+        .hud-titulo {
+          top: 14px;
+          left: 16px;
+        }
+        .hud-titulo h1 {
+          font-size: 21px;
+        }
+        .hud-controles {
+          top: auto;
+          bottom: 14px;
+          left: 14px;
+          right: 14px;
+          flex-direction: column;
+          align-items: center;
+        }
+        .chips {
+          justify-content: center;
+        }
+        .hud-legenda {
+          display: none;
+        }
+        #painel {
+          top: auto;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: auto;
+          max-height: 62vh;
+          border-radius: 16px 16px 0 0;
+          border-left: none;
+          border-right: none;
+          border-bottom: none;
+          transform: translateY(105%);
+        }
+        #painel.aberto {
+          transform: translateY(0);
+        }
+      }
+
+      /* ---- W5: Minimap (canto inferior direito) ---- */
+      #minimap {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        z-index: 5;
+        background: rgba(16, 24, 40, 0.85);
+        border: 1px solid rgba(201, 162, 39, 0.4);
+        border-radius: 6px;
+        padding: 4px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+      }
+      #minimapCanvas {
+        display: block;
+        border-radius: 4px;
+        cursor: crosshair;
+        image-rendering: crisp-edges;
+      }
+      #minimapHint {
+        margin: 2px 0 0;
+        text-align: center;
+        font-size: 9px;
+        color: rgba(201, 162, 39, 0.7);
+        letter-spacing: 0.04em;
+        font-family: system-ui, sans-serif;
+      }
+
+      /* ---- W5.3: Filtro de raça ---- */
+      .filtro-raca {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 6px;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+      }
+      .filtro-raca > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .filtro-raca label {
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(244, 240, 232, 0.7);
+      }
+      .filtro-raca select {
+        background: rgba(16, 24, 40, 0.85);
+        color: #faf8f3;
+        border: 1px solid rgba(201, 162, 39, 0.4);
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 11px;
+        font-family: inherit;
+        cursor: pointer;
+        max-width: 200px;
+      }
+      .filtro-raca select:focus {
+        outline: 2px solid #c9a227;
+        outline-offset: 1px;
+      }
+
+      /* ---- W5.4: Botao exportar ---- */
+      #exportarPNG {
+        background: rgba(201, 162, 39, 0.15);
+        color: #c9a227;
+        border: 1px solid rgba(201, 162, 39, 0.5);
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-family: inherit;
+        cursor: pointer;
+        letter-spacing: 0.04em;
+        margin-top: 6px;
+        width: 100%;
+      }
+      #exportarPNG:hover {
+        background: rgba(201, 162, 39, 0.3);
+      }
+      #exportarPNG:focus-visible {
+        outline: 2px solid #c9a227;
+        outline-offset: 1px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #painel {
+          transition: none;
+        }
+        .spin {
+          animation-duration: 2.4s;
+        }
+      }
+
+      /* ========== §6.2 — ROTA NARRATIVA ========== */
+      #narrBtn {
+        position: fixed;
+        bottom: 14px;
+        left: 14px;
+        z-index: 220;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        font:
+          600 11px/1 "Cinzel",
+          serif;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f4ecd8;
+        background: rgba(28, 22, 16, 0.88);
+        border: 1px solid rgba(244, 236, 216, 0.35);
+        border-radius: 4px;
+        cursor: pointer;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        transition:
+          background 200ms,
+          transform 200ms;
+      }
+      #narrBtn:hover {
+        background: rgba(48, 30, 18, 0.95);
+      }
+      #narrBtn:active {
+        transform: translateY(1px);
+      }
+      #narrBtn[aria-expanded="true"] {
+        background: rgba(226, 72, 61, 0.85);
+        border-color: rgba(244, 236, 216, 0.6);
+      }
+
+      #narrSheet {
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%) translateY(100%);
+        width: min(640px, 96vw);
+        max-height: 56vh;
+        z-index: 230;
+        background: linear-gradient(180deg, rgba(28, 22, 16, 0.97), rgba(14, 10, 6, 0.98));
+        border: 1px solid rgba(244, 236, 216, 0.25);
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        color: #f4ecd8;
+        font-family: "Inter", system-ui, sans-serif;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+        transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+      }
+      #narrSheet[data-open="true"] {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      #narrSheet > header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px 6px;
+        border-bottom: 1px solid rgba(244, 236, 216, 0.15);
+      }
+      .narr-kicker {
+        margin: 0;
+        font:
+          600 9px/1 "Cinzel",
+          serif;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(244, 236, 216, 0.55);
+        flex: 0 0 auto;
+      }
+      #narrTitle {
+        margin: 0;
+        flex: 1;
+        font:
+          600 13px/1.2 "Cinzel",
+          serif;
+        letter-spacing: 0.08em;
+      }
+      #narrClose {
+        background: transparent;
+        border: none;
+        color: #f4ecd8;
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0 4px;
+        opacity: 0.7;
+      }
+      #narrClose:hover {
+        opacity: 1;
+      }
+
+      #narrActs {
+        display: flex;
+        gap: 6px;
+        padding: 8px 12px;
+        overflow-x: auto;
+        border-bottom: 1px solid rgba(244, 236, 216, 0.1);
+      }
+      .narr-act {
+        flex: 0 0 auto;
+        padding: 6px 10px;
+        background: transparent;
+        border: 1px solid rgba(244, 236, 216, 0.2);
+        border-radius: 3px;
+        color: rgba(244, 236, 216, 0.7);
+        font:
+          600 10px/1 "Cinzel",
+          serif;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .narr-act[aria-pressed="true"] {
+        background: rgba(226, 72, 61, 0.7);
+        color: #fff;
+        border-color: rgba(226, 72, 61, 0.9);
+      }
+
+      #narrStage {
+        padding: 14px 18px 10px;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        animation: narrFade 400ms ease-out;
+      }
+      @keyframes narrFade {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .narr-stage-kicker {
+        margin: 0 0 4px;
+        font:
+          600 10px/1 "Cinzel",
+          serif;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #e2483d;
+      }
+      #narrActTitle {
+        margin: 0 0 6px;
+        font:
+          600 16px/1.2 "Cinzel",
+          serif;
+      }
+      #narrActIntro {
+        margin: 0 0 8px;
+        font:
+          400 12px/1.5 "Inter",
+          sans-serif;
+        color: rgba(244, 236, 216, 0.85);
+      }
+      #narrBattleName {
+        margin: 0;
+        font:
+          500 11px/1.4 "Cinzel",
+          serif;
+        color: rgba(244, 236, 216, 0.55);
+        font-style: italic;
+      }
+
+      #narrPlayer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px 12px;
+        border-top: 1px solid rgba(244, 236, 216, 0.12);
+      }
+      #narrPlayer button {
+        background: transparent;
+        border: 1px solid rgba(244, 236, 216, 0.3);
+        color: #f4ecd8;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 12px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+      }
+      #narrPlayer button:hover {
+        background: rgba(244, 236, 216, 0.1);
+      }
+      #narrPlay {
+        background: rgba(226, 72, 61, 0.85);
+        border-color: rgba(226, 72, 61, 0.9);
+      }
+      #narrPlay:hover {
+        background: rgba(226, 72, 61, 1);
+      }
+      #narrScrub {
+        flex: 1 1 auto;
+        accent-color: #e2483d;
+        min-width: 0;
+      }
+      #narrCounter {
+        margin: 0;
+        font:
+          600 10px/1 "Cinzel",
+          serif;
+        letter-spacing: 0.1em;
+        color: rgba(244, 236, 216, 0.6);
+        flex: 0 0 auto;
+      }
+
+      @media (max-width: 520px) {
+        #narrSheet {
+          width: 100vw;
+          border-radius: 0;
+        }
+        #narrActTitle {
+          font-size: 14px;
+        }
+        #narrActIntro {
+          font-size: 11px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #narrSheet,
+        #narrStage,
+        #narrBtn {
+          transition: none;
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas
+      id="mapa"
+      tabindex="0"
+      aria-label="Mapa 3D interativo de Aetheria. Use as setas para orbitar, Tab para circular entre os marcadores e Enter para abrir um marcador."
+    ></canvas>
+    <div id="vinheta"></div>
+
+    <!-- Título -->
+    <header class="hud hud-titulo">
+      <h1><span>AETHERIA</span></h1>
+      <p>Mapa do Mundo · Cartografia dos Conflitos</p>
+    </header>
+
+    <!-- Camadas + câmera -->
+    <div class="hud hud-controles">
+      <div id="api-status"><span class="spin"></span><span>Consultando o códice…</span></div>
+      <div class="filtro-raca">
+        <span>
+          <label for="filtroRaca">Filtrar raça:</label>
+          <select id="filtroRaca" aria-label="Filtrar pins por raça">
+            <option value="">Todas (26 pins)</option>
+          </select>
+        </span>
+        <span>
+          <label for="filtroEra">Filtrar era:</label>
+          <select id="filtroEra" aria-label="Filtrar battles por era">
+            <option value="">Todas as eras</option>
+            <option value="I">Ato I — A Queda do Norte</option>
+            <option value="II">Ato II — Os Cumes em Chamas</option>
+            <option value="III">Ato III — A Ruptura da Fenda</option>
+            <option value="IV">Ato IV — O Vazio Desperta</option>
+          </select>
+        </span>
+      </div>
+      <div class="chips" role="group" aria-label="Camadas do mapa">
+        <button type="button" class="chip ativo" data-camada="regioes" aria-pressed="true">
+          <svg class="sel" viewBox="0 0 12 12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="#C9A227" stroke-width="1.4" />
+            <path
+              d="M3.4 6.2l1.8 1.8 3.4-3.9"
+              fill="none"
+              stroke="#C9A227"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg class="nao-sel" viewBox="0 0 12 12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="#8B93A5" stroke-width="1.3" />
+          </svg>
+          Regiões
+        </button>
+        <button type="button" class="chip ativo" data-camada="batalhas" aria-pressed="true">
+          <svg class="sel" viewBox="0 0 12 12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="#C9A227" stroke-width="1.4" />
+            <path
+              d="M3.4 6.2l1.8 1.8 3.4-3.9"
+              fill="none"
+              stroke="#C9A227"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg class="nao-sel" viewBox="0 0 12 12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="#8B93A5" stroke-width="1.3" />
+          </svg>
+          Batalhas
+        </button>
+        <button type="button" class="chip ativo" data-camada="ceus" aria-pressed="true">
+          <svg class="sel" viewBox="0 0 12 12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="#C9A227" stroke-width="1.4" />
+            <path
+              d="M3.4 6.2l1.8 1.8 3.4-3.9"
+              fill="none"
+              stroke="#C9A227"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg class="nao-sel" viewBox="0 0 12 12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="#8B93A5" stroke-width="1.3" />
+          </svg>
+          Céus
+        </button>
+        <button
+          type="button"
+          class="chip"
+          id="btn-redefinir"
+          aria-label="Redefinir câmera"
+          title="Redefinir câmera"
+        >
+          <svg viewBox="0 0 14 14" aria-hidden="true">
+            <path
+              d="M12 7a5 5 0 1 1-1.7-3.75"
+              fill="none"
+              stroke="#C9A227"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M12.2 1.6v2.6H9.6"
+              fill="none"
+              stroke="#C9A227"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Redefinir
+        </button>
+      </div>
+      <button type="button" id="exportarPNG" title="Salvar a vista atual como imagem PNG">
+        📸 Salvar vista
+      </button>
+    </div>
+
+    <!-- Legenda -->
+    <div class="hud hud-legenda" aria-hidden="true">
+      <div class="leg-item">
+        <svg viewBox="0 0 16 16">
+          <path d="M8 1.5L13.5 8 8 14.5 2.5 8z" fill="#4A90D9" opacity=".9" />
+          <path d="M8 1.5L13.5 8 8 14.5 2.5 8z" fill="none" stroke="#fff" stroke-opacity=".35" />
+        </svg>
+        <span>Região</span>
+      </div>
+      <div class="leg-item">
+        <svg viewBox="0 0 16 16">
+          <g stroke="#E2483D" stroke-width="1.7" stroke-linecap="round">
+            <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+            <path d="M4.6 10.2l-1.8 1.8M11.4 10.2l1.8 1.8" stroke-width="1.3" />
+          </g>
+        </svg>
+        <span>Batalha</span>
+      </div>
+      <div class="leg-item">
+        <svg viewBox="0 0 16 16">
+          <circle cx="8" cy="8" r="5.4" fill="none" stroke="#1ABC9C" stroke-width="1.6" />
+          <circle cx="8" cy="8" r="1.8" fill="#1ABC9C" />
+        </svg>
+        <span>Céus</span>
+      </div>
+    </div>
+
+    <div id="tooltip" role="tooltip"></div>
+
+    <!-- Rosa dos ventos (mesa de guerra) -->
+    <div
+      class="compass-rose"
+      aria-hidden="true"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 26px;
+        width: 48px;
+        height: 48px;
+        color: rgba(232, 227, 213, 0.35);
+        pointer-events: none;
+        z-index: 200;
+      "
+    >
+      <svg viewBox="0 0 80 80" width="100%" height="100%">
+        <g stroke="currentColor" stroke-width="0.75" fill="none" opacity="0.75">
+          <circle cx="40" cy="40" r="30" />
+          <line x1="40" y1="10" x2="40" y2="70" />
+          <line x1="10" y1="40" x2="70" y2="40" />
+          <line x1="18" y1="18" x2="62" y2="62" />
+          <line x1="18" y1="62" x2="62" y2="18" />
+          <circle cx="40" cy="40" r="4" fill="currentColor" stroke="none" opacity="0.9" />
+        </g>
+      </svg>
+    </div>
+    <!-- Coordenadas -->
+    <div
+      class="map-coords"
+      aria-label="Coordenadas do mapa"
+      style="
+        position: fixed;
+        top: 20px;
+        right: 26px;
+        font-family: Cinzel, serif;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        color: rgba(232, 227, 213, 0.45);
+        pointer-events: none;
+        z-index: 200;
+        text-align: right;
+        line-height: 1.4;
+      "
+    >
+      <span>LAT 14° N</span><br />
+      <span>LNG 28° E</span>
+    </div>
+    <!-- Painel lateral -->
+    <aside id="painel" data-tipo="regiao" aria-hidden="true" aria-labelledby="p-nome">
+      <button type="button" id="fechar" aria-label="Fechar painel">
+        <svg viewBox="0 0 14 14" aria-hidden="true">
+          <path
+            d="M2 2l10 10M12 2L2 12"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+      <p id="p-kicker">Região</p>
+      <h2 id="p-nome"></h2>
+      <p id="p-desc"></p>
+      <div id="p-racas-wrap">
+        <h3 id="p-racas-titulo"></h3>
+        <div class="raca-chips" id="p-racas"></div>
+      </div>
+      <footer>Arraste para orbitar · Role para zoom</footer>
+    </aside>
+
+    <!-- Minimap (W5.1) -->
+    <div id="minimap" aria-label="Minimapa de navegação">
+      <canvas id="minimapCanvas" width="160" height="180"></canvas>
+      <p id="minimapHint">Clique para teleportar</p>
+    </div>
+
+    <div id="sr-estado" class="sr-only" aria-live="polite"></div>
+
+    <!-- §6.2 — botão flutuante da rota narrativa (canto inferior esquerdo) -->
+    <button
+      id="narrBtn"
+      type="button"
+      aria-label="Abrir rota narrativa"
+      aria-expanded="false"
+      aria-controls="narrSheet"
+    >
+      <svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14">
+        <path
+          d="M2 2.5h12M2 8h12M2 13.5h12"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          fill="none"
+        />
+        <circle cx="3" cy="2.5" r="1" fill="currentColor" />
+        <circle cx="9" cy="8" r="1" fill="currentColor" />
+        <circle cx="13" cy="13.5" r="1" fill="currentColor" />
+      </svg>
+      <span>Rota narrativa</span>
+    </button>
+
+    <!-- §6.2 — bottom-sheet: 4 atos cinematográficos + player (play/pause + scrub) -->
+    <section id="narrSheet" role="region" aria-labelledby="narrTitle" aria-hidden="true" hidden>
+      <header>
+        <p class="narr-kicker" id="narrSheetKicker">5 batalhas · 4 atos</p>
+        <h2 id="narrTitle">Rota narrativa de Aetheria</h2>
+        <button id="narrClose" type="button" aria-label="Fechar rota narrativa">×</button>
+      </header>
+      <div id="narrActs" role="tablist" aria-label="Atos narrativos"></div>
+      <div id="narrStage">
+        <p class="narr-stage-kicker">
+          <span id="narrActNum">Ato I</span> · <span id="narrActData"></span>
+        </p>
+        <h3 id="narrActTitle">—</h3>
+        <p id="narrActIntro">—</p>
+        <p id="narrBattleName"></p>
+      </div>
+      <div id="narrPlayer">
+        <button id="narrPrev" type="button" aria-label="Evento anterior">⏮</button>
+        <button id="narrPlay" type="button" aria-label="Iniciar narração">▶</button>
+        <button id="narrNext" type="button" aria-label="Próximo evento">⏭</button>
+        <input
+          id="narrScrub"
+          type="range"
+          min="0"
+          max="4"
+          step="1"
+          value="0"
+          aria-label="Pular para evento"
+        />
+        <p id="narrCounter" aria-hidden="true">1 / 5</p>
+      </div>
+    </section>
+
+    <script>
+      "use strict";
+      /* ============================================================
+   MAPA 3D DE AETHERIA — Canvas 2D puro, sem bibliotecas
+   Seções: 1) Dados  2) Matemática 3D  3) Terreno  4) Render
+           5) Interação  6) UI / Painel / Integração com a galeria
+   ============================================================ */
+
+      (function () {
+        /* ============================================================
+   1. DADOS — consumidos de ./historia-api.json (com fallback embutido)
+   ============================================================ */
+
+        /* Fallback completo: exatamente os dados da API estática
+   (Historia/Aetheria_Dados_do_Mundo.md via characters/historia api).
+   Usado em file:// (fetch bloqueado) ou se o json não responder — sem
+   indicador de carregamento e sem erro no console. */
+        const FALLBACK = {
+          project: "Aetheria Codex — História",
+          generatedAt: "2026-08-24",
+          sourceFile: "Historia/Aetheria_Dados_do_Mundo.md",
+          regions: [
+            {
+              id: "norte-sub-frost",
+              nome: "O Norte Sub-Frost",
+              camada: "Mundo",
+              pos: { x: 0.42, y: 0.06 },
+              bioma: "Tundra Glacial",
+              racas: ["01_Humanos"],
+              cor: "#4A90D9",
+              descricao:
+                "Tundra implacável acima da Linha de Geada, onde tempestades de neve místicas jamais cessam. Fortalezas de ferro negro pontuam o gelo: campos de prova da infantaria humana e prisões de segurança máxima que guardam segredos que o Império prefere enterrados — literalmente."
+            },
+            {
+              id: "norte-vetusto",
+              nome: "O Norte Vetusto",
+              camada: "Mundo",
+              pos: { x: 0.28, y: 0.25 },
+              bioma: "Zona Temperada",
+              racas: ["01_Humanos"],
+              cor: "#4A90D9",
+              descricao:
+                "Coração da civilização humana ao sul da Linha de Geada: cidades-bastião muradas, bacias hidrográficas e as rotas comerciais que abastecem o continente. É aqui que se decide o destino político de Aetheria — e onde a alquimia militar dos Observadores criou raiz mais funda."
+            },
+            {
+              id: "cumes-da-tempestade",
+              nome: "Cumes da Tempestade",
+              camada: "Mundo",
+              pos: { x: 0.72, y: 0.18 },
+              bioma: "Montanhas de Dente de Dragão",
+              racas: ["19_Barbaros"],
+              cor: "#CA6F1E",
+              descricao:
+                "Cadeia nordestina de picos afiados sob tempestades elétricas eternas, resquício elementais das guerras antigas. Os clãs bárbaros não têm cidades — têm assentamentos verticais de pedra e osso, e as espadas elementais que os Observadores lhes entregaram na Era de Ouro."
+            },
+            {
+              id: "grande-fenda-central",
+              nome: "A Grande Fenda Central",
+              camada: "Mundo",
+              pos: { x: 0.5, y: 0.42 },
+              bioma: "Ravinas Arcanas",
+              racas: ["02_Mutantes", "06_Desconhecidos"],
+              cor: "#7B4D9E",
+              descricao:
+                "Faixa divisória que corta o continente de leste a oeste: uma abóbada afundada de ravinas profundas, solo envenenado por radiação mágica e ruínas arcanas dos antigos laboratórios. Zona livre governada pelos párias mutantes desde a Queda dos Laboratórios Kether — e o lugar onde os Desconhecidos são vistos com mais frequência."
+            },
+            {
+              id: "florestas-espirituais",
+              nome: "Florestas Espirituais e Vales de Névoa",
+              camada: "Mundo",
+              pos: { x: 0.24, y: 0.6 },
+              bioma: "Floresta de Mana",
+              racas: ["17_Meio_Sangue"],
+              cor: "#D35400",
+              descricao:
+                "Árvores colossais cujas raízes canalizam o fluxo de mana do planeta, rios cristalinos e pântanos de névoa densa no centro-oeste. As tribos Meio-Sangue vivem em equilíbrio tenso com esse fluxo — quando o mana pulsa, elas sentem primeiro."
+            },
+            {
+              id: "necropoles-silenciosas",
+              nome: "As Necrópoles Silenciosas",
+              camada: "Mundo",
+              pos: { x: 0.13, y: 0.8 },
+              bioma: "Vales Sepulcrais",
+              racas: ["16_Alvamortos"],
+              cor: "#BDC3C7",
+              descricao:
+                "Vales cobertos de névoa eterna a sudoeste, onde cidades de mármore cinzento e obsidianas flutuantes formam um reino monástico e sepulcral. Isolados por barreiras de energia espiritual, os Alvamortos guardam os segredos da manipulação de almas — técnica legada diretamente pelos Observadores."
+            },
+            {
+              id: "terras-vermelhas",
+              nome: "As Terras Vermelhas & Picos de Magma",
+              camada: "Mundo",
+              pos: { x: 0.68, y: 0.78 },
+              bioma: "Planalto Vulcânico",
+              racas: ["21_Demonios_Akuma-Gani"],
+              cor: "#DC143C",
+              descricao:
+                "Planalto escaldante retalhado por rios de basalto e fendas de enxofre. As cidadelas Akuma-Gani são escavadas no interior dos próprios vulcões: arquitetura púrpura e rubra, portões colossais decorados com crânios de feras lendárias e forjas que nunca esfriam."
+            },
+            {
+              id: "fronteiras-de-magma",
+              nome: "Fronteiras de Magma",
+              camada: "Mundo",
+              pos: { x: 0.86, y: 0.64 },
+              bioma: "Transição Selva-Deserto",
+              racas: ["18_Canibais"],
+              cor: "#A04000",
+              descricao:
+                "Zona de transição entre a selva úmida e o deserto escuro nas bordas das Terras Vermelhas. Arenas de sacrifício e campos de caça pontuam a terra, e a única lei é a sobrevivência do mais forte — tribos de múltiplos braços incluídas."
+            },
+            {
+              id: "abismo-das-profundezas",
+              nome: "O Abismo das Profundezas",
+              camada: "Mundo",
+              pos: { x: 0.52, y: 0.58 },
+              bioma: "Fenda Cósmica",
+              racas: ["11_Seres_Do_Vazio"],
+              cor: "#5D6D9E",
+              descricao:
+                "O centro geométrico da Grande Fenda, onde a crosta cedeu por completo e revelou a dimensão corrosiva que dorme sob Aetheria. Não é um lugar — é uma ferida. Toda raça constrói suas defesas voltadas para dentro do solo; desde a Erupção, o mal latente respira de volta."
+            },
+            {
+              id: "torres-arcanas",
+              nome: "Torres Arcanas de Vetusto",
+              camada: "Mundo",
+              pos: { x: 0.34, y: 0.32 },
+              bioma: "Cidadelas-Torre",
+              racas: ["12_Magos"],
+              cor: "#16A085",
+              descricao:
+                'Distrito elevado do Norte Vetusto onde as academias de magia defensiva cresceram até virar cidadelas-torre, ligadas por pontes de pedra rúnica. Os Magos catalogam cada vertente de mana do continente — e desconfiam profundamente da "tecnologia arcana" dos Observadores, que parece magia sem fonte.'
+            },
+            {
+              id: "fortalezas-de-juramento",
+              nome: "Fortalezas de Juramento",
+              camada: "Mundo",
+              pos: { x: 0.37, y: 0.4 },
+              bioma: "Marca Fronteiriça",
+              racas: ["03_Ordens_E_Guerreiros"],
+              cor: "#C0392B",
+              descricao:
+                "Linha de fortalezas-monastério erguidas sobre as estradas entre o Vetusto e a Fenda, após a Chacina da Linha de Geada provou que exércitos comuns não bastam. Cada Ordem juramenta uma guarda eterna: seus cavaleiros patrulham a Geada e enterram os mortos de todas as raças com o mesmo ritual."
+            },
+            {
+              id: "planalto-dos-colossos",
+              nome: "Planalto dos Colossos",
+              camada: "Mundo",
+              pos: { x: 0.07, y: 0.48 },
+              bioma: "Altiplano Ocidental",
+              racas: ["07_Gigantes"],
+              cor: "#D68910",
+              descricao:
+                "Cadeia montanhosa ocidental esquecida pelos mapas humanos, onde mesetas gigantescas carregam tronos talhados na própria rocha. Os Gigantes são testemunhas vivas da Era da Criação — e desde o Retorno Divino, os mais velhos despertam de sono de séculos para olhar fixamente o céu."
+            },
+            {
+              id: "terras-selvagens",
+              nome: "Terras Selvagens",
+              camada: "Mundo",
+              pos: { x: 0.83, y: 0.4 },
+              bioma: "Cinturão Bruto",
+              racas: ["08_Monstros"],
+              cor: "#2E4053",
+              descricao:
+                "Cinturão de biomas brutais entre a Fenda e o litoral leste, onde a fauna mutou fora de controle desde a Primeira Ruptura: bestas de couraça, colossos de caverna e matilhas que caçam por território, não por fome. Exércitos inteiros entram; caravanas de bandeiras saem."
+            },
+            {
+              id: "cavernas-de-obsidiana",
+              nome: "Cavernas de Obsidiana",
+              camada: "Mundo",
+              pos: { x: 0.58, y: 0.9 },
+              bioma: "Subsolo Vulcânico",
+              racas: ["04_Onis"],
+              cor: "#E74C3C",
+              descricao:
+                "Rede feudal de galerias e salões sob as bordas oeste das Terras Vermelhas, iluminada por veios de obsidiana espelhada. Cada corte Oni reivindica uma forja ancestral, e a guerra fria entre eles e as cidadelas Akuma-Gani pelo domínio das profundezas esquenta a cada ciclo."
+            },
+            {
+              id: "fosso-infernal",
+              nome: "O Fosso Infernal",
+              camada: "Mundo",
+              pos: { x: 0.72, y: 0.93 },
+              bioma: "Caldeira Selada",
+              racas: ["05_Demonios"],
+              cor: "#8E44AD",
+              descricao:
+                "Uma caldeira de basalto no extremo sul, coroada por sete pilares-selo gravados em linguagem anterior aos Deuses. Ali foram aprisionados os nobres infernais nascidos dos pactos de sangue da era pré-Ruptura — e cada guerra no continente acima afrouxa um elo da corrente."
+            },
+            {
+              id: "ruinas-do-voto-partido",
+              nome: "Ruínas do Voto Partido",
+              camada: "Mundo",
+              pos: { x: 0.34, y: 0.72 },
+              bioma: "Campo de Ruínas",
+              racas: ["20_Amaldiçoados"],
+              cor: "#5D6D7E",
+              descricao:
+                "Campo de santuários arruinados no centro-sul onde maldições antigas condensam em névoa visível. Os Amaldiçoados — monges e guerreiros marcados por votos que ninguém deveria fazer — peregrinam até aqui para reforçar os selos menores que mantêm o Vazio longe dos vales habitados."
+            }
+          ],
+          celes: [
+            {
+              id: "naves-dos-observadores",
+              nome: "Naves-Cidadelas dos Observadores",
+              camada: "Céus",
+              pos: { x: 0.8, y: 0.1 },
+              altitude: "Alta",
+              racas: ["10_Os_Observadores"],
+              cor: "#1ABC9C",
+              descricao:
+                "Figuras colossais envoltas em halos de luz e tecnologia arcana indecifrável, estacionadas no Vazio Superior. Chegaram como benfeitoras há séculos; hoje suas naves-cidadelas descem em silêncio, planejando sacrificar 80% do continente como escudo de almas contra o Abismo."
+            },
+            {
+              id: "retorno-dos-deuses",
+              nome: "Retorno dos Deuses",
+              camada: "Céus",
+              pos: { x: 0.5, y: 0.3 },
+              altitude: "Alta",
+              racas: ["13_Deuses"],
+              cor: "#F39C12",
+              descricao:
+                "Feixes de luz divina rasgam o céu e avatares como Solkhamun, Mycelium e Kaminari descem em carruagens de fogo e tempestade. O Retorno não é milagre: é resposta de emergência à barreira rompida — os velhos mestres da realidade voltaram para reivindicar posições."
+            },
+            {
+              id: "mascaras-na-nevoa",
+              nome: "Máscaras na Névoa",
+              camada: "Céus",
+              pos: { x: 0.79, y: 0.88 },
+              altitude: "Baixa",
+              racas: ["14_Demonios_Do_Caos"],
+              cor: "#E67E22",
+              descricao:
+                "Remanescentes da primeira invasão do Abismo, presos no plano material quando as fendas se fecharam. Vestem trajes de bufões e máscaras risonhas enquanto rondam os campos de batalha do sul — colhendo a energia da dor e provocando guerras para abrir os portões por baixo."
+            },
+            {
+              id: "aspectos-em-marcha",
+              nome: "Os Aspectos em Marcha",
+              camada: "Céus",
+              pos: { x: 0.46, y: 0.14 },
+              altitude: "Média",
+              racas: ["15_Os_Aspectos"],
+              cor: "#9B59B6",
+              descricao:
+                "Seres conceituais em armaduras lendárias — Convex, Ganion, Eonis — marchando de novo sobre picos imortais e geleiras. Não fazem aliança, não negociam, não poupam: sua única missão é rearmar as defesas do mundo, e quem cruzar essa linha é obstáculo."
+            },
+            {
+              id: "sementes-de-ascensao",
+              nome: "Sementes de Ascensão",
+              camada: "Céus",
+              pos: { x: 0.84, y: 0.22 },
+              altitude: "Média",
+              racas: ["09_Semi_Deuses"],
+              cor: "#F1C40F",
+              descricao:
+                "Fragmentos de poder cósmico lançados pelos Observadores sobre mortais comuns — Humanos, Alvamortos, Meio-Sangue. Cada centelha que acende cria um Semi-Deus: imortalidade parcial, propósito incerto e uma suspeita crescente de que são peões, não campeões."
+            }
+          ],
+          battles: [
+            {
+              id: "chacina-da-linha-de-geada",
+              nome: "A Chacina da Linha de Geada",
+              pos: { x: 0.44, y: 0.15 },
+              regiao: "norte-sub-frost",
+              lados: ["01_Humanos", "15_Os_Aspectos"],
+              resumo:
+                "A 1ª Divisão de Infantaria Humana cruzou com Os Aspectos emergindo do gelo — e foi obliterada por lâminas cósmicas em horas. A fronteira congelada ficou marcada por armaduras despedaçadas: o primeiro sinal público do fim dos tempos."
+            },
+            {
+              id: "tres-picos",
+              nome: "A Batalha dos Três Picos",
+              pos: { x: 0.74, y: 0.2 },
+              regiao: "cumes-da-tempestade",
+              lados: ["19_Barbaros", "09_Semi_Deuses"],
+              resumo:
+                "Sob a maior tempestade elétrica já registrada, os clãs bárbaros resistiram à magia divina e ao voo dos Semi-Deuses enviados pelos Observadores, transformando as gargantas em corredor de sangue. Uma trégua forçada nasceu da interferência de um único Aspecto."
+            },
+            {
+              id: "queda-dos-laboratorios-kether",
+              nome: "A Queda dos Laboratórios Kether",
+              pos: { x: 0.48, y: 0.35 },
+              regiao: "grande-fenda-central",
+              lados: ["02_Mutantes", "01_Humanos", "21_Demonios_Akuma-Gani"],
+              resumo:
+                "O levante massivo das cobaias destruiu o maior complexo de clonagem e síntese arcana de Aetheria. As habilidades instáveis alimentadas pela energia residual dos experimentos arrasaram as estruturas arcanas — e nasceu ali a zona livre dos párias mutantes."
+            },
+            {
+              id: "erupcao-do-abismo",
+              nome: "A Erupção do Abismo",
+              pos: { x: 0.51, y: 0.56 },
+              regiao: "abismo-das-profundezas",
+              lados: ["13_Deuses", "11_Seres_Do_Vazio"],
+              resumo:
+                "Com os selos enfraquecidos pelas guerras mortais, o solo da Fenda cedeu e o Vazio emergiu em névoa cinzenta. No mesmo instante, avatares divinos desceram direto no ponto de impacto — a batalha em curso que rasga a física do continente."
+            },
+            {
+              id: "cerco-de-obsidianas",
+              nome: "O Cerco de Obsidianas",
+              pos: { x: 0.66, y: 0.84 },
+              regiao: "terras-vermelhas",
+              lados: ["21_Demonios_Akuma-Gani", "14_Demonios_Do_Caos"],
+              resumo:
+                "Atraídos pela energia acumulada das forjas, os Demônios do Caos invadiram a cidadela vulcânica sobre rios de lava e pontes de basalto. Defendida com fogo puro, a fortaleza resistiu — mas os invasores recuaram satisfeitos, tendo colhido a dor de centenas de mortos."
+            }
+          ],
+          races: [
+            {
+              id: "01_Humanos",
+              nome: "Humanos",
+              cor: "#4A90D9",
+              tipo: "Territorial",
+              regioes: ["norte-sub-frost", "norte-vetusto"],
+              descricao:
+                "Donos do Norte Duplo: civilização de bastiões, alquimia militar herdada dos Observadores e a ambição que sustenta — e ameaça — o equilíbrio continental.",
+              count: 30
+            },
+            {
+              id: "02_Mutantes",
+              nome: "Mutantes",
+              cor: "#7B4D9E",
+              tipo: "Dispersa",
+              regioes: "grande-fenda-central",
+              descricao:
+                "Nascidos de experimentos, adaptações extremas ou rejeição genética; banidos de toda cidade, organizam células rebeldes na única terra que os aceitou: a Fenda.",
+              count: 43
+            },
+            {
+              id: "03_Ordens_E_Guerreiros",
+              nome: "Ordens e Guerreiros",
+              cor: "#C0392B",
+              tipo: "Territorial",
+              regioes: "fortalezas-de-juramento",
+              descricao:
+                "Cavalaria de juramentos permanentes que guarda a Linha de Geada e as estradas do sul; enterram os mortos de qualquer raça com o mesmo ritual.",
+              count: 25
+            },
+            {
+              id: "04_Onis",
+              nome: "Onis",
+              cor: "#E74C3C",
+              tipo: "Territorial",
+              regioes: "cavernas-de-obsidiana",
+              descricao:
+                "Cortes feudais demoníacas do subsolo vulcânico, cada uma disputando uma forja ancestral — rivais frios dos Akuma-Gani nas profundezas.",
+              count: 29
+            },
+            {
+              id: "05_Demonios",
+              nome: "Demônios",
+              cor: "#8E44AD",
+              tipo: "Territorial",
+              regioes: "fosso-infernal",
+              descricao:
+                "Nobres infernais selados desde a era pré-Ruptura numa caldeira de sete pilares; cada guerra no mundo acima afrouxa um elo.",
+              count: 42
+            },
+            {
+              id: "06_Desconhecidos",
+              nome: "Desconhecidos",
+              cor: "#95A5A6",
+              tipo: "Errante",
+              regioes: "grande-fenda-central",
+              descricao:
+                "Manifestações encapuzadas que aparecem antes de tragédias e ativam monólitos da Era da Criação. Não falam: gravam marcas em pedra.",
+              count: 15
+            },
+            {
+              id: "07_Gigantes",
+              nome: "Gigantes",
+              cor: "#D68910",
+              tipo: "Territorial",
+              regioes: "planalto-dos-colossos",
+              descricao:
+                "Testemunhas da Era da Criação no altiplano ocidental; desde o Retorno Divino, os mais antigos despertam para olhar o céu.",
+              count: 26
+            },
+            {
+              id: "08_Monstros",
+              nome: "Monstros",
+              cor: "#2E4053",
+              tipo: "Selvagem",
+              regioes: "terras-selvagens",
+              descricao:
+                "Fauna mutada pela radiação mágica das guerras antigas; caçam por território e transformaram o cinturão leste em terra proibida.",
+              count: 37
+            },
+            {
+              id: "09_Semi_Deuses",
+              nome: "Semideuses",
+              cor: "#F1C40F",
+              tipo: "Ascensa",
+              regioes: "sementes-de-ascensao",
+              descricao:
+                "Mortais com Sementes de Ascensão injetadas pelos Observadores; imortalidade parcial e a dúvida de serem peões de um tabuleiro maior.",
+              count: 31
+            },
+            {
+              id: "10_Os_Observadores",
+              nome: "Os Observadores",
+              cor: "#1ABC9C",
+              tipo: "Cósmica",
+              regioes: "naves-dos-observadores",
+              descricao:
+                'Arquitetos silenciosos do Vazio Superior; cada "presente" dado às raças foi calibrado para forjar uma linha de frente contra o Abismo.',
+              count: 9
+            },
+            {
+              id: "11_Seres_Do_Vazio",
+              nome: "Seres do Vazio",
+              cor: "#5D6D9E",
+              tipo: "Abissal",
+              regioes: "abismo-das-profundezas",
+              descricao:
+                "O mal latente sob a crosta: entidades amorfas numa dimensão corrosiva que ninguém jamais visitou e voltou para descrever.",
+              count: 20
+            },
+            {
+              id: "12_Magos",
+              nome: "Magos",
+              cor: "#16A085",
+              tipo: "Territorial",
+              regioes: "torres-arcanas",
+              descricao:
+                "Catalogadores da mana em cidadelas-torre sobre o Vetusto; desconfiam da tecnologia arcana dos Observadores — magia sem fonte é feitiçaria mentirosa.",
+              count: 21
+            },
+            {
+              id: "13_Deuses",
+              nome: "Deuses",
+              cor: "#F39C12",
+              tipo: "Divina",
+              regioes: "retorno-dos-deuses",
+              descricao:
+                "O Panteão Ressurrecto, de volta em carruagens de fogo não por milagre, mas por contingência: a barreira está se rompendo.",
+              count: 18
+            },
+            {
+              id: "14_Demonios_Do_Caos",
+              nome: "Demônios do Caos",
+              cor: "#E67E22",
+              tipo: "Parasita",
+              regioes: "mascaras-na-nevoa",
+              descricao:
+                "Bufões da primeira invasão, alimentam-se de conflito e desespero; ELES NÃO QUEREM A PAZ — guerra é colheita.",
+              count: 11
+            },
+            {
+              id: "15_Os_Aspectos",
+              nome: "Os Aspectos",
+              cor: "#9B59B6",
+              tipo: "Conceitual",
+              regioes: "aspectos-em-marcha",
+              descricao:
+                "Guardiões conceituais em armaduras lendárias que selaram a grande fenda ancestral; seu retorno é o maior indicativo de tragédia iminente.",
+              count: 10
+            },
+            {
+              id: "16_Alvamortos",
+              nome: "Alvamortos",
+              cor: "#BDC3C7",
+              tipo: "Territorial",
+              regioes: "necropoles-silenciosas",
+              descricao:
+                "MONGES SEPULCRAIS das necrópoles de mármore e obsidiana flutuante; herdeiros diretos da técnica de manipulação de almas dos Observadores.",
+              count: 17
+            },
+            {
+              id: "17_Meio_Sangue",
+              nome: "Meio-Sangue",
+              cor: "#D35400",
+              tipo: "Territorial",
+              regioes: "florestas-espirituais",
+              descricao:
+                "Linhagens mistas das florestas de mana; sentem o pulso do planeta primeiro — e pagam o preço de estar na frente.",
+              count: 18
+            },
+            {
+              id: "18_Canibais",
+              nome: "Canibais",
+              cor: "#A04000",
+              tipo: "Territorial",
+              regioes: "fronteiras-de-magma",
+              descricao:
+                "Tribos de múltiplos braços das arenas de sacrifício; a única lei que reconhecem é a sobrevivência do mais forte.",
+              count: 22
+            },
+            {
+              id: "19_Barbaros",
+              nome: "Bárbaros",
+              cor: "#CA6F1E",
+              tipo: "Territorial",
+              regioes: "cumes-da-tempestade",
+              descricao:
+                "Clãs nômades das Montanhas de Dente de Dragão, armados com as espadas elementais que os Observadores lhes deram — e que aprenderam a odiar.",
+              count: 17
+            },
+            {
+              id: "20_Amaldiçoados",
+              nome: "Amaldiçoados",
+              cor: "#5D6D7E",
+              tipo: "Territorial",
+              regioes: "ruinas-do-voto-partido",
+              descricao:
+                "Monges e guerreiros marcados por votos impossíveis; peregrinam entre ruínas reforçando selos menores contra o Vazio.",
+              count: 8
+            },
+            {
+              id: "21_Demonios_Akuma-Gani",
+              nome: "Demônios Akuma-Gani",
+              cor: "#DC143C",
+              tipo: "Territorial",
+              regioes: "terras-vermelhas",
+              descricao:
+                "Onze fragmentos da vontade do soberano Imu, selado — cada cidadela vulcânica é um domínio dessa vontade partida, forjando guerra eterna.",
+              count: 11
+            }
+          ]
+        };
+
+        /* ---- estado derivado (preenchido por aplicarDados antes da partida) ---- */
+        let DADOS = FALLBACK; // payload em uso (API http ou fallback embutido)
+        let RACAS_MAP = {}; // id da raça -> {nome, cor, folder}
+        let CONTAGENS = null; // folder -> nº de personagens na galeria
+        let POIS = []; // pontos de interesse (26 pins: 16 regiões + 5 céus + 5 batalhas)
+        let PEGADAS = []; // elipses de influência biômica derivadas das posições
+        let CALDEIRA = null; // centro da Caldeira Selada (Fosso Infernal)
+
+        const ROTULO_TIPO = {
+          regiao: "REGIÃO",
+          batalha: "BATALHA",
+          ceu: "CÉUS"
+        };
+        const ROTULO_BLOCO = {
+          regiao: "HABITANTES",
+          ceu: "ENVOUCADOS",
+          batalha: "COMBATENTES"
+        };
+
+        // altitude dos pins celestes conforme a categoria da API
+        const ALT_CEUS = { Baixa: 86, Média: 110, Alta: 134 };
+
+        // normaliza campos que chegam como string OU array ("01_Humanos" | ["02_Mutantes",…])
+        function listaDe(v) {
+          return Array.isArray(v) ? v : v ? [v] : [];
+        }
+
+        function aplicarDados(j) {
+          DADOS = j;
+
+          // raças: o id já é a pasta da galeria; count vem pronto da API
+          RACAS_MAP = {};
+          CONTAGENS = {};
+          for (const r of j.races || []) {
+            RACAS_MAP[r.id] = { nome: r.nome, cor: r.cor, folder: r.id };
+            CONTAGENS[r.id] = typeof r.count === "number" ? r.count : null;
+          }
+          const raca = (id) => RACAS_MAP[id] || { nome: id, cor: "#999999", folder: id };
+
+          POIS = [];
+          for (const rg of j.regions || []) {
+            POIS.push({
+              id: rg.id,
+              tipo: "regiao",
+              nome: rg.nome,
+              u: rg.pos.x,
+              v: rg.pos.y,
+              cor: rg.cor,
+              desc: rg.descricao,
+              racas: listaDe(rg.racas).map(raca)
+            });
+          }
+          for (const cz of j.celes || []) {
+            POIS.push({
+              id: cz.id,
+              tipo: "ceu",
+              nome: cz.nome,
+              u: cz.pos.x,
+              v: cz.pos.y,
+              alt: ALT_CEUS[cz.altitude] || 110,
+              cor: cz.cor,
+              desc: cz.descricao,
+              racas: listaDe(cz.racas).map(raca)
+            });
+          }
+          for (const bt of j.battles || []) {
+            // "lados" pode vir plano ([a,b,…]) ou aninhado ([[a],[b,…]]) — aceita ambos
+            let lados = bt.lados || [];
+            if (lados.length && !Array.isArray(lados[0])) lados = [[lados[0]], lados.slice(1)];
+            POIS.push({
+              id: bt.id,
+              tipo: "batalha",
+              nome: bt.nome,
+              u: bt.pos.x,
+              v: bt.pos.y,
+              cor: "#E2483D",
+              desc: bt.resumo,
+              // §6.2 — campos opcionais da rota narrativa (vazios se a API for antiga)
+              era: bt.era || "",
+              data: bt.data || "",
+              lados: lados.map((ld) => listaDe(ld).map(raca))
+            });
+          }
+
+          /* ---- pegadas biômicas: elipse por região, raio derivado do espaçamento
+     entre vizinhas (distância ao vizinho mais próximo, corrigida pelo aspecto) ---- */
+          const regs = j.regions || [];
+          PEGADAS = regs.map((r) => {
+            let dmin = Infinity;
+            for (const o of regs) {
+              if (o === r) continue;
+              const d = Math.hypot(r.pos.x - o.pos.x, (r.pos.y - o.pos.y) * (MAP_D / MAP_W));
+              if (d < dmin) dmin = d;
+            }
+            if (!isFinite(dmin)) dmin = 0.2;
+            let rx = clamp(dmin * 0.8, 0.085, 0.27),
+              ry = rx * (MAP_W / MAP_D);
+            if (r.id === "grande-fenda-central") {
+              rx = 0.3;
+              ry = 0.115;
+            } // faixa leste-oeste
+            if (r.id === "abismo-das-profundezas") {
+              rx = Math.max(rx, 0.105);
+              ry = Math.max(ry, 0.105);
+            }
+            return { bioma: r.bioma, u: r.pos.x, v: r.pos.y, rx, ry };
+          });
+
+          // vulcões ancorados nas Terras Vermelhas; caldeira no Fosso Infernal
+          VOLCOES.length = 0;
+          const tv = regs.find((r) => r.id === "terras-vermelhas");
+          if (tv) {
+            const U = tv.pos.x,
+              V = tv.pos.y;
+            VOLCOES.push(
+              { u: U - 0.05, v: V - 0.02, r: 0.075, h: 27 },
+              { u: U + 0.065, v: V + 0.065, r: 0.062, h: 31 },
+              { u: U + 0.03, v: V - 0.09, r: 0.05, h: 21 }
+            );
+          }
+          const fi = regs.find((r) => r.id === "fosso-infernal");
+          CALDEIRA = fi ? { u: fi.pos.x, v: fi.pos.y } : null;
+        }
+
+        // Vulcões das Terras Vermelhas (cones com cratera) — preenchido por aplicarDados
+        const VOLCOES = [];
+
+        /* ============================================================
+   2. MATEMÁTICA 3D — câmera orbital + projeção perspectiva
+   ============================================================ */
+
+        const MIN_DIST = 300,
+          MAX_DIST = 1020,
+          PITCH_MIN = 0.26,
+          PITCH_MAX = 1.31;
+        // Câmera inicial mais próxima: o continente comanda o quadro (~44% da largura)
+        const HOME = { tx: 0, ty: 8, tz: 8, dist: 390, pitch: 0.6, yaw: -0.14 };
+
+        const cam = Object.assign({}, HOME); // câmera atual
+        let tw = null; // tween de câmera em curso
+
+        // Base ortonormal da câmera (recalculada a cada quadro)
+        const olho = { x: 0, y: 0, z: 0 },
+          fwd = { x: 0, y: 0, z: 0 },
+          dir = { x: 0, y: 0, z: 0 },
+          up = { x: 0, y: 0, z: 0 };
+        let focal = 800;
+
+        function atualizarCamera() {
+          const cp = Math.cos(cam.pitch),
+            sp = Math.sin(cam.pitch);
+          const cy = Math.cos(cam.yaw),
+            sy = Math.sin(cam.yaw);
+          olho.x = cam.tx + cam.dist * sy * cp;
+          olho.y = cam.ty + cam.dist * sp;
+          olho.z = cam.tz + cam.dist * cy * cp;
+          // forward = direção olho -> alvo
+          let fx = cam.tx - olho.x,
+            fy = cam.ty - olho.y,
+            fz = cam.tz - olho.z;
+          const fl = Math.hypot(fx, fy, fz);
+          fx /= fl;
+          fy /= fl;
+          fz /= fl;
+          fwd.x = fx;
+          fwd.y = fy;
+          fwd.z = fz;
+          // right = normalize(cross(forward, mundoUp)) ; up = cross(right, forward)
+          let rx = -fz,
+            rz = fx; // cross((fx,fy,fz),(0,1,0)) = (-fz,0,fx)
+          const rl = Math.hypot(rx, rz) || 1;
+          rx /= rl;
+          rz /= rl;
+          dir.x = rx;
+          dir.y = 0;
+          dir.z = rz;
+          up.x = dir.y * fz - dir.z * fy;
+          up.y = dir.z * fx - dir.x * fz;
+          up.z = dir.x * fy - dir.y * fx;
+        }
+
+        // Projeta um ponto do mundo -> tela. Retorna false se atrás do plano próximo.
+        const PLANO_PROX = 60;
+        const proj = { x: 0, y: 0, z: 0 };
+        function projetar(px, py, pz) {
+          const dx = px - olho.x,
+            dy = py - olho.y,
+            dz = pz - olho.z;
+          const zv = dx * fwd.x + dy * fwd.y + dz * fwd.z;
+          if (zv < PLANO_PROX) return false;
+          const xv = dx * dir.x + dy * dir.y + dz * dir.z;
+          const yv = dx * up.x + dy * up.y + dz * up.z;
+          const s = focal / zv;
+          proj.x = larguraTela / 2 + xv * s;
+          proj.y = alturaTela / 2 - yv * s;
+          proj.z = zv;
+          return true;
+        }
+
+        function easeInOut(k) {
+          return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        }
+        function clamp(v, a, b) {
+          return v < a ? a : v > b ? b : v;
+        }
+        function lerp(a, b, k) {
+          return a + (b - a) * k;
+        }
+
+        function iniciarTween(para, dur) {
+          if (RM) dur = Math.min(dur, 180);
+          tw = { t0: performance.now(), dur, de: Object.assign({}, cam), para };
+        }
+        function passoTween(agora) {
+          if (!tw) return;
+          const k = clamp((agora - tw.t0) / tw.dur, 0, 1);
+          const e = easeInOut(k);
+          cam.tx = lerp(tw.de.tx, tw.para.tx, e);
+          cam.ty = lerp(tw.de.ty, tw.para.ty, e);
+          cam.tz = lerp(tw.de.tz, tw.para.tz, e);
+          cam.dist = lerp(tw.de.dist, tw.para.dist, e);
+          cam.pitch = lerp(tw.de.pitch, tw.para.pitch, e);
+          cam.yaw = lerp(tw.de.yaw, tw.para.yaw, e);
+          if (k >= 1) tw = null;
+        }
+        function cancelarTween() {
+          tw = null;
+        }
+
+        /* ---- ruído determinístico (value noise + fbm) ---- */
+        function hash2(ix, iz) {
+          const s = Math.sin(ix * 127.1 + iz * 311.7) * 43758.5453123;
+          return s - Math.floor(s);
+        }
+        function ruidoValor(x, z) {
+          const ix = Math.floor(x),
+            iz = Math.floor(z);
+          const fx = x - ix,
+            fz = z - iz;
+          const sx = fx * fx * (3 - 2 * fx),
+            sz = fz * fz * (3 - 2 * fz);
+          const a = hash2(ix, iz),
+            b = hash2(ix + 1, iz),
+            c = hash2(ix, iz + 1),
+            d = hash2(ix + 1, iz + 1);
+          return a + (b - a) * sx + (c - a) * sz + (a - b - c + d) * sx * sz;
+        }
+        function fbm(x, z) {
+          let amp = 0.5,
+            f = 1,
+            soma = 0,
+            norm = 0;
+          for (let o = 0; o < 4; o++) {
+            soma += amp * ruidoValor(x * f, z * f);
+            norm += amp;
+            amp *= 0.5;
+            f *= 2.03;
+          }
+          return (soma / norm) * 2 - 1; // ~[-1,1]
+        }
+        function crista(x, z) {
+          return 1 - Math.abs(fbm(x, z));
+        }
+        function sstep(a, b, x) {
+          const t = clamp((x - a) / (b - a), 0, 1);
+          return t * t * (3 - 2 * t);
+        }
+
+        /* ============================================================
+   3. TERRENO — grade de altura ~26x30 células, cor por bioma
+   ============================================================ */
+
+        const COLS = 26,
+          ROWS = 30,
+          VX = COLS + 1,
+          VZ = ROWS + 1;
+        const MAP_W = 280,
+          MAP_D = 330;
+        const BASE_Y = -26; // base da placa continental
+
+        const H = new Float32Array(VX * VZ); // altura por vértice
+        const CORV = new Float32Array(VX * VZ * 3); // cor base por vértice
+        const EMISV = new Uint8Array(VX * VZ); // vértice emissivo (lava/veios)
+        const EMCOR = new Float32Array(VX * VZ * 3); // cor emissiva
+        const MARV = new Uint8Array(VX * VZ); // vértice de mar/ névoa (face não desenhada)
+        const WX = new Float32Array(VX); // coordenadas fixas do plano
+        const WZ = new Float32Array(VZ);
+
+        function vidar(ix, iz) {
+          return iz * VX + ix;
+        }
+
+        /* Paleta por bioma — as chaves são exatamente o campo "bioma" da API.
+   Tons de base contidos: o brilho fica por conta do emissivo e dos pins. */
+        const BIOMAS = {
+          "Tundra Glacial": { a: [220, 232, 242], b: [184, 204, 221] },
+          "Zona Temperada": { a: [92, 134, 88], b: [70, 108, 72] },
+          "Montanhas de Dente de Dragão": {
+            a: [142, 147, 166],
+            b: [116, 122, 140]
+          },
+          "Ravinas Arcanas": { a: [84, 72, 104], b: [54, 46, 74] },
+          "Floresta de Mana": { a: [52, 118, 102], b: [127, 191, 176] },
+          "Vales Sepulcrais": { a: [154, 160, 172], b: [92, 100, 112] },
+          "Planalto Vulcânico": { a: [172, 56, 38], b: [204, 86, 46] },
+          "Transição Selva-Deserto": { a: [134, 76, 54], b: [90, 58, 52] },
+          "Fenda Cósmica": { a: [10, 14, 26], b: [127, 212, 255] },
+          "Cidadelas-Torre": { a: [128, 148, 150], b: [88, 108, 110] },
+          "Marca Fronteiriça": { a: [128, 118, 90], b: [92, 85, 65] },
+          "Altiplano Ocidental": { a: [150, 127, 90], b: [115, 96, 68] },
+          "Cinturão Bruto": { a: [112, 114, 98], b: [72, 76, 64] },
+          "Subsolo Vulcânico": { a: [124, 74, 62], b: [80, 46, 40] },
+          "Caldeira Selada": { a: [94, 62, 100], b: [58, 38, 64] },
+          "Campo de Ruínas": { a: [142, 134, 118], b: [104, 98, 86] }
+        };
+
+        function alturaBioma(bioma, u, v) {
+          switch (bioma) {
+            case "Tundra Glacial":
+              return 7 + fbm(u * 3, v * 3) * 4 + Math.pow(crista(u * 4.2, v * 4.2), 2.4) * 13;
+            case "Zona Temperada":
+              return 4.5 + fbm(u * 3.4, v * 3.4) * 3.5;
+            case "Montanhas de Dente de Dragão":
+              return 14 + Math.pow(crista(u * 3.6, v * 3.6), 2.6) * 32;
+            case "Ravinas Arcanas":
+              return -3 + fbm(u * 3, v * 3) * 2.5;
+            case "Floresta de Mana":
+              return 5.5 + fbm(u * 3.2, v * 3.2) * 3;
+            case "Vales Sepulcrais":
+              return 3.5 + fbm(u * 2.6, v * 2.6) * 1.6;
+            case "Planalto Vulcânico":
+              return 11 + fbm(u * 3, v * 3) * 4.5;
+            case "Transição Selva-Deserto":
+              return 7.5 + fbm(u * 3.3, v * 3.3) * 3.5;
+            case "Fenda Cósmica":
+              return -2 + fbm(u * 3, v * 3) * 2;
+            case "Cidadelas-Torre":
+              return 8 + Math.pow(crista(u * 4.6, v * 4.6), 3) * 11 + fbm(u * 3, v * 3) * 2;
+            case "Marca Fronteiriça":
+              return 6 + fbm(u * 3.1, v * 3.1) * 2.5;
+            case "Altiplano Ocidental":
+              return 12 + fbm(u * 2.8, v * 2.8) * 2.5;
+            case "Cinturão Bruto":
+              return 5 + fbm(u * 3.4, v * 3.4) * 4 + Math.pow(crista(u * 3.8, v * 3.8), 3) * 8;
+            case "Subsolo Vulcânico":
+              return 9 + fbm(u * 3.2, v * 3.2) * 3;
+            case "Caldeira Selada":
+              return 3 + fbm(u * 3, v * 3) * 2;
+            case "Campo de Ruínas":
+              return 4.5 + fbm(u * 3.3, v * 3.3) * 2.8;
+          }
+          return 6;
+        }
+
+        function construirTerreno() {
+          for (let j = 0; j < VZ; j++) {
+            WZ[j] = (j / ROWS - 0.5) * MAP_D;
+          }
+          for (let i = 0; i < VX; i++) {
+            WX[i] = (i / COLS - 0.5) * MAP_W;
+          }
+          const tmp = {
+            h: 0,
+            r: 0,
+            g: 0,
+            b: 0,
+            e: 0,
+            er: 0,
+            eg: 0,
+            eb: 0,
+            mar: 0
+          };
+          for (let j = 0; j < VZ; j++) {
+            for (let i = 0; i < VX; i++) {
+              calcularVertice(i / COLS, j / ROWS, tmp);
+              const vi = vidar(i, j);
+              H[vi] = tmp.h;
+              CORV[vi * 3] = tmp.r;
+              CORV[vi * 3 + 1] = tmp.g;
+              CORV[vi * 3 + 2] = tmp.b;
+              EMISV[vi] = tmp.e;
+              EMCOR[vi * 3] = tmp.er;
+              EMCOR[vi * 3 + 1] = tmp.eg;
+              EMCOR[vi * 3 + 2] = tmp.eb;
+              MARV[vi] = tmp.mar;
+            }
+          }
+          // coerência espacial do emissivo: um vértice só brilha se tiver vizinho
+          // candidato — as fissuras formam linhas conectadas, não pontos isolados
+          for (let j = 0; j < VZ; j++) {
+            for (let i = 0; i < VX; i++) {
+              const vi = vidar(i, j);
+              if (!EMISV[vi]) continue;
+              const viz =
+                (i > 0 && EMISV[vi - 1]) ||
+                (i < VX - 1 && EMISV[vi + 1]) ||
+                (j > 0 && EMISV[vi - VX]) ||
+                (j < VZ - 1 && EMISV[vi + VX]);
+              if (!viz) EMISV[vi] = 0;
+            }
+          }
+        }
+
+        function calcularVertice(u, v, out) {
+          /* máscara continental: elipse central deformada por ruído angular
+     (penínsulas e baías quebram a silhueta arredondada) + falésia nas bordas */
+          const borda = sstep(0.02, 0.11, Math.min(u, 1 - u, v, 1 - v));
+          const ang = Math.atan2((v - 0.52) * 1.1, u - 0.5);
+          const warp = 1 + 0.2 * fbm(Math.cos(ang) * 1.25 + 9.7, Math.sin(ang) * 1.25 + 3.1);
+          const rr =
+            ((u - 0.5) / 0.46) * ((u - 0.5) / 0.46) + ((v - 0.52) / 0.5) * ((v - 0.52) / 0.5);
+          const massa = Math.exp(-(rr / warp) * 1.35);
+
+          // ilhotas costeiras (fragmentos de arquipélago), imunes à falésia da borda
+          const ilha = (cx, cy, rad) => {
+            const a = (u - cx) / rad,
+              b = (v - cy) / (rad * 1.25);
+            return Math.exp(-(a * a + b * b));
+          };
+          const iA = ilha(0.052, 0.325, 0.034),
+            iB = ilha(0.95, 0.478, 0.031);
+
+          let terra =
+            clamp(massa * 1.28 - 0.44 + fbm(u * 2.2 + 7.3, v * 2.2 + 2.9) * 0.3, 0, 1) * borda;
+          terra = Math.max(terra, iA * 0.85, iB * 0.8);
+
+          // influência biômica das regiões (o peso máximo também garante terra sob cada uma)
+          let somaW = 0,
+            hAcc = 0;
+          let wDom = 0,
+            biomaDom = null,
+            w2 = 0,
+            bioma2 = null,
+            wMax = 0;
+          for (let k = 0; k < PEGADAS.length; k++) {
+            const R = PEGADAS[k];
+            const du = (u - R.u) / R.rx,
+              dv = (v - R.v) / R.ry;
+            const w = Math.exp(-(du * du + dv * dv) * 1.9);
+            if (w > wMax) wMax = w;
+            if (w < 0.03) continue;
+            somaW += w;
+            hAcc += w * alturaBioma(R.bioma, u, v);
+            if (w > wDom) {
+              w2 = wDom;
+              bioma2 = biomaDom;
+              wDom = w;
+              biomaDom = R.bioma;
+            } else if (w > w2) {
+              w2 = w;
+              bioma2 = R.bioma;
+            }
+          }
+          // nenhuma região reivindica este ponto, mas a placa continental sustenta o solo
+          terra = Math.max(terra, Math.min(0.92, wMax * 1.05) * borda);
+
+          // mar / névoa rasa (faces de mar nem são desenhadas: o vazio estrelado aparece)
+          if (terra <= 0.26) {
+            out.h = BASE_Y + 2 + fbm(u * 5, v * 5) * 0.5;
+            out.r = 13;
+            out.g = 20;
+            out.b = 36;
+            out.e = 0;
+            out.er = out.eg = out.eb = 0;
+            out.mar = 1;
+            return;
+          }
+          out.mar = 0;
+
+          let h = (somaW > 0 ? hAcc / somaW : 6) + 10 * iA + 8 * iB;
+
+          // trincheira alongada da Grande Fenda Central (estreita e profunda)
+          const gf = (x, y, cx, cy, rx, ry) => {
+            const a = (x - cx) / rx,
+              b = (y - cy) / ry;
+            return Math.exp(-(a * a + b * b) * 2.4);
+          };
+          const wFenda = gf(u, v, 0.5, 0.42, 0.08, 0.19);
+          const wAbismo = gf(u, v, 0.52, 0.575, 0.105, 0.105);
+          h -= 12 * wFenda;
+
+          // cratera cósmica do Abismo (poço distinto, ao sul da fenda)
+          h -= 34 * wAbismo;
+
+          // caldeira selada do Fosso Infernal (depressão basáltica no extremo sul)
+          if (CALDEIRA) h -= 11 * gf(u, v, CALDEIRA.u, CALDEIRA.v, 0.085, 0.075);
+
+          // cones vulcânicos (com cratera no topo); guardam influência p/ recolorir
+          let infVolc = 0;
+          for (let k = 0; k < VOLCOES.length; k++) {
+            const vc = VOLCOES[k];
+            const d = Math.hypot(u - vc.u, v - vc.v);
+            if (d < vc.r) {
+              const t = 1 - d / vc.r,
+                cone = t * t * (3 - 2 * t);
+              h += vc.h * cone;
+              infVolc = Math.max(infVolc, cone);
+              if (d < vc.r * 0.18) {
+                h -= vc.h * 0.5 * (1 - d / (vc.r * 0.18));
+              } // cratera
+            }
+          }
+          if (infVolc > 0.35) biomaDom = "Planalto Vulcânico"; // encostas vulcânicas rubras
+
+          h = clamp(h, BASE_Y - 12, 52);
+
+          if (wAbismo > 0.1) biomaDom = "Fenda Cósmica"; // recoloriza o fundo e as bordas da cratera
+
+          // cor do bioma dominante, mesclando com o secundário nas transições
+          const A = BIOMAS[biomaDom] || BIOMAS["Zona Temperada"];
+          const B = BIOMAS[bioma2] || A;
+          const tVar = 0.5 + 0.5 * fbm(u * 5.5 + 11.7, v * 5.5 + 5.3);
+          const kMix = clamp(tVar, 0, 1) * (wDom / (wDom + w2 || 1));
+          let r = lerp(A.a[0], A.b[0], kMix),
+            g = lerp(A.a[1], A.b[1], kMix),
+            b = lerp(A.a[2], A.b[2], kMix);
+
+          // neve nos cumes mais altos
+          if (biomaDom === "Montanhas de Dente de Dragão" && h > 33) {
+            const ns = clamp((h - 33) / 9, 0, 1) * 0.85;
+            r = lerp(r, 222, ns);
+            g = lerp(g, 234, ns);
+            b = lerp(b, 244, ns);
+          }
+          // litoral rochoso
+          if (terra < 0.34) {
+            const es = sstep(0.34, 0.26, terra) * 0.55;
+            r = lerp(r, 92, es);
+            g = lerp(g, 100, es);
+            b = lerp(b, 112, es);
+          }
+
+          out.h = h;
+          out.r = r;
+          out.g = g;
+          out.b = b;
+          out.e = 0;
+          out.er = r;
+          out.eg = g;
+          out.eb = b;
+
+          // candidatos a fissura de lava (a coerência por vizinho vem em construirTerreno):
+          // faixa larga do cruzamento zero do fbm -> linhas conectadas, sem "confete"
+          if (
+            (biomaDom === "Planalto Vulcânico" || biomaDom === "Transição Selva-Deserto") &&
+            h > 6 &&
+            Math.abs(fbm(u * 6.5 + 3.1, v * 6.5 + 9.4)) < 0.1
+          ) {
+            out.e = 1;
+            out.er = 255;
+            out.eg = 164;
+            out.eb = 72;
+          }
+          // veios cintilantes do Abismo (mesma gramática de fissura conectada)
+          if (
+            biomaDom === "Fenda Cósmica" &&
+            h < -8 &&
+            Math.abs(fbm(u * 6.1 + 13.7, v * 6.1 + 5.1)) < 0.1
+          ) {
+            out.e = 1;
+            out.er = 127;
+            out.eg = 212;
+            out.eb = 255;
+          }
+        }
+
+        function alturaEm(u, v) {
+          const x = clamp(u, 0, 1) * COLS,
+            z = clamp(v, 0, 1) * ROWS;
+          const x0 = clamp(Math.floor(x), 0, COLS - 1),
+            z0 = clamp(Math.floor(z), 0, ROWS - 1);
+          const fx = x - x0,
+            fz = z - z0;
+          const a = H[vidar(x0, z0)],
+            b = H[vidar(x0 + 1, z0)],
+            c = H[vidar(x0, z0 + 1)],
+            d = H[vidar(x0 + 1, z0 + 1)];
+          return lerp(lerp(a, b, fx), lerp(c, d, fx), fz);
+        }
+
+        /* ---- quads do terreno + paredões laterais (placa extrudada) ---- */
+        const NUM_CELULAS = COLS * ROWS;
+        const Q_IDX = new Int32Array(NUM_CELULAS * 4);
+        const Q_COR = new Float32Array(NUM_CELULAS * 3);
+        const Q_EMISSIVO = new Uint8Array(NUM_CELULAS);
+        const Q_GLOW = new Uint8Array(NUM_CELULAS); // 1 = núcleo de fissura (≥2 vizinhos emissivos)
+        const Q_EMCOR = new Float32Array(NUM_CELULAS * 3);
+        const Q_MAR = new Uint8Array(NUM_CELULAS); // 1 = face de mar (pular)
+
+        const PAREDES = []; // {va,vb,vc,vd (vértices topo), y0 (base), cor:[r,g,b], nx,nz (normal)}
+
+        function construirQuads() {
+          for (let j = 0; j < ROWS; j++) {
+            for (let i = 0; i < COLS; i++) {
+              const q = j * COLS + i,
+                b = q * 4;
+              Q_IDX[b] = vidar(i, j);
+              Q_IDX[b + 1] = vidar(i + 1, j);
+              Q_IDX[b + 2] = vidar(i + 1, j + 1);
+              Q_IDX[b + 3] = vidar(i, j + 1);
+              // cor da face = média dos cantos; emissivo só com ≥2 cantos na fissura
+              // ( faces raspadas por um canto único engordariam a linha em manchas )
+              let r = 0,
+                g = 0,
+                bl = 0,
+                nE = 0,
+                mar = 0;
+              for (let c = 0; c < 4; c++) {
+                const vi = Q_IDX[b + c];
+                r += CORV[vi * 3];
+                g += CORV[vi * 3 + 1];
+                bl += CORV[vi * 3 + 2];
+                if (EMISV[vi]) {
+                  nE++;
+                }
+                if (MARV[vi]) {
+                  mar++;
+                }
+              }
+              Q_COR[q * 3] = r / 4;
+              Q_COR[q * 3 + 1] = g / 4;
+              Q_COR[q * 3 + 2] = bl / 4;
+              Q_EMISSIVO[q] = nE >= 2 ? 1 : 0;
+              Q_MAR[q] = mar === 4 ? 1 : 0;
+              if (Q_EMISSIVO[q]) {
+                let er = 0,
+                  eg = 0,
+                  eb = 0,
+                  n = 0;
+                for (let c = 0; c < 4; c++) {
+                  const vi = Q_IDX[b + c];
+                  if (EMISV[vi]) {
+                    er += EMCOR[vi * 3];
+                    eg += EMCOR[vi * 3 + 1];
+                    eb += EMCOR[vi * 3 + 2];
+                    n++;
+                  }
+                }
+                Q_EMCOR[q * 3] = er / n;
+                Q_EMCOR[q * 3 + 1] = eg / n;
+                Q_EMCOR[q * 3 + 2] = eb / n;
+              }
+            }
+          }
+          // o glow fica restrito ao esqueleto das fissuras (≥2 vizinhas emissivas):
+          // linhas ganham um halo contínuo em vez de brilho por célula solta
+          for (let j = 0; j < ROWS; j++) {
+            for (let i = 0; i < COLS; i++) {
+              const q = j * COLS + i;
+              if (!Q_EMISSIVO[q]) continue;
+              let viz = 0;
+              if (i > 0 && Q_EMISSIVO[q - 1]) viz++;
+              if (i < COLS - 1 && Q_EMISSIVO[q + 1]) viz++;
+              if (j > 0 && Q_EMISSIVO[q - COLS]) viz++;
+              if (j < ROWS - 1 && Q_EMISSIVO[q + COLS]) viz++;
+              Q_GLOW[q] = viz >= 2 ? 1 : 0;
+            }
+          }
+          // paredões: onde a vizinhança é mais baixa (ou na borda do mapa),
+          // desce uma parede até a base -> continente "extrudado" na névoa
+          const ALT_MEDIA = (i, j) =>
+            (H[vidar(i, j)] +
+              H[vidar(i, Math.min(j + 1, ROWS))] +
+              H[vidar(Math.min(i + 1, COLS), j)]) /
+            3;
+          const COR_MEDIA = (i, j, out) => {
+            const vi = vidar(clamp(i, 0, COLS), clamp(j, 0, ROWS));
+            out[0] = CORV[vi * 3];
+            out[1] = CORV[vi * 3 + 1];
+            out[2] = CORV[vi * 3 + 2];
+          };
+          const cm = [0, 0, 0];
+          const parede = (ia, ja, ib, jb, nx, nz, oi, oj) => {
+            const va = vidar(ia, ja),
+              vb = vidar(ib, jb);
+            COR_MEDIA(oi, oj, cm); // cor vem do lado mais alto (dono do penhasco)
+            PAREDES.push({
+              va,
+              vb,
+              y0: BASE_Y,
+              nx,
+              nz,
+              cor: [cm[0] * 0.5, cm[1] * 0.5, cm[2] * 0.5]
+            });
+          };
+          for (let j = 0; j < ROWS; j++) {
+            for (let i = 0; i < COLS; i++) {
+              const hC = ALT_MEDIA(i, j);
+              // borda leste: paredão em qualquer descontinuidade (face voltada p/ o lado baixo)
+              if (i < COLS - 1) {
+                const hd = hC - ALT_MEDIA(i + 1, j);
+                if (hd > 1.2) parede(i + 1, j, i + 1, j + 1, 1, 0, i, j);
+                else if (hd < -1.2) parede(i + 1, j, i + 1, j + 1, -1, 0, i + 1, j);
+              } else if (hC > BASE_Y + 4) {
+                parede(i + 1, j, i + 1, j + 1, 1, 0, i, j); // borda leste do mapa (só onde há terra)
+              }
+              // borda sul da célula
+              if (j < ROWS - 1) {
+                const hd = hC - ALT_MEDIA(i, j + 1);
+                if (hd > 1.2) parede(i, j + 1, i + 1, j + 1, 0, 1, i, j);
+                else if (hd < -1.2) parede(i, j + 1, i + 1, j + 1, 0, -1, i, j + 1);
+              } else if (hC > BASE_Y + 4) {
+                parede(i, j + 1, i + 1, j + 1, 0, 1, i, j); // borda sul do mapa (só onde há terra)
+              }
+              // bordas norte e oeste do mapa inteiro (idem: só onde há terra)
+              if (j === 0 && hC > BASE_Y + 4) parede(i, 0, i + 1, 0, 0, -1, i, 0);
+              if (i === 0 && hC > BASE_Y + 4) parede(0, j, 0, j + 1, -1, 0, 0, j);
+            }
+          }
+        }
+
+        /* ============================================================
+   4. RENDERIZAÇÃO — pintor, sombreamento flat, névoa, pins
+   ============================================================ */
+
+        const canvas = document.getElementById("mapa");
+        const ctx = canvas.getContext("2d");
+        let larguraTela = 0,
+          alturaTela = 0,
+          dpr = 1;
+        let fundoEstrelas = null;
+
+        const LUZ = (() => {
+          const x = -0.5,
+            y = 0.9,
+            z = -0.35,
+            l = Math.hypot(x, y, z);
+          return { x: x / l, y: y / l, z: z / l };
+        })();
+        const AMBIENTE = 0.46,
+          DIFUSA = 0.6;
+        // cor da névoa = cor do fundo no centro -> as bordas do continente se dissolvem
+        const NEB_FONTE = [13, 20, 36],
+          NEB_PERTO = 330,
+          NEB_LONGE = 1250,
+          NEB_MAX = 0.86;
+
+        // buffers reutilizados (sem alocação pesada por quadro)
+        // limite superior de itens: células + paredes (≤ 2 por célula + bordas) + pins
+        const SX = new Float32Array(VX * VZ),
+          SY = new Float32Array(VX * VZ),
+          SZ = new Float32Array(VX * VZ);
+        const MAX_ITENS = NUM_CELULAS * 4 + 96; // células + paredes + folga para os pins
+        const ORDEM = new Array(MAX_ITENS);
+        let nItens = 0;
+        const PROF = new Float32Array(MAX_ITENS);
+        const PIN_ORDEM = new Array(48); // ordem de desenho dos pins (entre si)
+        let nPinos = 0;
+        const _cacheCor = new Map();
+
+        function cssCor(r, g, b) {
+          const ri = Math.min(255, r) | 0,
+            gi = Math.min(255, g) | 0,
+            bi = Math.min(255, b) | 0;
+          const k = (ri << 16) | (gi << 8) | bi;
+          let s = _cacheCor.get(k);
+          if (!s) {
+            s = "rgb(" + ri + "," + gi + "," + bi + ")";
+            _cacheCor.set(k, s);
+          }
+          return s;
+        }
+
+        function redimensionar() {
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          larguraTela = canvas.clientWidth;
+          alturaTela = canvas.clientHeight;
+          canvas.width = Math.round(larguraTela * dpr);
+          canvas.height = Math.round(alturaTela * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          focal = alturaTela / 2 / Math.tan((27 * Math.PI) / 180); // FOV vertical ~54°
+          gerarEstrelas();
+        }
+
+        // céu estrelado pré-renderizado (barato de desenhar por quadro)
+        function gerarEstrelas() {
+          fundoEstrelas = document.createElement("canvas");
+          fundoEstrelas.width = canvas.width;
+          fundoEstrelas.height = canvas.height;
+          const c2 = fundoEstrelas.getContext("2d");
+          c2.scale(dpr, dpr);
+          let semente = 7;
+          const rnd = () => {
+            semente = (semente * 16807) % 2147483647;
+            return semente / 2147483647;
+          };
+          for (let n = 0; n < 170; n++) {
+            const x = rnd() * larguraTela,
+              y = rnd() * alturaTela;
+            const r = 0.4 + rnd() * 1.1,
+              a = 0.25 + rnd() * 0.6;
+            const tinte = rnd();
+            let corEstrela = "rgba(220,228,245," + a + ")";
+            if (tinte > 0.92)
+              corEstrela = "rgba(201,162,39," + a + ")"; // douradas raras
+            else if (tinte > 0.84) corEstrela = "rgba(127,212,255," + a + ")"; // azuladas
+            c2.fillStyle = corEstrela;
+            c2.beginPath();
+            c2.arc(x, y, r, 0, 6.2832);
+            c2.fill();
+          }
+        }
+
+        // wisps de névoa que derivam ao redor do continente
+        const NEBLINHAS = [];
+        for (let n = 0; n < 6; n++) {
+          NEBLINHAS.push({
+            ang: n * 1.047 + n * n * 0.61,
+            raio: 210 + n * 26,
+            vel: (n % 2 ? 0.000045 : -0.000038) * (1 + n * 0.12),
+            tam: 95 + n * 17,
+            alfa: 0.045 + 0.012 * (n % 3),
+            frente: n >= 4
+          });
+        }
+
+        function projetarGrade() {
+          for (let j = 0; j < VZ; j++) {
+            for (let i = 0; i < VX; i++) {
+              const vi = vidar(i, j);
+              if (projetar(WX[i], H[vi], WZ[j])) {
+                SX[vi] = proj.x;
+                SY[vi] = proj.y;
+                SZ[vi] = proj.z;
+              } else {
+                SZ[vi] = -1;
+              }
+            }
+          }
+        }
+
+        function sombraQuadro(qIdx) {
+          // intensidade emissiva com leve tremulação (viva, não estática)
+          if (RM) return 1.02;
+          return 1.0 + 0.09 * Math.sin(tempoAgora * 0.0026 + qIdx * 1.7);
+        }
+
+        function desenharCelula(q) {
+          if (Q_MAR[q]) return; // mar: deixa o vazio estrelado aparecer
+          const b = q * 4;
+          const v0 = Q_IDX[b],
+            v1 = Q_IDX[b + 1],
+            v2 = Q_IDX[b + 2],
+            v3 = Q_IDX[b + 3];
+          // se qualquer canto caiu atrás do plano próximo, descarta (evita triângulo degenerado)
+          if (SZ[v0] < 0 || SZ[v1] < 0 || SZ[v2] < 0 || SZ[v3] < 0) return;
+          // culling: todos fora da tela (com margem) -> pula
+          const m = 120;
+          if (
+            (SX[v0] < -m && SX[v1] < -m && SX[v2] < -m && SX[v3] < -m) ||
+            (SX[v0] > larguraTela + m &&
+              SX[v1] > larguraTela + m &&
+              SX[v2] > larguraTela + m &&
+              SX[v3] > larguraTela + m) ||
+            (SY[v0] < -m && SY[v1] < -m && SY[v2] < -m && SY[v3] < -m) ||
+            (SY[v0] > alturaTela + m &&
+              SY[v1] > alturaTela + m &&
+              SY[v2] > alturaTela + m &&
+              SY[v3] > alturaTela + m)
+          )
+            return;
+          const prof = (SZ[v0] + SZ[v1] + SZ[v2] + SZ[v3]) * 0.25;
+
+          // normal flat a partir dos cantos em coordenadas de mundo
+          const i0 = v0 % VX,
+            j0 = (v0 - i0) / VX;
+          const x00 = WX[i0],
+            z00 = WZ[j0],
+            y00 = H[v0];
+          const i1 = v1 % VX,
+            j1 = (v1 - i1) / VX;
+          const x10 = WX[i1],
+            z10 = WZ[j1],
+            y10 = H[v1];
+          const i3 = v3 % VX,
+            j3 = (v3 - i3) / VX;
+          const x01 = WX[i3],
+            z01 = WZ[j3],
+            y01 = H[v3];
+          let nx = (y10 - y00) * (z01 - z00) - (z10 - z00) * (y01 - y00);
+          let ny = (z10 - z00) * (x01 - x00) - (x10 - x00) * (z01 - z00);
+          let nz = (x10 - x00) * (y01 - y00) - (y10 - y00) * (x01 - x00);
+          const nl = Math.hypot(nx, ny, nz) || 1;
+          nx /= nl;
+          ny /= nl;
+          nz /= nl;
+          if (ny < 0) {
+            nx = -nx;
+            ny = -ny;
+            nz = -nz;
+          }
+          const lambert = Math.max(0, nx * LUZ.x + ny * LUZ.y + nz * LUZ.z);
+
+          const profNeb = clamp((prof - NEB_PERTO) / (NEB_LONGE - NEB_PERTO), 0, 1);
+          const neb =
+            Math.pow(profNeb, 1.15) * NEB_MAX + clamp((BASE_Y + 4 - y00) / 90, 0, 1) * 0.12;
+
+          let rr, gg, bb;
+          if (Q_EMISSIVO[q]) {
+            const kq = sombraQuadro(q);
+            rr = Q_EMCOR[q * 3] * kq;
+            gg = Q_EMCOR[q * 3 + 1] * kq;
+            bb = Q_EMCOR[q * 3 + 2] * kq;
+          } else {
+            const sombra = Math.min(1, AMBIENTE + DIFUSA * lambert);
+            rr = Q_COR[q * 3] * sombra;
+            gg = Q_COR[q * 3 + 1] * sombra;
+            bb = Q_COR[q * 3 + 2] * sombra;
+          }
+          rr += (NEB_FONTE[0] - rr) * neb;
+          gg += (NEB_FONTE[1] - gg) * neb;
+          bb += (NEB_FONTE[2] - bb) * neb;
+
+          const cor = cssCor(rr, gg, bb);
+          ctx.fillStyle = cor;
+          ctx.strokeStyle = cor;
+          ctx.lineWidth = 1;
+          // leve expansão em torno do centro fecha as frestas entre quads
+          const cxp = (SX[v0] + SX[v1] + SX[v2] + SX[v3]) * 0.25,
+            cyp = (SY[v0] + SY[v1] + SY[v2] + SY[v3]) * 0.25;
+          ctx.beginPath();
+          ctx.moveTo(cxp + (SX[v0] - cxp) * 1.018, cyp + (SY[v0] - cyp) * 1.018);
+          ctx.lineTo(cxp + (SX[v1] - cxp) * 1.018, cyp + (SY[v1] - cyp) * 1.018);
+          ctx.lineTo(cxp + (SX[v2] - cxp) * 1.018, cyp + (SY[v2] - cyp) * 1.018);
+          ctx.lineTo(cxp + (SX[v3] - cxp) * 1.018, cyp + (SY[v3] - cyp) * 1.018);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          if (Q_EMISSIVO[q] && Q_GLOW[q]) {
+            const area =
+              Math.abs(
+                (SX[v1] - SX[v0]) * (SY[v3] - SY[v0]) - (SX[v3] - SX[v0]) * (SY[v1] - SY[v0])
+              ) * 0.5;
+            if (area > 14) {
+              // gate baixo: halo vive também na vista geral
+              ctx.save();
+              ctx.globalCompositeOperation = "lighter";
+              ctx.globalAlpha = 0.26;
+              ctx.shadowColor = cssCor(Q_EMCOR[q * 3], Q_EMCOR[q * 3 + 1], Q_EMCOR[q * 3 + 2]);
+              ctx.shadowBlur = clamp(area * 0.07, 12, 34);
+              ctx.fillStyle = cssCor(rr, gg, bb);
+              ctx.fill();
+              ctx.restore();
+            }
+          }
+        }
+
+        // pequeno auxiliar: teto de segurança para componentes de cor
+        function tetoCor(v) {
+          return v > 255 ? 255 : v;
+        }
+
+        function desenharParede(idx) {
+          const p = PAREDES[idx];
+          if (SZ[p.va] < 0 || SZ[p.vb] < 0) return;
+          // canto A: topo (vértice da grade) e base (mesmo x/z, y = base da placa)
+          if (!projetar(WX[p.va % VX], p.y0, WZ[Math.floor(p.va / VX)])) return;
+          const xa = proj.x,
+            ya = proj.y,
+            za = proj.z;
+          const xt = SX[p.va],
+            yt = SY[p.va];
+          // canto B
+          if (!projetar(WX[p.vb % VX], p.y0, WZ[Math.floor(p.vb / VX)])) return;
+          const xb = proj.x,
+            yb = proj.y,
+            zb = proj.z;
+          const xt2 = SX[p.vb],
+            yt2 = SY[p.vb];
+          // culling por tela
+          const m = 140;
+          if (
+            Math.max(xa, xt, xb, xt2) < -m ||
+            Math.min(xa, xt, xb, xt2) > larguraTela + m ||
+            Math.max(ya, yt, yb, yt2) < -m ||
+            Math.min(ya, yt, yb, yt2) > alturaTela + m
+          )
+            return;
+          const prof = (za + zb) * 0.5;
+
+          const lambert = Math.max(0, p.nx * LUZ.x + p.nz * LUZ.z + 0.15);
+          const sombra = Math.min(1, AMBIENTE * 0.9 + DIFUSA * 0.7 * lambert);
+          const profNeb = clamp((prof - NEB_PERTO) / (NEB_LONGE - NEB_PERTO), 0, 1);
+          const neb = Math.pow(profNeb, 1.15) * NEB_MAX;
+          let rr = p.cor[0] * sombra,
+            gg = p.cor[1] * sombra,
+            bb = p.cor[2] * sombra;
+          rr += (NEB_FONTE[0] - rr) * neb;
+          gg += (NEB_FONTE[1] - gg) * neb;
+          bb += (NEB_FONTE[2] - bb) * neb;
+
+          const cor = cssCor(tetoCor(rr), tetoCor(gg), tetoCor(bb));
+          ctx.fillStyle = cor;
+          ctx.strokeStyle = cor;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(xt, yt);
+          ctx.lineTo(xt2, yt2);
+          ctx.lineTo(xb, yb);
+          ctx.lineTo(xa, ya);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        /* ---- pins (marcadores billboard) ---- */
+        const PINOS = [];
+        function construirPinos() {
+          for (let k = 0; k < POIS.length; k++) {
+            const p = POIS[k];
+            const wx = (p.u - 0.5) * MAP_W,
+              wz = (p.v - 0.5) * MAP_D;
+            const solo = alturaEm(p.u, p.v);
+            PINOS.push({
+              poi: p,
+              wx,
+              wz,
+              solo,
+              alt: p.tipo === "ceu" ? p.alt : 0,
+              fase: k * 1.93,
+              visivel: true,
+              tx: 0,
+              ty: 0,
+              tam: 10,
+              prof: 1e9, // estado de tela do quadro
+              bx: 0,
+              by: 0 // projeção da base (solo)
+            });
+          }
+        }
+
+        const ALT_HASTE = 26; // altura (em unidades de mundo) da haste dos pins terrestres
+
+        // ============================================================
+        // W5.1: MINIMAP — bússola 2D no canto inferior direito
+        // ============================================================
+        const MM_W = 160;
+        const MM_H = 180;
+        const mmCanvas = document.getElementById("minimapCanvas");
+        const mmCtx = mmCanvas && mmCanvas.getContext("2d");
+
+        // helpers de conversão mundo (MAP_W × MAP_D) → minimap (MM_W × MM_H)
+        function mundoParaMM(wx, wz) {
+          return {
+            x: (wx / MAP_W + 0.5) * MM_W,
+            y: (wz / MAP_D + 0.5) * MM_H
+          };
+        }
+
+        // Retângulo visível da viewport no minimap.
+        // Como a câmera é orbital com centro (cam.tx, cam.tz) e dist, o que aparece
+        // na viewport é um quadrado proporcional a cam.dist, rotacionado por cam.yaw.
+        function retanguloVisivel() {
+          // fator de "metade da viewport visível em unidades de mundo"
+          // derivação: a tela tem larguraTela px com focal ~ 500; a área que cabe
+          // em zv ~ cam.dist tem tamanho mundo ~= (larguraTela/2) * (cam.dist/focal).
+          const focalUsado = 500;
+          const meioLargura = (larguraTela / 2) * (cam.dist / focalUsado);
+          // correção: mapa é mais largo em z (MAP_D > MAP_W), o que importa é a meia-largura
+          // em cada eixo (assume aspect ratio similar; suficiente p/ bússola)
+          const centro = mundoParaMM(cam.tx, cam.tz);
+          // retângulo rotacionado por cam.yaw
+          const c = Math.cos(cam.yaw);
+          const s = Math.sin(cam.yaw);
+          const rx = meioLargura * (MM_W / MAP_W);
+          const ry = meioLargura * (MM_H / MAP_D);
+          const corners = [
+            [-rx, -ry],
+            [rx, -ry],
+            [rx, ry],
+            [-rx, ry]
+          ].map(([x, y]) => ({
+            x: centro.x + x * c - y * s,
+            y: centro.y + x * s + y * c
+          }));
+          return corners;
+        }
+
+        function desenharMinimap() {
+          if (!mmCtx) return;
+          mmCtx.clearRect(0, 0, MM_W, MM_H);
+          // fundo escuro com leve gradiente
+          const grad = mmCtx.createLinearGradient(0, 0, 0, MM_H);
+          grad.addColorStop(0, "#0a1426");
+          grad.addColorStop(1, "#1a120e");
+          mmCtx.fillStyle = grad;
+          mmCtx.fillRect(0, 0, MM_W, MM_H);
+          // borda interna decorativa
+          mmCtx.strokeStyle = "rgba(201,162,39,0.15)";
+          mmCtx.lineWidth = 1;
+          mmCtx.strokeRect(0.5, 0.5, MM_W - 1, MM_H - 1);
+          // pins (mini-dots, invisíveis somem)
+          for (let k = 0; k < PINOS.length; k++) {
+            const pn = PINOS[k];
+            if (!pn.visivel) continue;
+            const p = mundoParaMM(pn.wx, pn.wz);
+            if (p.x < 0 || p.x >= MM_W || p.y < 0 || p.y >= MM_H) continue;
+            // cor por tipo
+            const cor =
+              pn.poi.tipo === "regiao"
+                ? "#C9A227"
+                : pn.poi.tipo === "batalha"
+                  ? "#E2483D"
+                  : "#7EC0EE";
+            mmCtx.fillStyle = cor;
+            mmCtx.beginPath();
+            mmCtx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
+            mmCtx.fill();
+          }
+          // retângulo da vista (bússola)
+          const corners = retanguloVisivel();
+          mmCtx.beginPath();
+          mmCtx.moveTo(corners[0].x, corners[0].y);
+          for (let i = 1; i < corners.length; i++) mmCtx.lineTo(corners[i].x, corners[i].y);
+          mmCtx.closePath();
+          mmCtx.strokeStyle = "#faf8f3";
+          mmCtx.lineWidth = 1.5;
+          mmCtx.stroke();
+          // ponto central (foco da câmera)
+          const centro = mundoParaMM(cam.tx, cam.tz);
+          mmCtx.fillStyle = "#faf8f3";
+          mmCtx.beginPath();
+          mmCtx.arc(centro.x, centro.y, 2, 0, Math.PI * 2);
+          mmCtx.fill();
+        }
+
+        // Click no minimap = teleporta a câmera para o ponto clicado
+        if (mmCanvas) {
+          mmCanvas.addEventListener("click", (ev) => {
+            const rect = mmCanvas.getBoundingClientRect();
+            const mx = (ev.clientX - rect.left) / rect.width;
+            const my = (ev.clientY - rect.top) / rect.height;
+            const alvoX = (mx - 0.5) * MAP_W;
+            const alvoZ = (my - 0.5) * MAP_D;
+            // teletransporta com tween suave
+            if (typeof iniciarTween === "function") {
+              iniciarTween({ tx: alvoX, tz: alvoZ, dist: cam.dist }, 380);
+            } else {
+              cam.tx = alvoX;
+              cam.tz = alvoZ;
+            }
+          });
+        }
+
+        function atualizarPinos(agora) {
+          for (let k = 0; k < PINOS.length; k++) {
+            const pn = PINOS[k];
+            const camadaOk =
+              CAMADAS[
+                pn.poi.tipo === "regiao"
+                  ? "regioes"
+                  : pn.poi.tipo === "batalha"
+                    ? "batalhas"
+                    : "ceus"
+              ];
+            // Filtro de raça (W5.3): se FILTRO_RACA setado, exige match em poi.racas.
+            // Ceus/batalhas podem ter racas vazias — somem quando filtro ativo.
+            const racaOk =
+              !FILTRO_RACA ||
+              (Array.isArray(pn.poi.racas) && pn.poi.racas.some((r) => r.folder === FILTRO_RACA));
+            // §6.3 — Filtro de era: se FILTRO_ERA setado, esconde battles que não batem.
+            // Regiões e céus NÃO são afetados (filtro só esconde battles, evita "mapa vazio").
+            const eraOk = !FILTRO_ERA || pn.poi.tipo !== "batalha" || pn.poi.era === FILTRO_ERA;
+            pn.visivel = false;
+            pn.prof = 1e9;
+            if (!camadaOk) continue;
+            if (!racaOk) continue;
+            if (!eraOk) continue;
+            const bob = pn.poi.tipo === "ceu" && !RM ? Math.sin(agora * 0.0011 + pn.fase) * 4 : 0;
+            const ySolo = pn.solo;
+            const yAlto = ySolo + (pn.poi.tipo === "ceu" ? pn.alt + bob : ALT_HASTE);
+            if (!projetar(pn.wx, ySolo, pn.wz)) continue;
+            pn.bx = proj.x;
+            pn.by = proj.y;
+            const profBase = proj.z;
+            if (!projetar(pn.wx, yAlto, pn.wz)) continue;
+            pn.tx = proj.x;
+            pn.ty = proj.y;
+            pn.prof = proj.z;
+            let tam = ((pn.poi.tipo === "ceu" ? 10.5 : 9) * focal) / proj.z;
+            tam = clamp(tam, 9, 36);
+            if (hoverPino === pn || selecionado === pn.poi.id)
+              tam *= 1 + 0.13 * Math.sin(agora * 0.006 + pn.fase);
+            pn.tam = tam;
+            pn.visivel =
+              pn.tx > -60 &&
+              pn.tx < larguraTela + 60 &&
+              pn.by > -80 &&
+              pn.by < alturaTela + 80 &&
+              profBase > PLANO_PROX + 20;
+          }
+        }
+
+        const HEXA = {};
+        function hexRgb(h) {
+          let c = HEXA[h];
+          if (!c) {
+            c = [
+              parseInt(h.slice(1, 3), 16),
+              parseInt(h.slice(3, 5), 16),
+              parseInt(h.slice(5, 7), 16)
+            ];
+            HEXA[h] = c;
+          }
+          return c;
+        }
+        function rgba(hex, a) {
+          const c = hexRgb(hex);
+          return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")";
+        }
+
+        function desenharPino(pn, agora) {
+          const p = pn.poi,
+            s = pn.tam;
+          const cor = p.cor;
+
+          if (p.tipo === "ceu") {
+            // feixe tênue descendo até o solo
+            const grad = ctx.createLinearGradient(pn.bx, pn.by, pn.tx, pn.ty);
+            grad.addColorStop(0, rgba(cor, 0));
+            grad.addColorStop(1, rgba(cor, 0.28));
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.moveTo(pn.bx, pn.by);
+            ctx.lineTo(pn.tx, pn.ty);
+            ctx.stroke();
+
+            ctx.save();
+            ctx.shadowColor = rgba(cor, 0.9);
+            ctx.shadowBlur = s * 1.9;
+            // halo: anel + núcleo
+            ctx.strokeStyle = rgba(cor, 0.95);
+            ctx.lineWidth = Math.max(1.6, s * 0.2);
+            ctx.beginPath();
+            ctx.arc(pn.tx, pn.ty, s * 1.12, 0, 6.2832);
+            ctx.stroke();
+            ctx.fillStyle = rgba("#FFFFFF", 0.9);
+            ctx.beginPath();
+            ctx.arc(pn.tx, pn.ty, Math.max(1.6, s * 0.3), 0, 6.2832);
+            ctx.fill();
+            ctx.restore();
+            if (!RM) {
+              // faísca orbital
+              const ang = agora * 0.0016 + pn.fase;
+              const ox = pn.tx + Math.cos(ang) * s * 1.12,
+                oy = pn.ty + Math.sin(ang) * s * 1.12;
+              ctx.fillStyle = rgba(cor, 0.85);
+              ctx.beginPath();
+              ctx.arc(ox, oy, 1.7, 0, 6.2832);
+              ctx.fill();
+            }
+          } else {
+            // anel de assentamento no solo (achatado pela perspectiva)
+            const ry = Math.max(1.5, s * 0.8 * Math.sin(cam.pitch));
+            ctx.strokeStyle = rgba(cor, 0.5);
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.ellipse(pn.bx, pn.by, s * 0.8, ry, 0, 0, 6.2832);
+            ctx.stroke();
+
+            // haste luminosa
+            ctx.strokeStyle = rgba(cor, 0.85);
+            ctx.lineWidth = Math.max(1.1, s * 0.1);
+            ctx.beginPath();
+            ctx.moveTo(pn.bx, pn.by);
+            ctx.lineTo(pn.tx, pn.ty + s * 0.9);
+            ctx.stroke();
+
+            ctx.save();
+            ctx.shadowColor = rgba(cor, 0.85);
+            ctx.shadowBlur = s * 1.5;
+            if (p.tipo === "batalha") {
+              // espadas cruzadas: X com guarda
+              ctx.strokeStyle = rgba(cor, 1);
+              ctx.lineWidth = Math.max(1.6, s * 0.26);
+              ctx.lineCap = "round";
+              const L = s * 0.85;
+              ctx.beginPath();
+              ctx.moveTo(pn.tx - L, pn.ty - L);
+              ctx.lineTo(pn.tx + L, pn.ty + L);
+              ctx.moveTo(pn.tx + L, pn.ty - L);
+              ctx.lineTo(pn.tx - L, pn.ty + L);
+              ctx.stroke();
+              ctx.lineWidth = Math.max(1, s * 0.14);
+              const g = L * 0.62;
+              ctx.beginPath();
+              ctx.moveTo(pn.tx - g * 0.8, pn.ty - g * 1.25);
+              ctx.lineTo(pn.tx + g * 0.8, pn.ty + g * 1.25);
+              ctx.moveTo(pn.tx + g * 1.25, pn.ty - g * 0.8);
+              ctx.lineTo(pn.tx - g * 1.25, pn.ty + g * 0.8);
+              ctx.stroke();
+              ctx.fillStyle = rgba("#FFD9D4", 0.95);
+              ctx.beginPath();
+              ctx.arc(pn.tx, pn.ty, Math.max(1.4, s * 0.16), 0, 6.2832);
+              ctx.fill();
+            } else {
+              // gema losangular da região
+              ctx.fillStyle = rgba(cor, 0.98);
+              ctx.beginPath();
+              ctx.moveTo(pn.tx, pn.ty - s);
+              ctx.lineTo(pn.tx + s * 0.72, pn.ty);
+              ctx.lineTo(pn.tx, pn.ty + s);
+              ctx.lineTo(pn.tx - s * 0.72, pn.ty);
+              ctx.closePath();
+              ctx.fill();
+              ctx.strokeStyle = rgba("#FFFFFF", 0.4);
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(pn.tx, pn.ty - s * 0.55);
+              ctx.lineTo(pn.tx, pn.ty + s * 0.55);
+              ctx.stroke();
+            }
+            ctx.restore();
+
+            // marca de seleção
+            if (selecionado === p.id) {
+              const pr = s * (1.7 + 0.3 * Math.sin(agora * 0.004));
+              ctx.strokeStyle = rgba("#C9A227", 0.85);
+              ctx.lineWidth = 1.6;
+              ctx.beginPath();
+              ctx.arc(pn.tx, pn.ty, pr, 0, 6.2832);
+              ctx.stroke();
+            }
+          }
+        }
+
+        function desenharNeblinha(n, agora) {
+          const ang = n.ang + agora * n.vel;
+          const px = Math.cos(ang) * n.raio,
+            pz = Math.sin(ang) * n.raio;
+          if (!projetar(px, -16, pz)) return;
+          const r = (n.tam * focal) / proj.z;
+          const g = ctx.createRadialGradient(proj.x, proj.y, 0, proj.x, proj.y, r);
+          g.addColorStop(0, "rgba(120,140,190," + n.alfa + ")");
+          g.addColorStop(1, "rgba(120,140,190,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(proj.x - r, proj.y - r, r * 2, r * 2);
+        }
+
+        let tempoAgora = 0;
+        let tempoQuadroMedio = 4,
+          _ultimoT = 0;
+
+        function quadro(agora) {
+          tempoAgora = agora;
+          _ultimoT = agora;
+          const _iniRender = performance.now();
+
+          passoTween(agora);
+          atualizarCamera();
+
+          ctx.clearRect(0, 0, larguraTela, alturaTela);
+
+          // céu
+          ctx.globalAlpha = RM ? 0.9 : 0.82 + 0.18 * Math.sin(agora * 0.0007);
+          ctx.drawImage(fundoEstrelas, 0, 0, larguraTela, alturaTela);
+          ctx.globalAlpha = 1;
+
+          // névoa ao fundo
+          for (let n = 0; n < NEBLINHAS.length; n++)
+            if (!NEBLINHAS[n].frente) desenharNeblinha(NEBLINHAS[n], agora);
+
+          projetarGrade();
+          atualizarPinos(agora);
+
+          // lista ordenável do terreno: células + paredes (algoritmo do pintor)
+          nItens = 0;
+          for (let q = 0; q < NUM_CELULAS; q++) {
+            if (Q_MAR[q]) continue; // mar nem entra na ordenação
+            const b = q * 4,
+              v0 = Q_IDX[b],
+              v1 = Q_IDX[b + 1],
+              v2 = Q_IDX[b + 2],
+              v3 = Q_IDX[b + 3];
+            if (SZ[v0] < 0 && SZ[v1] < 0 && SZ[v2] < 0 && SZ[v3] < 0) continue;
+            const prof = (SZ[v0] + SZ[v1] + SZ[v2] + SZ[v3]) * 0.25;
+            if (prof <= PLANO_PROX) continue;
+            PROF[nItens] = prof;
+            ORDEM[nItens++] = q;
+          }
+          for (let w = 0; w < PAREDES.length; w++) {
+            const p = PAREDES[w];
+            if (SZ[p.va] < 0 || SZ[p.vb] < 0) continue;
+            const prof = (SZ[p.va] + SZ[p.vb]) * 0.5;
+            if (prof <= PLANO_PROX) continue;
+            PROF[nItens] = prof;
+            ORDEM[nItens++] = NUM_CELULAS + w;
+          }
+          // ordenação in-place (do mais distante para o mais próximo)
+          ORDEM.length = nItens;
+          ORDEM.sort((a, b) => PROF[b] - PROF[a]);
+
+          for (let n = 0; n < nItens; n++) {
+            const item = ORDEM[n];
+            if (item < NUM_CELULAS) desenharCelula(item);
+            else desenharParede(item - NUM_CELULAS);
+          }
+
+          // §6.2 — polilinha da rota narrativa (atrás dos pinos)
+          if (typeof narrFrameHook === "function") narrFrameHook(agora);
+
+          // pins em passada própria, por cima do terreno (marcadores sempre legíveis),
+          // ordenados entre si por profundidade
+          nPinos = 0;
+          for (let k = 0; k < PINOS.length; k++) {
+            const pn = PINOS[k];
+            if (pn.visivel) PIN_ORDEM[nPinos++] = pn;
+          }
+          PIN_ORDEM.length = nPinos;
+          PIN_ORDEM.sort((a, b) => b.prof - a.prof);
+          for (let k = 0; k < nPinos; k++) desenharPino(PIN_ORDEM[k], agora);
+
+          // névoa em primeiro plano (sensação de profundidade)
+          for (let n = 0; n < NEBLINHAS.length; n++)
+            if (NEBLINHAS[n].frente) desenharNeblinha(NEBLINHAS[n], agora);
+
+          // tempo real de desenho (diagnóstico; exclui ociosidade entre quadros)
+          tempoQuadroMedio = tempoQuadroMedio * 0.9 + (performance.now() - _iniRender) * 0.1;
+
+          // W5.1: minimap
+          desenharMinimap();
+
+          requestAnimationFrame(quadro);
+        }
+
+        /* ============================================================
+   5. INTERAÇÃO — orbitar, zoom, hover, clique, teclado
+   ============================================================ */
+
+        const CAMADAS = { regioes: true, batalhas: true, ceus: true };
+        // Filtro de raça (W5.3). Vazio = todas. Restaurado do localStorage no boot.
+        let FILTRO_RACA = "";
+        try {
+          FILTRO_RACA = localStorage.getItem("mapaFiltroRaca") || "";
+        } catch (e) {}
+        // §6.3 — Filtro de era (I-IV). Vazio = todas. Mesma persistência do filtro de raça.
+        let FILTRO_ERA = "";
+        try {
+          FILTRO_ERA = localStorage.getItem("mapaFiltroEra") || "";
+        } catch (e) {}
+        let hoverPino = null;
+        let selecionado = null;
+        let arrastando = false,
+          _downX = 0,
+          _downY = 0,
+          _downT = 0,
+          _moveu = false;
+        const ponteiros = new Map();
+        let pinchDist0 = 0;
+
+        function pinoEm(x, y) {
+          // prioridade: pin mais "centrado" sob o cursor (distância normalizada pelo raio);
+          // empates resolvidos pelo mais próximo da câmera
+          let melhor = null,
+            melhorNota = Infinity,
+            melhorProf = Infinity;
+          for (let k = 0; k < PINOS.length; k++) {
+            const pn = PINOS[k];
+            if (!pn.visivel) continue;
+            const raio = Math.max(16, pn.tam * 1.2);
+            const d1 = Math.hypot(x - pn.tx, y - pn.ty) / raio;
+            const d2 = Math.hypot(x - pn.bx, y - pn.by) / (raio * 0.9);
+            const d = Math.min(d1, d2);
+            if (d <= 1 && (d < melhorNota || (d === melhorNota && pn.prof < melhorProf))) {
+              melhorNota = d;
+              melhorProf = pn.prof;
+              melhor = pn;
+            }
+          }
+          return melhor;
+        }
+
+        canvas.addEventListener("pointerdown", (e) => {
+          try {
+            canvas.setPointerCapture(e.pointerId);
+          } catch (_) {}
+          ponteiros.set(e.pointerId, { x: e.clientX, y: e.clientY });
+          if (ponteiros.size === 1) {
+            arrastando = true;
+            _moveu = false;
+            _downX = e.clientX;
+            _downY = e.clientY;
+            _downT = performance.now();
+            canvas.classList.add("arrastando");
+          } else if (ponteiros.size === 2) {
+            const ps = [...ponteiros.values()];
+            pinchDist0 = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
+          }
+        });
+
+        canvas.addEventListener("pointermove", (e) => {
+          if (ponteiros.has(e.pointerId)) {
+            const pt = ponteiros.get(e.pointerId);
+            const dx = e.clientX - pt.x,
+              dy = e.clientY - pt.y;
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+            if (ponteiros.size === 2) {
+              // pinça: zoom proporcional à variação da distância entre dedos
+              const ps = [...ponteiros.values()];
+              const d = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
+              if (pinchDist0 > 0 && d > 0) {
+                cancelarTween();
+                cam.dist = clamp((cam.dist * pinchDist0) / d, MIN_DIST, MAX_DIST);
+                pinchDist0 = d;
+              }
+              return;
+            }
+            if (arrastando) {
+              if (Math.abs(e.clientX - _downX) + Math.abs(e.clientY - _downY) > 6) _moveu = true;
+              if (_moveu) {
+                cancelarTween();
+                cam.yaw += dx * 0.0052; // arrasto = orbitar
+                cam.pitch = clamp(cam.pitch + dy * 0.0042, PITCH_MIN, PITCH_MAX);
+              }
+            }
+          } else {
+            // hover (mouse solto): cursor + tooltip mínimo
+            hoverPino = pinoEm(e.clientX, e.clientY);
+            canvas.classList.toggle("sobre-pino", !!hoverPino);
+            if (hoverPino) {
+              tooltip.textContent = hoverPino.poi.nome;
+              tooltip.style.display = "block";
+              const tx = clamp(e.clientX + 14, 0, larguraTela - 260),
+                ty = clamp(e.clientY - 30, 0, alturaTela - 40);
+              tooltip.style.left = tx + "px";
+              tooltip.style.top = ty + "px";
+            } else {
+              tooltip.style.display = "none";
+            }
+          }
+        });
+
+        function soltarPointer(e) {
+          ponteiros.delete(e.pointerId);
+          if (ponteiros.size < 2) pinchDist0 = 0;
+          if (ponteiros.size === 1) {
+            // saiu da pinça para um dedo só: evita "toque fantasma" com a âncora antiga
+            _moveu = true;
+            const restante = [...ponteiros.values()][0];
+            _downX = restante.x;
+            _downY = restante.y;
+          }
+          if (ponteiros.size === 0) {
+            canvas.classList.remove("arrastando");
+            // janela larga: o que define o toque é NÃO ter arrastado (>6px),
+            // não a duração do press — entradas lentas (fila sintética/dispositivo
+            // carregado) continuam sendo toques válidos
+            const foiToque = !_moveu && performance.now() - _downT < 2500;
+            arrastando = false;
+            if (foiToque) {
+              hoverPino = pinoEm(e.clientX, e.clientY);
+              if (hoverPino) {
+                selecionarPoi(hoverPino.poi, true);
+              } else if (selecionado) {
+                fecharPainel();
+              }
+            }
+          }
+        }
+        canvas.addEventListener("pointerup", soltarPointer);
+        canvas.addEventListener("pointercancel", soltarPointer);
+
+        canvas.addEventListener(
+          "wheel",
+          (e) => {
+            e.preventDefault();
+            cancelarTween();
+            cam.dist = clamp(cam.dist * Math.exp(e.deltaY * 0.0012), MIN_DIST, MAX_DIST);
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener("dblclick", () => redefinirCamera());
+        canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+
+        // teclado: Tab/cursor circulam os pins; Enter abre; Esc fecha; setas orbitam
+        let indiceTeclado = -1;
+        canvas.addEventListener("keydown", (e) => {
+          const pinsVisiveis = PINOS.filter((p) => p.visivel);
+          if (e.key === "Escape") {
+            fecharPainel();
+            return;
+          }
+          if (e.key === "Tab" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+            e.preventDefault();
+            if (!pinsVisiveis.length) {
+              return;
+            }
+            const delta = e.key === "ArrowUp" ? -1 : 1;
+            indiceTeclado = (indiceTeclado + delta + pinsVisiveis.length) % pinsVisiveis.length;
+            hoverPino = pinsVisiveis[indiceTeclado];
+            srEstado.textContent =
+              "Marcador: " + hoverPino.poi.nome + " — pressione Enter para abrir.";
+          } else if (e.key === "Enter" || e.key === " ") {
+            if (hoverPino) {
+              e.preventDefault();
+              selecionarPoi(hoverPino.poi, true);
+            }
+          } else if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            cancelarTween();
+            cam.yaw -= 0.12;
+          } else if (e.key === "ArrowRight") {
+            e.preventDefault();
+            cancelarTween();
+            cam.yaw += 0.12;
+          }
+        });
+
+        document.getElementById("btn-redefinir").addEventListener("click", () => redefinirCamera());
+
+        // W5.4: Exportar vista como PNG. Esconde HUDs temporariamente pra
+        // não virarem parte da imagem, renderiza 1 frame extra, depois restaura.
+        const btnExportar = document.getElementById("exportarPNG");
+        if (btnExportar) {
+          btnExportar.addEventListener("click", () => {
+            const huds = document.querySelectorAll(".hud, #minimap, #painel, #vinheta");
+            const prev = [];
+            huds.forEach((h, i) => {
+              prev[i] = h.style.display;
+              h.style.display = "none";
+            });
+            // 1 frame extra sem HUDs (requestAnimationFrame do quadro() está rodando)
+            requestAnimationFrame(() => {
+              canvas.toBlob((blob) => {
+                if (!blob) {
+                  huds.forEach((h, i) => (h.style.display = prev[i] || ""));
+                  return;
+                }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                const ts = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+                a.href = url;
+                a.download = `aetheria-mapa-${ts}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                // restaura HUDs imediatamente (sem esperar próximo frame)
+                huds.forEach((h, i) => (h.style.display = prev[i] || ""));
+              }, "image/png");
+            });
+          });
+        }
+
+        function redefinirCamera() {
+          indiceTeclado = -1;
+          iniciarTween(Object.assign({}, HOME), 750);
+        }
+
+        /* ============================================================
+   6. UI — painel, camadas, integração com a galeria
+   ============================================================ */
+
+        const painel = document.getElementById("painel");
+        const pKicker = document.getElementById("p-kicker");
+        const pNome = document.getElementById("p-nome");
+        const pDesc = document.getElementById("p-desc");
+        const pTituloBloco = document.getElementById("p-racas-titulo");
+        const pChips = document.getElementById("p-racas");
+        const pWrapChips = document.getElementById("p-racas-wrap");
+        const tooltip = document.getElementById("tooltip");
+        const srEstado = document.getElementById("sr-estado");
+        const apiStatus = document.getElementById("api-status");
+
+        function montarChip(r) {
+          const a = document.createElement("a");
+          a.className = "raca-chip";
+          a.href = "index.html#" + r.folder; // deep-link na galeria (patch futuro aplica o hash)
+          a.target = "_self";
+          a.style.setProperty("--cor", r.cor);
+          a.setAttribute("aria-label", r.nome + " — abrir na galeria");
+          const ponto = document.createElement("span");
+          ponto.className = "ponto";
+          const nome = document.createElement("span");
+          nome.textContent = r.nome;
+          a.appendChild(ponto);
+          a.appendChild(nome);
+          if (CONTAGENS && typeof CONTAGENS[r.folder] === "number") {
+            const ct = document.createElement("span");
+            ct.className = "contagem";
+            ct.textContent = "· " + CONTAGENS[r.folder];
+            ct.title = CONTAGENS[r.folder] + " personagens na galeria";
+            a.appendChild(ct);
+          }
+          return a;
+        }
+
+        function renderizarPainel(p) {
+          pKicker.textContent = ROTULO_TIPO[p.tipo];
+          pNome.textContent = p.nome;
+          pDesc.textContent = p.desc;
+          pTituloBloco.textContent = ROTULO_BLOCO[p.tipo];
+          pChips.innerHTML = "";
+          if (p.tipo === "batalha") {
+            for (let l = 0; l < p.lados.length; l++) {
+              if (l > 0) {
+                const vs = document.createElement("span");
+                vs.className = "vs";
+                vs.textContent = "VS";
+                pChips.appendChild(vs);
+              }
+              for (const r of p.lados[l]) pChips.appendChild(montarChip(r));
+            }
+          } else {
+            for (const r of p.racas) pChips.appendChild(montarChip(r));
+          }
+          painel.dataset.tipo = p.tipo;
+        }
+
+        function selecionarPoi(p, comFoco) {
+          hoverPino = null;
+          tooltip.style.display = "none"; // tooltip não sobrevive à seleção
+          selecionado = p.id;
+          document.body.classList.add("com-painel"); // desliza os chips p/ fora do painel
+          renderizarPainel(p);
+          painel.classList.add("aberto");
+          painel.setAttribute("aria-hidden", "false");
+          srEstado.textContent = ROTULO_TIPO[p.tipo] + ": " + p.nome;
+          document.getElementById("fechar").focus({ preventScroll: true });
+          if (comFoco) {
+            // pequeno "focus" de câmera: aproxima e inclina levemente para o POI
+            const pn = PINOS.find((q) => q.poi === p);
+            if (pn) {
+              const alvoY = p.tipo === "ceu" ? pn.solo + pn.alt * 0.45 : pn.solo;
+              iniciarTween(
+                {
+                  tx: lerp(cam.tx, pn.wx, 0.6),
+                  ty: lerp(cam.ty, alvoY + 6, 0.6),
+                  tz: lerp(cam.tz, pn.wz, 0.6),
+                  dist: clamp(cam.dist * 0.8, 360, 900),
+                  pitch: clamp(cam.pitch + 0.04, PITCH_MIN, PITCH_MAX),
+                  yaw: cam.yaw
+                },
+                650
+              );
+            }
+          }
+        }
+
+        function fecharPainel() {
+          if (!selecionado && !painel.classList.contains("aberto")) return;
+          selecionado = null;
+          document.body.classList.remove("com-painel");
+          painel.classList.remove("aberto");
+          painel.setAttribute("aria-hidden", "true");
+          tooltip.style.display = "none";
+          canvas.focus({ preventScroll: true });
+        }
+
+        document.getElementById("fechar").addEventListener("click", fecharPainel);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && document.activeElement !== canvas) fecharPainel();
+        });
+
+        // ---- camadas (chips) ----
+        const CHIPS = [...document.querySelectorAll(".chip[data-camada]")];
+        CHIPS.forEach((ch) => {
+          ch.addEventListener("click", () => {
+            const nome = ch.dataset.camada;
+            CAMADAS[nome] = !CAMADAS[nome];
+            const ativo = CAMADAS[nome];
+            ch.classList.toggle("ativo", ativo);
+            ch.setAttribute("aria-pressed", String(ativo));
+            if (!ativo && selecionado) {
+              const p = POIS.find((q) => q.id === selecionado);
+              const chave =
+                p.tipo === "regiao" ? "regioes" : p.tipo === "batalha" ? "batalhas" : "ceus";
+              if (chave === nome) fecharPainel();
+            }
+          });
+        });
+
+        /* ---- integração com os dados ----
+   POIs, raças, cores, copy e contagens vêm de ./historia-api.json
+   (races[].count já traz o nº de personagens — não há segunda busca).
+   A carga acontece no bootstrap ao final do script; em caso de falha,
+   o FALLBACK embutido assume silenciosamente. */
+
+        /* ---- redimensionamento / visibilidade / reduced motion ---- */
+        const mqRM = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let RM = mqRM.matches;
+        mqRM.addEventListener("change", (e) => {
+          RM = e.matches;
+        });
+
+        let _redimTimer = null;
+        window.addEventListener("resize", () => {
+          clearTimeout(_redimTimer);
+          _redimTimer = setTimeout(redimensionar, 120);
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) {
+            /* rAF é suspenso pelo navegador; nada acumula */
+          } else {
+            _ultimoT = performance.now();
+            requestAnimationFrame(quadro);
+          }
+        });
+
+        /* ---- gancho mínimo para diagnóstico/testes ---- */
+        window.__MAPA__ = {
+          telaDePOI(id) {
+            const pn = PINOS.find((q) => q.poi.id === id);
+            if (!pn || !pn.visivel) return null;
+            return { x: pn.tx, y: pn.ty, base: { x: pn.bx, y: pn.by } };
+          },
+          ids() {
+            return PINOS.map((p) => p.poi.id);
+          },
+          // §6.2 — expõe battles pra teste (já com era+data carregados)
+          battles() {
+            return POIS.filter((p) => p.tipo === "batalha").map((p) => ({
+              id: p.id,
+              era: p.era,
+              data: p.data,
+              nome: p.nome
+            }));
+          },
+          // §6.3 — expõe seleção de POI pra teste (gera chips no painel)
+          selecionar(id) {
+            const p = POIS.find((q) => q.id === id);
+            if (p) selecionarPoi(p, false);
+          },
+          // diagnóstico: de onde vieram os dados ("api" em http | "fallback" embutido)
+          fonte() {
+            return DADOS === FALLBACK ? "fallback" : "api";
+          },
+          estado() {
+            return {
+              dist: +cam.dist.toFixed(1),
+              yaw: +cam.yaw.toFixed(3),
+              pitch: +cam.pitch.toFixed(3),
+              pinsVisiveis: PINOS.filter((p) => p.visivel).length,
+              itens: nItens,
+              msQuadro: +tempoQuadroMedio.toFixed(2),
+              painelAberto: painel.classList.contains("aberto"),
+              camadas: Object.assign({}, CAMADAS)
+            };
+          },
+          abrir(id) {
+            const p = POIS.find((q) => q.id === id);
+            if (p) selecionarPoi(p, false);
+          },
+          // diagnóstico: posiciona a câmera (usado pelos testes automatizados)
+          camera(p) {
+            cancelarTween();
+            Object.assign(cam, p);
+          },
+          // diagnóstico: faces emissivas por tipo (lava = quente, veios = frias)
+          contagemEmissiva() {
+            let lava = 0,
+              veios = 0;
+            for (let q = 0; q < NUM_CELULAS; q++) {
+              if (!Q_EMISSIVO[q]) continue;
+              if (Q_EMCOR[q * 3 + 2] > Q_EMCOR[q * 3]) veios++;
+              else lava++;
+            }
+            return { lava, veios };
+          }
+        };
+
+        /* ---- partida: dados -> terreno -> laço de renderização ---- */
+        let _partiu = false;
+        function partir() {
+          if (_partiu) return;
+          _partiu = true;
+          construirTerreno();
+          construirQuads();
+          construirPinos();
+          redimensionar();
+          atualizarCamera();
+          _ultimoT = performance.now();
+          requestAnimationFrame(quadro);
+        }
+
+        (async function iniciar() {
+          if (location.protocol === "file:") {
+            aplicarDados(FALLBACK); // fetch é bloqueado em file://: nem tenta
+            popularFiltroRaca(null);
+          } else {
+            apiStatus.classList.add("visivel");
+            try {
+              const r = await fetch("./historia-api.json", {
+                cache: "no-cache"
+              });
+              if (!r.ok) throw new Error("HTTP " + r.status);
+              aplicarDados(await r.json());
+            } catch (err) {
+              aplicarDados(FALLBACK); // falha silenciosa: o mapa segue integral
+            } finally {
+              apiStatus.classList.remove("visivel");
+            }
+            // Carrega characters-api.json em paralelo (não bloqueia o boot)
+            fetch("./characters-api.json", { cache: "no-cache" })
+              .then((r) => (r.ok ? r.json() : null))
+              .then(popularFiltroRaca)
+              .catch(() => popularFiltroRaca(null));
+          }
+          partir();
+          // §6.2 — PINOS só existe após partir(); chamamos narrConstruirSeq aqui
+          if (typeof narrConstruirSeq === "function") narrConstruirSeq();
+        })();
+
+        // W5.3: popula o <select> com as 22 raças vindas da characters-api.json.
+        // api = { groups: [{folder, label, icon, count}, ...] }
+        function popularFiltroRaca(api) {
+          const sel = document.getElementById("filtroRaca");
+          if (!sel) return;
+          // Limpa options existentes (mantém o "Todas" como primeiro)
+          sel.length = 1;
+          const grupos = api && Array.isArray(api.groups) ? api.groups : [];
+          // Ordena por label humano
+          grupos
+            .slice()
+            .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"))
+            .forEach((g) => {
+              const opt = document.createElement("option");
+              opt.value = g.folder;
+              opt.textContent = `${g.icon || "•"} ${g.label} (${g.count || 0})`;
+              sel.appendChild(opt);
+            });
+          if (FILTRO_RACA && grupos.some((g) => g.folder === FILTRO_RACA)) {
+            sel.value = FILTRO_RACA;
+          }
+          sel.addEventListener("change", () => {
+            FILTRO_RACA = sel.value;
+            try {
+              localStorage.setItem("mapaFiltroRaca", FILTRO_RACA);
+            } catch (e) {}
+          });
+
+          // §6.3 — Filtro de era (I-IV). Listener separado: a era vem da
+          // historia-api.json e é independente da characters-api.json. Filtro
+          // só esconde battles; regiões e céus ficam visíveis mesmo com era
+          // setada, para não dar "mapa vazio" se o usuário erra o filtro.
+          const selEra = document.getElementById("filtroEra");
+          if (selEra) {
+            if (FILTRO_ERA && ["I", "II", "III", "IV"].includes(FILTRO_ERA)) {
+              selEra.value = FILTRO_ERA;
+            }
+            selEra.addEventListener("change", () => {
+              FILTRO_ERA = selEra.value;
+              try {
+                localStorage.setItem("mapaFiltroEra", FILTRO_ERA);
+              } catch (e) {}
+            });
+          }
+        }
+
+        /* ============================================================
+     §6.2 — ROTA NARRATIVA
+     Player em bottom-sheet que conta a história do mundo movendo a câmera
+     entre as 5 battles em ordem cronológica. Reaproveita iniciarTween() e
+     selecionarPoi() — não duplica lógica de câmera.
+     ============================================================ */
+        const NARR_INTROS = {
+          I: "A infantaria humana avança para o norte e encontra os primeiros Aspectos emergindo do gelo. A guerra dos milênios começa.",
+          II: "As cumes se transformam em arena. Bárbaros e Semi-Deuses disputam o controle das passagens de montanha.",
+          III: "Nos laboratórios subterrâneos, as cobaias se rebelam. A maior estrutura arcana do continente cai em horas.",
+          IV: "O Vazio se abre. Avatares divinos descem para o ponto de impacto. A batalha que rasga a física do mundo começa."
+        };
+        const NARR_TITULOS = {
+          I: "A Queda do Norte",
+          II: "Os Cumes em Chamas",
+          III: "A Ruptura da Fenda",
+          IV: "O Vazio Desperta"
+        };
+
+        const NARR = {
+          ativas: false,
+          idx: 0, // 0..4 (5 battles)
+          timer: null,
+          seq: [], // [{pn, poi}] em ordem cronológica (5 itens)
+          // §6.2.3 — flags expostas para o teste
+          __ultimoTween: 0 // performance.now() do último tween disparado
+        };
+
+        // IIFE que monta a sequência de battles. Roda uma vez depois de aplicarDados().
+        function narrConstruirSeq() {
+          // Filtra só battles com era definida e ordena por era → v (norte→sul é a ordem cronológica).
+          const battles = POIS.filter((p) => p.tipo === "batalha" && p.era);
+          const ordemEra = { I: 0, II: 1, III: 2, IV: 3 };
+          battles.sort((a, b) => {
+            const ea = ordemEra[a.era] ?? 99;
+            const eb = ordemEra[b.era] ?? 99;
+            if (ea !== eb) return ea - eb;
+            return a.v - b.v; // dentro da mesma era, mais ao norte primeiro
+          });
+          NARR.seq = battles
+            .map((poi) => {
+              const pn = PINOS.find((p) => p.poi === poi);
+              return { pn, poi };
+            })
+            .filter((x) => x.pn); // descarta se algum pino não foi construído
+          // expõe para teste
+          window.__NARR__ = NARR;
+        }
+
+        const narrBtn = document.getElementById("narrBtn");
+        const narrSheet = document.getElementById("narrSheet");
+        const narrClose = document.getElementById("narrClose");
+        const narrActs = document.getElementById("narrActs");
+        const narrActNum = document.getElementById("narrActNum");
+        const narrActData = document.getElementById("narrActData");
+        const narrActTitle = document.getElementById("narrActTitle");
+        const narrActIntro = document.getElementById("narrActIntro");
+        const narrBattleName = document.getElementById("narrBattleName");
+        const narrPlay = document.getElementById("narrPlay");
+        const narrPrev = document.getElementById("narrPrev");
+        const narrNext = document.getElementById("narrNext");
+        const narrScrub = document.getElementById("narrScrub");
+        const narrCounter = document.getElementById("narrCounter");
+
+        // §6.2 — botões de ato (4, mesmo se a era IV tiver 2 battles).
+        // Cada botão pula pro 1º battle daquela era.
+        function narrConstruirActs() {
+          narrActs.innerHTML = "";
+          const erasPresentes = [...new Set(NARR.seq.map((x) => x.poi.era))].sort();
+          for (const era of erasPresentes) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "narr-act";
+            btn.dataset.era = era;
+            btn.setAttribute("role", "tab");
+            btn.setAttribute("aria-pressed", "false");
+            btn.textContent = `Ato ${era}`;
+            btn.addEventListener("click", () => {
+              narrParar();
+              const idxEra = NARR.seq.findIndex((x) => x.poi.era === era);
+              if (idxEra >= 0) narrIr(idxEra);
+            });
+            narrActs.appendChild(btn);
+          }
+        }
+
+        function narrAbrir() {
+          if (NARR.seq.length === 0) return; // API ainda não carregou
+          NARR.ativas = true;
+          narrSheet.hidden = false;
+          narrSheet.dataset.open = "true";
+          narrSheet.setAttribute("aria-hidden", "false");
+          narrBtn.setAttribute("aria-expanded", "true");
+          narrConstruirActs();
+          narrIr(0);
+          // expõe flag pra teste
+          window.__NARR_SHEET_OPEN__ = true;
+        }
+        function narrFechar() {
+          narrParar();
+          NARR.ativas = false;
+          narrSheet.dataset.open = "false";
+          narrSheet.setAttribute("aria-hidden", "true");
+          // pequeno delay pra animação de slide-down não cortar abruptamente
+          setTimeout(() => {
+            if (!NARR.ativas) narrSheet.hidden = true;
+          }, 320);
+          narrBtn.setAttribute("aria-expanded", "false");
+          window.__NARR_SHEET_OPEN__ = false;
+        }
+
+        function narrIr(idx) {
+          if (idx < 0 || idx >= NARR.seq.length) return;
+          NARR.idx = idx;
+          const { pn, poi } = NARR.seq[idx];
+          // marca pino como 'em rota' (halo extra)
+          pn.emRota = true;
+          // §6.2.2 — atualiza UI do sheet
+          narrActNum.textContent = `Ato ${poi.era}`;
+          narrActData.textContent = poi.data || "";
+          narrActTitle.textContent = NARR_TITULOS[poi.era] || poi.nome;
+          narrActIntro.textContent = NARR_INTROS[poi.era] || "";
+          narrBattleName.textContent = `→ ${poi.nome}`;
+          // marca ato ativo na lista
+          for (const b of narrActs.children) {
+            b.setAttribute("aria-pressed", b.dataset.era === poi.era ? "true" : "false");
+          }
+          // scrub + counter
+          narrScrub.value = String(idx);
+          narrCounter.textContent = `${idx + 1} / ${NARR.seq.length}`;
+          // §6.2.2 — move a câmera (reusa iniciarTween, já com cap RM)
+          const alvoY = pn.solo;
+          const dur = RM ? 180 : 800;
+          NARR.__ultimoTween = performance.now();
+          iniciarTween(
+            {
+              tx: lerp(cam.tx, pn.wx, 0.7),
+              ty: lerp(cam.ty, alvoY + 6, 0.6),
+              tz: lerp(cam.tz, pn.wz, 0.7),
+              dist: clamp(cam.dist * 0.85, 360, 900),
+              pitch: clamp(cam.pitch + 0.02, PITCH_MIN, PITCH_MAX),
+              yaw: cam.yaw
+            },
+            dur
+          );
+          // anuncia para leitor de tela
+          srEstado.textContent = `Ato ${poi.era}: ${NARR_TITULOS[poi.era] || poi.nome}. ${poi.nome}.`;
+          // §6.2.3 — flag de teste: tween acabou
+          setTimeout(() => {
+            NARR.__ultimoTween = 0;
+          }, dur + 50);
+        }
+
+        function narrTocar() {
+          if (NARR.seq.length === 0) return;
+          NARR.ativas = true;
+          const intervalo = RM ? 12000 : 8000;
+          NARR.timer = setInterval(() => {
+            const prox = NARR.idx + 1;
+            if (prox >= NARR.seq.length) {
+              narrParar();
+              narrPlay.textContent = "✔";
+              setTimeout(() => {
+                narrPlay.textContent = "▶";
+                narrIr(0);
+              }, 2000);
+              return;
+            }
+            narrIr(prox);
+          }, intervalo);
+          narrPlay.textContent = "❚❚";
+          narrPlay.setAttribute("aria-label", "Pausar narração");
+        }
+        function narrParar() {
+          if (NARR.timer) {
+            clearInterval(NARR.timer);
+            NARR.timer = null;
+          }
+          narrPlay.textContent = "▶";
+          narrPlay.setAttribute("aria-label", "Iniciar narração");
+        }
+
+        // listeners (só liga se os elementos existirem — testes headless quebram se não tiver)
+        if (narrBtn) {
+          narrBtn.addEventListener("click", () => {
+            if (NARR.ativas) narrFechar();
+            else narrAbrir();
+          });
+        }
+        if (narrClose) narrClose.addEventListener("click", narrFechar);
+        if (narrPlay)
+          narrPlay.addEventListener("click", () => {
+            if (NARR.timer) narrParar();
+            else narrTocar();
+          });
+        if (narrPrev)
+          narrPrev.addEventListener("click", () => {
+            narrParar();
+            narrIr(NARR.idx - 1);
+          });
+        if (narrNext)
+          narrNext.addEventListener("click", () => {
+            narrParar();
+            narrIr(NARR.idx + 1);
+          });
+        if (narrScrub) {
+          // input só atualiza o counter (não teleportar a câmera a cada pixel)
+          narrScrub.addEventListener("input", () => {
+            narrCounter.textContent = `${Number(narrScrub.value) + 1} / ${NARR.seq.length}`;
+          });
+          // change (mouseup) confirma e vai
+          narrScrub.addEventListener("change", () => {
+            narrParar();
+            narrIr(Number(narrScrub.value));
+          });
+        }
+        // Esc fecha o sheet
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && NARR.ativas) {
+            narrFechar();
+            narrBtn.focus();
+          }
+        });
+
+        // §6.2 — polilinha animada: desenhada no quadro(), antes dos pinos.
+        // Precisa estar em escopo acessível pelo render loop. Função global no
+        // módulo; chamada condicional pelo quadro().
+        function narrDesenharTrilha(agora) {
+          if (!NARR.ativas || NARR.seq.length < 2) return;
+          // cor = média ponderada das cores das battles (todas vermelho #E2483D aqui)
+          ctx.save();
+          ctx.lineWidth = 2.4;
+          ctx.strokeStyle = "rgba(226, 72, 61, 0.85)";
+          ctx.shadowColor = "rgba(226, 72, 61, 0.7)";
+          ctx.shadowBlur = 12;
+          if (!RM) {
+            ctx.setLineDash([4, 8]);
+            ctx.lineDashOffset = -(agora * 0.04) % 12;
+          } else {
+            ctx.setLineDash([]);
+          }
+          ctx.beginPath();
+          let primeiro = true;
+          for (const { pn } of NARR.seq) {
+            if (!pn || !pn.visivel) continue;
+            const sx = pn.bx; // projeção x do solo (atualizada em atualizarPinos)
+            const sy = pn.by; // projeção y do solo
+            if (primeiro) {
+              ctx.moveTo(sx, sy);
+              primeiro = false;
+            } else {
+              ctx.lineTo(sx, sy);
+            }
+          }
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // §6.2.2 — pino "em rota" ganha halo extra. Patch simples no final do
+        // quadro(), antes de desenharPino, é difícil sem reescrever — então
+        // sobrescrevemos uma flag visual via classList no elemento se houver;
+        // como é canvas, controlamos via pn.glow que desenharPino já respeita.
+        // (Aqui só garantimos que a flag existe; desenho fica em desenharPino.)
+        // Hook no quadro: após passoTween/atualizarCamera e antes de desenhar os
+        // pinos, desenhamos a trilha. Modificar quadro() via wrapper seria
+        // invasivo; em vez disso, expomos um hook: o quadro chama
+        // `narrDesenharTrilha(agora)` se o hook foi registrado.
+        // Solução limpa: monkey-patch é risco; em vez disso, injetamos via
+        // hookOnFrame abaixo (chamado de quadro).
+        function narrFrameHook(agora) {
+          narrDesenharTrilha(agora);
+        }
+      })();
+    </script>
+  </body>
+</html>

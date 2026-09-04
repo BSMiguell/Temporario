@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://bsmiguell.github.io/Temporario/Linha_do_Tempo.html" />
+    <title>Linha do Tempo — Aetheria Codex</title>
+    <meta
+      name="description"
+      content="Linha do tempo do mundo de Aetheria: as 5 grandes batalhas em 4 atos canonicos, do Inverno Eterno (ano 0) ao Verao do Vazio (ano 12)."
+    />
+    <meta name="theme-color" content="#171310" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aetheria Codex" />
+    <meta property="og:title" content="Linha do Tempo — Aetheria Codex" />
+    <meta
+      property="og:description"
+      content="As 5 grandes batalhas de Aetheria em 4 atos, do Inverno Eterno (ano 0) ao Verao do Vazio (ano 12)."
+    />
+    <meta property="og:url" content="https://bsmiguell.github.io/Temporario/Linha_do_Tempo.html" />
+    <meta
+      property="og:image"
+      content="https://bsmiguell.github.io/Temporario/assets/og-cover.jpg"
+    />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Linha do Tempo — Aetheria Codex" />
+    <meta
+      name="twitter:description"
+      content="As 5 grandes batalhas de Aetheria em 4 atos, do Inverno Eterno (ano 0) ao Verao do Vazio (ano 12)."
+    />
+    <meta
+      name="twitter:image"
+      content="https://bsmiguell.github.io/Temporario/assets/og-cover.jpg"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%93%9C%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      // §4.1 — skip-link e tema sincronizado com index.html.
+      // Tema: dark/light segue preferencia salva em "siteTheme" (mesma chave
+      // usada pelo toggle do index.html). Default: dark (papel envelhecido).
+      try {
+        var t = localStorage.getItem("siteTheme");
+        if (t) document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/codex.css?v=20260902" />
+    <link rel="stylesheet" href="assets/timeline.css?v=20260903" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Pular para a linha do tempo</a>
+
+    <header class="site-head">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">Æ</span>
+        <span class="brand-name">Aetheria Codex</span>
+      </a>
+      <nav class="head-nav" aria-label="Navegacao principal">
+        <a class="head-link" href="index.html">Galeria</a>
+        <a class="head-link" href="Mapa_Aetheria.html">Mapa</a>
+        <a class="head-link" href="Linha_do_Tempo.html" aria-current="page">Linha do Tempo</a>
+      </nav>
+    </header>
+
+    <main id="mainContent">
+      <section class="timeline-hero">
+        <h1>Linha do Tempo do Mundo</h1>
+        <p>
+          As cinco batalhas que moldaram Aetheria, do Inverno Eterno (ano 0) ate o Verao do Vazio
+          (ano 12). Quatro atos, em ordem cronologica.
+        </p>
+      </section>
+
+      <nav id="timeline" class="timeline-rail" aria-label="Eventos por era"></nav>
+    </main>
+
+    <footer class="site-foot">
+      <p>
+        <a href="index.html">← Voltar a galeria</a> · Fonte canonica:
+        <code>historia-api.json</code> · Eventos extraidos de
+        <code>Historia/Aetheria_Dados_do_Mundo.md</code>.
+      </p>
+    </footer>
+
+    <script src="assets/timeline-data.js?v=20260903"></script>
+    <script>
+      // Render da timeline. Tudo via DOM (sem framework). 30 linhas.
+      (function () {
+        "use strict";
+
+        const rail = document.getElementById("timeline");
+        const ERAS = window.__TIMELINE__.ERAS;
+
+        function escapeHtml(s) {
+          return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        function render(events) {
+          // Agrupa por era. Mantem a ordem canonica das eras (I, II, III, IV).
+          const groups = {};
+          events.forEach(function (e) {
+            (groups[e.era] = groups[e.era] || []).push(e);
+          });
+          const ordemEras = ["I", "II", "III", "IV"].filter(function (k) {
+            return groups[k];
+          });
+
+          rail.innerHTML = ordemEras
+            .map(function (era) {
+              const meta = ERAS[era];
+              const cards = groups[era]
+                .map(function (b) {
+                  // Deep-link pro mapa: identificador do battle e canto aproximado.
+                  const href = "Mapa_Aetheria.html#" + encodeURIComponent(b.id);
+                  return (
+                    '<article class="event-card">' +
+                    '<p class="kicker">' +
+                    escapeHtml(era) +
+                    " · " +
+                    escapeHtml(b.data) +
+                    "</p>" +
+                    "<h3>" +
+                    escapeHtml(b.nome) +
+                    "</h3>" +
+                    '<p class="resumo">' +
+                    escapeHtml(b.resumo) +
+                    "</p>" +
+                    '<a class="cta" href="' +
+                    href +
+                    '">Abrir no mapa →</a>' +
+                    "</article>"
+                  );
+                })
+                .join("");
+              return (
+                '<section class="era-group era-' +
+                era +
+                '" aria-labelledby="era-' +
+                era +
+                '">' +
+                '<header class="era-header">' +
+                '<span class="era-num">Ato ' +
+                era +
+                "</span>" +
+                '<h2 id="era-' +
+                era +
+                '">' +
+                escapeHtml(meta.titulo) +
+                "</h2>" +
+                "</header>" +
+                cards +
+                "</section>"
+              );
+            })
+            .join("");
+        }
+
+        window.__TIMELINE__
+          .load()
+          .then(render)
+          .catch(function (err) {
+            rail.innerHTML =
+              '<p style="padding:2rem;color:var(--ink-muted);">Nao foi possivel carregar a historia (HTTP falhou). Tente recarregar a pagina.</p>';
+            console.error("[timeline] load falhou:", err);
+          });
+      })();
+    </script>
+  </body>
+</html>

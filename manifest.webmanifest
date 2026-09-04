@@ -1,0 +1,51 @@
+{
+  "name": "Aetheria Codex",
+  "short_name": "Aetheria",
+  "description": "Codice de 487 personagens em 22 racas, com fichas, arte, lore e mapa do mundo.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1a120e",
+  "theme_color": "#1a120e",
+  "lang": "pt-BR",
+  "categories": ["books", "entertainment", "lifestyle"],
+  "icons": [
+    {
+      "purpose": "any",
+      "type": "image/png",
+      "sizes": "192x192",
+      "src": "assets/favicon-192.png"
+    },
+    {
+      "purpose": "any",
+      "type": "image/png",
+      "sizes": "32x32",
+      "src": "assets/favicon-32.png"
+    },
+    {
+      "purpose": "any",
+      "type": "image/png",
+      "sizes": "180x180",
+      "src": "assets/apple-touch-icon.png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mapa do mundo",
+      "url": "./Mapa_Aetheria.html"
+    },
+    {
+      "name": "Os Aspectos",
+      "url": "./?g=15_Os_Aspectos"
+    },
+    {
+      "name": "Alvamortos",
+      "url": "./?g=16_Alvamortos"
+    },
+    {
+      "name": "Demônios do Caos",
+      "url": "./?g=14_Demonios_Do_Caos"
+    }
+  ]
+}

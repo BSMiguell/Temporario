@@ -1,0 +1,33 @@
+{
+  "name": "aetheria-codex-tests",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Smoke tests + screenshots do Aetheria Codex (Playwright local)",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/smoke.mjs",
+    "validate": "node tests/validate-api.mjs",
+    "og-check": "node tests/og-check.mjs",
+    "narrativa-check": "node tests/narrativa-check.mjs",
+    "mapa-filtros-check": "node tests/mapa-filtros-check.mjs",
+    "mapa-export-check": "node tests/mapa-export-check.mjs",
+    "timeline-check": "node tests/timeline-check.mjs",
+    "a11y-empty-check": "node tests/a11y-empty-check.mjs",
+    "share-check": "node tests/share-check.mjs",
+    "about-check": "node tests/about-check.mjs",
+    "screens": "node tests/screenshots.mjs",
+    "all": "node tests/validate-api.mjs && node tests/smoke.mjs && node tests/screenshots.mjs",
+    "lint": "npm run lint:js && npm run lint:md",
+    "lint:js": "eslint tests/",
+    "lint:md": "markdownlint *.md scripts/**/*.md",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "eslint": "^9.13.0",
+    "globals": "^15.11.0",
+    "markdownlint-cli": "^0.42.0",
+    "playwright": "^1.62.1",
+    "prettier": "^3.3.3"
+  }
+}
