@@ -576,6 +576,242 @@
     $("galleryLink").href = `../index.html#${encodeURIComponent(RACE.folder)}`;
   }
 
+  // ---------- lore archive (W6: layout dedicado) ----------
+  function fillArchive() {
+    const el = $("loreArchive");
+    if (!el) return;
+    const regioes = RACE.regioes || [];
+    if (!regioes.length) { el.remove(); return; }
+    el.innerHTML = `
+      <h3>Arquivos</h3>
+      <ul>${regioes.map((r) => `
+        <li><a href="../Mapa_Aetheria.html#g=${encodeURIComponent(RACE.folder)}">${esc(r)}</a></li>
+      `).join("")}</ul>
+    `;
+  }
+
+  // ---------- ritual de invocao (W7: motor com 1 nó reaproveitado) ----------
+  // Estado de módulo: 1 overlay por sessão (zera race conditions entre pills).
+  let ritualNode = null;     // div.ritual-overlay (criada lazily na 1a chamada)
+  let ritualTimer = null;    // handle do setTimeout do auto-fecha
+  let ritualReturnFocus = null; // último elemento focado antes do overlay
+
+  function initRitual() {
+    const picker = $("ritualPicker");
+    if (picker) {
+      // 5 rituais específicos (Demônios × 3, Onis × 2)
+      picker.querySelectorAll(".ritual-pill").forEach((pill) => {
+        pill.addEventListener("click", () => abrirRitual(pill.dataset.ritual));
+      });
+    } else {
+      // fallback W6: 1 botão (raça dedicated sem rituais no JSON)
+      const btn = $("invocarRitualBtn");
+      if (btn) btn.addEventListener("click", () => abrirRitual(null));
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && ritualNode) fecharRitual();
+    });
+  }
+
+  function abrirRitual(ritualId) {
+    if (ritualNode) {
+      // já aberto: limpa o timer antigo; conteúdo será reescrito abaixo
+      clearTimeout(ritualTimer);
+    } else {
+      // primeira abertura: cria overlay 1× e fixa handlers
+      ritualReturnFocus = document.activeElement;
+      ritualNode = document.createElement("div");
+      ritualNode.className = "ritual-overlay";
+      ritualNode.setAttribute("role", "dialog");
+      ritualNode.setAttribute("aria-modal", "true");
+      ritualNode.innerHTML = `
+        <button class="ritual-close" aria-label="Fechar ritual">×</button>
+        <div class="ritual-card" id="ritualCard"></div>
+      `;
+      document.body.appendChild(ritualNode);
+      ritualNode.addEventListener("click", (e) => {
+        if (e.target === ritualNode) fecharRitual();
+      });
+      ritualNode.querySelector(".ritual-close").addEventListener("click", fecharRitual);
+      pause("ritual"); // pausa autoplay do carrossel enquanto overlay aberto
+    }
+
+    // resolve conteúdo
+    const rituais = RACE.rituais || [];
+    const ritual = rituais.find((r) => r.id === ritualId);
+    const card = ritualNode.querySelector("#ritualCard");
+
+    if (ritual) {
+      ritualNode.className = "ritual-overlay ritual-overlay--" + esc(ritual.estilo);
+      card.innerHTML = `
+        <div class="ritual-efeito ritual-efeito--${esc(ritual.estilo)}" aria-hidden="true"></div>
+        <span class="ritual-icon" aria-hidden="true">${esc(ritual.icon)}</span>
+        <p class="ritual-kicker">Invocação de ${esc(RACE.label)}</p>
+        <h2 class="ritual-name">${esc(ritual.titulo)}</h2>
+        <p class="ritual-text">${esc(ritual.estrofe)}</p>
+      `;
+      const efeito = card.querySelector(".ritual-efeito");
+      if (ritual.estilo === "pacto") gerarBrasas(efeito);
+      if (ritual.estilo === "devoracao") gerarMandibulaDevoracao(efeito);
+      if (ritual.estilo === "honra") gerarPortoes(efeito);
+      if (ritual.estilo === "ressurreicao") gerarRipple(efeito);
+      // W8: 5 efeitos novos em raças generic (selo, raio, flash, mandibula, fusao)
+      if (ritual.estilo === "selo") gerarSelo(efeito);
+      if (ritual.estilo === "raio") gerarRaio(efeito);
+      if (ritual.estilo === "flash") { /* CSS-only — sem DOM extra */ }
+      if (ritual.estilo === "mandibula") gerarMandibulaMonstro(efeito);
+      if (ritual.estilo === "fusao") gerarFusao(efeito);
+      ritualTimer = setTimeout(fecharRitual, ritual.duracao_ms);
+    } else {
+      // fallback: ritual genérico (sem efeito) — raça sem rituais no JSON
+      ritualNode.className = "ritual-overlay";
+      const t = splitTitle(MEMBERS[0].title);
+      const loreTxt = (RACE.lore || "").trim();
+      const loreCurto = loreTxt.length > 220 ? loreTxt.slice(0, 220) + "…" : loreTxt;
+      card.innerHTML = `
+        <span class="ritual-icon" aria-hidden="true">${esc(RACE.icon)}</span>
+        <p class="ritual-kicker">Invocação de ${esc(RACE.label)}</p>
+        <h2 class="ritual-name">${esc(t.name)}${t.epithet ? `, <em>${esc(t.epithet)}</em>` : ""}</h2>
+        <p class="ritual-text">${esc(loreCurto)}</p>
+      `;
+      ritualTimer = setTimeout(fecharRitual, 3200);
+    }
+
+    // aria-pressed em todos os pills (o ativo true, os demais false)
+    document.querySelectorAll(".ritual-pill").forEach((p) => {
+      p.setAttribute("aria-pressed", String(p.dataset.ritual === ritualId));
+    });
+
+    // abre (classe adicionada no próximo frame para a transition disparar)
+    requestAnimationFrame(() => {
+      ritualNode.classList.add("is-open");
+      const btn = ritualNode.querySelector(".ritual-close");
+      if (btn) btn.focus();
+    });
+  }
+
+  function fecharRitual() {
+    if (!ritualNode) return;
+    clearTimeout(ritualTimer);
+    ritualNode.classList.remove("is-open");
+    // zera aria-pressed em todos os pills
+    document.querySelectorAll(".ritual-pill").forEach((p) => p.setAttribute("aria-pressed", "false"));
+    setTimeout(() => {
+      if (ritualNode && ritualNode.parentNode) ritualNode.parentNode.removeChild(ritualNode);
+      ritualNode = null;
+      resume("ritual"); // retoma autoplay do carrossel
+      if (ritualReturnFocus && ritualReturnFocus.focus) ritualReturnFocus.focus();
+    }, 420);
+  }
+
+  // ---------- geradores de efeito (DOM leve, sem canvas/libs) ----------
+  // W7
+  function gerarBrasas(host) {
+    // 12 partículas filhas; CSS faz o resto via @keyframes brasa + nth-child
+    for (let i = 0; i < 12; i++) {
+      const b = document.createElement("span");
+      b.className = "brasa";
+      host.appendChild(b);
+    }
+  }
+
+  // W7 (renomeado de "gerarMandibula" no W8 pra coexistir com gerarMandibulaMonstro)
+  function gerarMandibulaDevoracao(host) {
+    const top = document.createElement("span");
+    top.className = "metade metade--top";
+    const bot = document.createElement("span");
+    bot.className = "metade metade--bot";
+    host.appendChild(top);
+    host.appendChild(bot);
+  }
+
+  function gerarPortoes(host) {
+    // 2 portões ancestrais de obsidiana; CSS faz o scale 0→1 com delay
+    for (let i = 0; i < 2; i++) {
+      const p = document.createElement("span");
+      p.className = "portao";
+      host.appendChild(p);
+    }
+  }
+
+  function gerarRipple(host) {
+    // 3 ripples concêntricos; o CSS usa ::before, ::after + .ripple
+    // (::before/::after não podem ser criados via JS, então a 3a ripple é elemento)
+    const r = document.createElement("span");
+    r.className = "ripple";
+    host.appendChild(r);
+  }
+
+  // W8: 4 geradores novos (flash é CSS-only, sem gerador JS)
+  function gerarSelo(host) {
+    // 1 anel + 8 runas em círculo (Unicode rúnico antigo)
+    const ring = document.createElement("span");
+    ring.className = "selo-ring";
+    host.appendChild(ring);
+    const runas = ["ᚠ", "ᚱ", "ᛇ", "ᛟ", "ᚦ", "ᛗ", "ᛚ", "ᛜ"];
+    runas.forEach((r, i) => {
+      const runa = document.createElement("span");
+      runa.className = "selo-runa";
+      runa.textContent = r;
+      runa.style.transform = `rotate(${(i * 360) / 8}deg) translateY(-58px)`;
+      host.appendChild(runa);
+    });
+  }
+
+  function gerarRaio(host) {
+    // SVG inline com polyline zigzag + 6 partículas irradiando do centro
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("class", "relampago");
+    svg.setAttribute("viewBox", "0 0 100 200");
+    svg.setAttribute("aria-hidden", "true");
+    // IDs de gradient precisam ser únicos por página; usamos timestamp pra evitar colisão
+    const gradId = "raio-grad-" + Date.now();
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff8c2" />
+          <stop offset="50%" stop-color="#f1c40f" />
+          <stop offset="100%" stop-color="#fff" />
+        </linearGradient>
+      </defs>
+      <polyline class="relampago-traco" points="50,0 30,80 60,100 20,180 70,200" />
+    `;
+    // atualiza o stroke do polyline pra apontar pro gradient (criado dinamicamente)
+    const polyline = svg.querySelector(".relampago-traco");
+    polyline.setAttribute("stroke", `url(#${gradId})`);
+    host.appendChild(svg);
+    for (let i = 0; i < 6; i++) {
+      const p = document.createElement("span");
+      p.className = "raio-particle";
+      p.style.setProperty("--i", i);
+      host.appendChild(p);
+    }
+  }
+
+  function gerarMandibulaMonstro(host) {
+    // 2 metades (top/bot) com 3 dentes triangulares cada
+    for (const half of ["top", "bot"]) {
+      const m = document.createElement("span");
+      m.className = `mandibula-metade metade--${half}`;
+      for (let d = 0; d < 3; d++) {
+        const dente = document.createElement("span");
+        dente.className = "dente";
+        m.appendChild(dente);
+      }
+      host.appendChild(m);
+    }
+  }
+
+  function gerarFusao(host) {
+    // 2 metades verticais (esq azul humana, dir cinza monstro) que se afastam em X
+    for (const side of ["esq", "dir"]) {
+      const m = document.createElement("span");
+      m.className = `fusao-metade metade--${side}`;
+      host.appendChild(m);
+    }
+  }
+
   // ---------- acervo ----------
   function buildRoster() {
     const grid = $("rosterGrid");
@@ -790,6 +1026,8 @@
     if (lw) lw.textContent = RACE.icon;
 
     fillLore();
+    fillArchive();
+    initRitual();
     fillRaceNav();
     buildPicker();
     buildDots();

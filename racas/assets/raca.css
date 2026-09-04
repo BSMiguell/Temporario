@@ -576,6 +576,12 @@ ul {
     color 0.3s var(--ease),
     border-color 0.3s var(--ease);
 }
+.btn-icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
 .btn-solid {
   color: var(--group-ink);
   background: linear-gradient(
@@ -1615,4 +1621,503 @@ ul {
     opacity: 1;
     transform: none;
   }
+}
+.race-seal-hero { position:absolute; top:1.5rem; right:1.5rem; width:64px; height:64px; opacity:0.15; z-index:0; pointer-events:none; color:var(--group-color); }
+
+/* ========== W6 · LAYOUT DEDICADO (Onis, Demônios) ========== */
+body[data-layout="dedicated"] .hero {
+  min-height: 100vh;
+  padding-bottom: 8rem;
+}
+body[data-layout="dedicated"] .hero-stats {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.1rem;
+  flex-wrap: wrap;
+}
+body[data-layout="dedicated"] .hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--group-color) 30%, var(--line));
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--group-color) 6%, var(--paper-light));
+}
+body[data-layout="dedicated"] .hero-stat strong {
+  font-family: var(--fd);
+  font-size: 1.45rem;
+  color: var(--group-color);
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+body[data-layout="dedicated"] .hero-stat span {
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+body[data-layout="dedicated"] .lore-body {
+  grid-template-columns: minmax(240px, 0.4fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+}
+body[data-layout="dedicated"] .lore-archive {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.4rem;
+  border: 1px solid color-mix(in srgb, var(--group-color) 26%, var(--line-faint));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--group-color) 4%, var(--paper-light));
+  align-self: start;
+}
+body[data-layout="dedicated"] .lore-archive h3 {
+  font-family: var(--fd);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--group-color) 70%, var(--ink));
+  margin-bottom: 0.3rem;
+}
+body[data-layout="dedicated"] .lore-archive ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+body[data-layout="dedicated"] .lore-archive a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  border: 1px solid transparent;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+body[data-layout="dedicated"] .lore-archive a:hover {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--group-color) 45%, var(--line));
+  background: color-mix(in srgb, var(--group-color) 8%, transparent);
+}
+@media (max-width: 900px) {
+  body[data-layout="dedicated"] .lore-body { grid-template-columns: 1fr; }
+  body[data-layout="dedicated"] .hero-stats { gap: 0.5rem; }
+  body[data-layout="dedicated"] .hero-stat { padding: 0.4rem 0.7rem; }
+  body[data-layout="dedicated"] .hero-stat strong { font-size: 1.2rem; }
+}
+
+/* ========== W6 · RITUAL OVERLAY (sem vídeo) ========== */
+.ritual-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--group-color) 22%, rgba(0, 0, 0, 0.85)),
+      rgba(0, 0, 0, 0.94) 70%
+    );
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s var(--ease);
+}
+.ritual-overlay.is-open { opacity: 1; pointer-events: auto; }
+.ritual-overlay .ritual-card {
+  max-width: min(560px, 88vw);
+  padding: 2.2rem 2.6rem;
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--group-color) 40%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--paper-light) 92%, transparent);
+  box-shadow: 0 0 60px -10px color-mix(in srgb, var(--group-color) 60%, transparent);
+  transform: scale(0.94);
+  transition: transform 0.5s var(--ease-bounce);
+}
+.ritual-overlay.is-open .ritual-card { transform: scale(1); }
+.ritual-overlay .ritual-icon {
+  font-size: 3.4rem;
+  display: block;
+  margin-bottom: 0.6rem;
+  animation: ritual-pulse 1.6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--group-color) 70%, transparent));
+}
+@keyframes ritual-pulse {
+  from { transform: scale(1); opacity: 0.9; }
+  to   { transform: scale(1.12); opacity: 1; }
+}
+.ritual-overlay .ritual-kicker {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--group-color) 75%, var(--ink));
+  margin-bottom: 0.5rem;
+}
+.ritual-overlay .ritual-name {
+  font-family: var(--fd);
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.8rem;
+  line-height: 1.15;
+}
+.ritual-overlay .ritual-name em {
+  font-style: italic;
+  color: color-mix(in srgb, var(--group-color) 60%, var(--ink-soft));
+}
+.ritual-overlay .ritual-text {
+  font-family: var(--fd);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--ink-soft) 80%, var(--group-color));
+  text-wrap: balance;
+}
+.ritual-overlay .ritual-close {
+  position: absolute; top: 1.4rem; right: 1.4rem;
+  width: 2.5rem; height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 1.3rem;
+  transition: transform 0.3s var(--ease-bounce), background 0.2s var(--ease);
+}
+.ritual-overlay .ritual-close:hover { background: rgba(0, 0, 0, 0.7); transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .ritual-overlay .ritual-icon { animation: none; }
+}
+
+/* ============================================================
+   W7: PICKER + 5 EFEITOS ESPECÍFICOS DE RITUAL
+   - .ritual-picker / .ritual-pill: lista de rituais da raça
+   - .ritual-overlay--{estilo}: modificador por ritual
+   - .ritual-efeito--{estilo}: container do efeito (DOM leve, sem canvas)
+   - Estilos escopados para preservar o genérico do W6
+   ============================================================ */
+
+/* ---------- PICKER (lista de pills) ---------- */
+.ritual-picker {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+.ritual-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 99px;
+  border: 1px solid color-mix(in srgb, var(--group-color) 40%, var(--line));
+  background: color-mix(in srgb, var(--group-color) 6%, var(--paper-light));
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease),
+    box-shadow 0.3s var(--ease),
+    transform 0.2s var(--ease);
+}
+.ritual-pill:hover {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--group-color) 60%, var(--line));
+  transform: translateY(-1px);
+}
+.ritual-pill[aria-pressed="true"] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--group-color) 18%, var(--paper-light));
+  border-color: var(--group-color);
+  box-shadow: 0 0 24px -4px color-mix(in srgb, var(--group-color) 70%, transparent);
+}
+@media (max-width: 560px) {
+  .ritual-picker { flex-direction: column; }
+  .ritual-pill { width: 100%; justify-content: center; }
+}
+
+/* ---------- CONTAINER DO EFEITO ---------- */
+.ritual-efeito {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- --pacto: 12 brasas subindo ---------- */
+.ritual-efeito--pacto .brasa {
+  position: absolute;
+  bottom: 0;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffcf6b 0%, #ff4500 60%, transparent 100%);
+  box-shadow: 0 0 8px #ff6a00;
+  animation: brasa 3.2s linear infinite;
+  opacity: 0;
+}
+.ritual-efeito--pacto .brasa:nth-child(1)  { left:  6%; animation-delay: 0.0s; animation-duration: 3.0s; }
+.ritual-efeito--pacto .brasa:nth-child(2)  { left: 14%; animation-delay: 0.4s; animation-duration: 3.4s; }
+.ritual-efeito--pacto .brasa:nth-child(3)  { left: 22%; animation-delay: 0.9s; animation-duration: 2.8s; }
+.ritual-efeito--pacto .brasa:nth-child(4)  { left: 30%; animation-delay: 1.2s; animation-duration: 3.6s; }
+.ritual-efeito--pacto .brasa:nth-child(5)  { left: 38%; animation-delay: 0.2s; animation-duration: 3.1s; }
+.ritual-efeito--pacto .brasa:nth-child(6)  { left: 46%; animation-delay: 1.5s; animation-duration: 3.3s; }
+.ritual-efeito--pacto .brasa:nth-child(7)  { left: 54%; animation-delay: 0.6s; animation-duration: 2.9s; }
+.ritual-efeito--pacto .brasa:nth-child(8)  { left: 62%; animation-delay: 1.8s; animation-duration: 3.5s; }
+.ritual-efeito--pacto .brasa:nth-child(9)  { left: 70%; animation-delay: 0.3s; animation-duration: 3.0s; }
+.ritual-efeito--pacto .brasa:nth-child(10) { left: 78%; animation-delay: 1.0s; animation-duration: 3.2s; }
+.ritual-efeito--pacto .brasa:nth-child(11) { left: 86%; animation-delay: 1.6s; animation-duration: 2.8s; }
+.ritual-efeito--pacto .brasa:nth-child(12) { left: 92%; animation-delay: 2.0s; animation-duration: 3.4s; }
+@keyframes brasa {
+  0%   { transform: translateY(0)     scale(0.6); opacity: 0; }
+  20%  { opacity: 0.9; }
+  100% { transform: translateY(-260px) scale(1.2); opacity: 0; }
+}
+
+/* ---------- --massacre: glitch RGB-split + screen-shake ---------- */
+@keyframes massacre-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20%      { transform: translate(-3px, 2px); }
+  40%      { transform: translate(3px, -2px); }
+  60%      { transform: translate(-2px, -2px); }
+  80%      { transform: translate(2px, 3px); }
+}
+.ritual-overlay--massacre.is-open { animation: massacre-shake 0.4s steps(5, end) infinite; }
+.ritual-overlay--massacre .ritual-name {
+  text-shadow:
+    2px 0 #ff0040,
+    -2px 0 #00ff80,
+    0 2px #ff00ff;
+  animation: massacre-glitch 0.3s steps(2, end) infinite;
+}
+@keyframes massacre-glitch {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(1px, -1px); }
+}
+
+/* ---------- --ressurreicao: 3 ripples concêntricos ---------- */
+.ritual-efeito--ressurreicao::before,
+.ritual-efeito--ressurreicao::after,
+.ritual-efeito--ressurreicao .ripple {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--group-color);
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-expand 2.4s ease-out infinite;
+  opacity: 0;
+}
+.ritual-efeito--ressurreicao::before { animation-delay: 0.0s; }
+.ritual-efeito--ressurreicao::after  { animation-delay: 0.8s; }
+.ritual-efeito--ressurreicao .ripple { animation-delay: 1.6s; }
+@keyframes ripple-expand {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(8); opacity: 0;   }
+}
+
+/* ---------- --devoracao: mandíbula de 2 metades ---------- */
+.ritual-efeito--devoracao .metade {
+  position: absolute;
+  left: 0; right: 0;
+  height: 50%;
+  background: radial-gradient(circle, var(--paper-light) 0%, color-mix(in srgb, var(--group-color) 30%, black) 100%);
+  transition: transform 0.6s var(--ease-bounce);
+}
+.ritual-efeito--devoracao .metade--top { top: 0;    transform: translateY(0); }
+.ritual-efeito--devoracao .metade--bot { bottom: 0; transform: translateY(0); }
+.ritual-overlay--devoracao.is-open .metade--top { transform: translateY(-100%); }
+.ritual-overlay--devoracao.is-open .metade--bot { transform: translateY(100%); }
+
+/* ---------- --honra: 2 portões ancestrais de obsidiana ---------- */
+.ritual-efeito--honra .portao {
+  position: absolute;
+  top: 50%;
+  width: 28px; height: 80px;
+  transform: translateY(-50%) scale(0);
+  background: linear-gradient(180deg, #2c1810 0%, #4a2818 50%, #1a0a05 100%);
+  border: 1px solid #6a3818;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--group-color) 40%, transparent);
+  animation: portao-abrir 0.8s var(--ease-bounce) 0.3s forwards;
+}
+.ritual-efeito--honra .portao::before {
+  content: "";
+  position: absolute;
+  top: 6px; left: -6px; right: -6px;
+  height: 4px;
+  background: inherit;
+  border: inherit;
+  border-radius: 2px;
+}
+.ritual-efeito--honra .portao:nth-child(1) { left: 32%; }
+.ritual-efeito--honra .portao:nth-child(2) { left: 58%; animation-delay: 0.5s; }
+@keyframes portao-abrir {
+  0%   { transform: translateY(-50%) scale(0);   opacity: 0; }
+  60%  { transform: translateY(-50%) scale(1.1); opacity: 1; }
+  100% { transform: translateY(-50%) scale(1);   opacity: 1; }
+}
+
+/* ---------- mobile: card com max-height + scroll ---------- */
+@media (max-width: 560px) {
+  .ritual-overlay .ritual-card {
+    max-height: 86vh;
+    overflow-y: auto;
+    padding: 1.6rem 1.4rem;
+  }
+}
+
+/* ---------- reduced-motion: estado final estático (não frame inicial) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ritual-pill { transition: none; }
+  .ritual-pill:hover { transform: none; }
+  .ritual-overlay--pacto .brasa { display: none; }
+  .ritual-overlay--massacre.is-open { animation: none; }
+  .ritual-overlay--massacre .ritual-name {
+    text-shadow: none;
+    animation: none;
+  }
+  .ritual-efeito--ressurreicao::before,
+  .ritual-efeito--ressurreicao::after,
+  .ritual-efeito--ressurreicao .ripple { display: none; }
+  .ritual-overlay--devoracao .metade { transform: translate(0, 0) !important; }
+  .ritual-efeito--honra .portao {
+    animation: none;
+    transform: translateY(-50%) scale(1);
+    opacity: 0.85;
+  }
+}
+
+/* ========== W8.4: 5 modificadores visuais novos ==========
+   Adicionados para raças generic (Humanos, Semideuses, Deuses, Monstros, Meio-Sangue).
+   Mesma estrutura do W7: .ritual-efeito--<estilo> + @keyframes + reduced-motion fallback.
+   Sem libs externas. */
+
+/* --- selo (Humanos): anel girando + 8 runas em círculo --- */
+.ritual-efeito--selo {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+}
+.ritual-efeito--selo .selo-ring {
+  position: absolute; width: 130px; height: 130px;
+  border: 3px solid var(--group-color);
+  border-radius: 50%;
+  box-shadow:
+    0 0 24px color-mix(in srgb, var(--group-color) 60%, transparent),
+    inset 0 0 18px color-mix(in srgb, var(--group-color) 40%, transparent);
+  animation: selo-spin 8s linear infinite;
+}
+.ritual-efeito--selo .selo-runa {
+  position: absolute;
+  left: 50%; top: 50%;
+  margin-left: -0.55rem; margin-top: -0.65rem;
+  font-size: 1.1rem; color: var(--group-color);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--group-color) 70%, transparent);
+  /* o transform inline (rotate + translateY) é setado pelo JS em gerarSelo */
+  animation: selo-spin 8s linear infinite reverse;
+}
+@keyframes selo-spin { to { transform: rotate(360deg); } }
+
+/* --- raio (Semideuses): SVG zigzag caindo + 6 partículas irradiando --- */
+.ritual-efeito--raio {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius-lg);
+}
+.ritual-efeito--raio .relampago {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px; height: 200px;
+  filter: drop-shadow(0 0 8px gold);
+}
+.ritual-efeito--raio .relampago-traco {
+  fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round;
+  /* stroke vem inline do JS (gradient dinâmico com ID único) */
+  animation: raio-cair 0.8s ease-out 0.1s both;
+}
+@keyframes raio-cair {
+  0%   { transform: translateY(-220px); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateY(0); opacity: 0.9; }
+}
+.ritual-efeito--raio .raio-particle {
+  position: absolute; left: 50%; top: 50%;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: radial-gradient(circle, #fff8c2 0%, #f1c40f 100%);
+  box-shadow: 0 0 10px gold;
+  /* --i é setado inline pelo JS (0..5); converte pra ângulo de 60° cada */
+  --angle: calc(var(--i) * 60deg);
+  animation: raio-particula 1.4s ease-out 0.2s both;
+}
+@keyframes raio-particula {
+  0%   { transform: rotate(var(--angle)) translateY(0)   scale(0); opacity: 0; }
+  30%  { transform: rotate(var(--angle)) translateY(8px) scale(1); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(60px) scale(0.6); opacity: 0; }
+}
+
+/* --- flash (Deuses): overlay branco pulsante (CSS-only, sem DOM extra) ---
+   ATENÇÃO: fotossensibilidade — usuários com epilepsia devem preferir reduced-motion. */
+.ritual-efeito--flash {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0);
+  animation: flash-bang 1.6s ease-in-out both;
+}
+@keyframes flash-bang {
+  0%   { background: rgba(255, 255, 255, 0); }
+  20%  { background: rgba(255, 255, 255, 0.95); }
+  60%  { background: rgba(255, 248, 220, 0.6); }
+  100% { background: rgba(255, 255, 255, 0); }
+}
+
+/* --- mandibula (Monstros): 2 metades com 3 dentes triangulares cada --- */
+.ritual-efeito--mandibula {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius-lg);
+}
+.ritual-efeito--mandibula .mandibula-metade {
+  position: absolute; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, #1a1a1a 0%, #2e4053 60%, #1a1a1a 100%);
+  transition: transform 0.6s var(--ease-bounce);
+  display: flex; align-items: center; justify-content: space-around;
+}
+.ritual-efeito--mandibula .metade--top { top: 0;    border-bottom: 2px solid #1a1a1a; align-items: end; }
+.ritual-efeito--mandibula .metade--bot { bottom: 0; border-top: 2px solid #1a1a1a;    align-items: start; }
+.ritual-efeito--mandibula .dente {
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+.ritual-efeito--mandibula .metade--top .dente { border-top: 14px solid #f0e6d2; }
+.ritual-efeito--mandibula .metade--bot .dente { border-bottom: 14px solid #f0e6d2; }
+.ritual-overlay--mandibula.is-open .metade--top { transform: translateY(-100%); }
+.ritual-overlay--mandibula.is-open .metade--bot { transform: translateY(100%); }
+
+/* --- fusao (Meio-Sangue): 2 metades verticais (azul humana + cinza monstro) se afastando em X --- */
+.ritual-efeito--fusao {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius-lg);
+}
+.ritual-efeito--fusao .fusao-metade {
+  position: absolute; top: 0; bottom: 0; width: 50%;
+  transition: transform 0.6s var(--ease-bounce);
+  mix-blend-mode: screen;
+}
+/* esquerda = azul humana (cor de #4A90D9 de 01_Humanos) */
+.ritual-efeito--fusao .metade--esq { left: 0;  background: linear-gradient(90deg,  rgba(74, 144, 217, 0.65) 0%, rgba(74, 144, 217, 0.05) 100%); }
+/* direita = cinza-azulada monstro (cor de #2E4053 de 08_Monstros) */
+.ritual-efeito--fusao .metade--dir { right: 0; background: linear-gradient(-90deg, rgba(46, 64, 83, 0.65) 0%, rgba(46, 64, 83, 0.05) 100%); }
+.ritual-overlay--fusao.is-open .metade--esq { transform: translateX(-100%); }
+.ritual-overlay--fusao.is-open .metade--dir { transform: translateX(100%); }
+
+/* ---------- reduced-motion: W8 fallbacks estáticos (W7 já tem o dele acima) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  /* W8.4: estado final estático pros 5 efeitos novos */
+  .ritual-efeito--selo .selo-ring,
+  .ritual-efeito--selo .selo-runa { animation: none; }
+  .ritual-efeito--raio .relampago-traco { animation: none; transform: translateY(0); }
+  .ritual-efeito--raio .raio-particle { display: none; }
+  .ritual-efeito--flash { animation: none; }
+  .ritual-overlay--mandibula .mandibula-metade { transform: translate(0, 0) !important; }
+  .ritual-overlay--fusao .fusao-metade { transform: translate(0, 0) !important; }
 }

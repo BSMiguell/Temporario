@@ -1,1063 +1,148 @@
-<!doctype html>
-<html lang="pt-BR" data-theme="dark" style="--group-color: #7b4d9e">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mutantes — Aetheria Codex</title>
-    <meta
-      name="description"
-      content="Página da raça Mutantes: 43 personagens do Aetheria Codex em showcase rotativo."
-    />
-    <meta name="theme-color" content="#7B4D9E" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%A7%AC%3C/text%3E%3C/svg%3E"
-    />
-    <script>
-      try {
-        var t = localStorage.getItem("racasTheme");
-        if (t) document.documentElement.setAttribute("data-theme", t);
-      } catch (e) {}
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="assets/raca.css" />
-  </head>
-  <body data-slug="mutantes">
-    <header class="site-head">
-      <a class="brand" href="../index.html"
-        ><span class="brand-mark">Æ</span
-        ><span class="brand-name">Aetheria Codex</span></a
-      >
-      <div class="head-race">
-        <span class="head-icon">🧬</span
-        ><span class="head-label">Mutantes</span>
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" style="--group-color:#7B4D9E;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://bsmiguell.github.io/Temporario/racas/mutantes.html">
+  <title>Mutantes — Aetheria Codex</title>
+  <meta name="description" content="Página da raça Mutantes: 48 personagens do Aetheria Codex em showcase rotativo.">
+  <meta name="theme-color" content="#7B4D9E">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Aetheria Codex">
+  <meta property="og:title" content="Mutantes — Aetheria Codex">
+  <meta property="og:description" content="Conheça os 48 personagens da raça Mutantes no Aetheria Codex. Cards, lore e galeria.">
+  <meta property="og:url" content="https://bsmiguell.github.io/Temporario/racas/mutantes.html">
+  <meta property="og:image" content="https://bsmiguell.github.io/Temporario/assets/og-cover.jpg">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mutantes — Aetheria Codex">
+  <meta name="twitter:description" content="Conheça os 48 personagens da raça Mutantes no Aetheria Codex.">
+  <meta name="twitter:image" content="https://bsmiguell.github.io/Temporario/assets/og-cover.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%A7%AC%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("racasTheme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/raca.css?v=20260902">
+</head>
+<body data-slug="mutantes" data-layout="generic">
+<a class="skip-link" href="#mainContent">Pular para a lista de personagens</a>
+
+<header class="site-head">
+  <a class="brand" href="../index.html"><span class="brand-mark">Æ</span><span class="brand-name">Aetheria Codex</span></a>
+  <div class="head-race"><span class="head-icon">🧬</span><span class="head-label">Mutantes</span></div>
+  <nav class="head-nav" aria-label="Navegação principal">
+    <div class="race-picker">
+      <button class="picker-btn" id="pickerBtn" aria-haspopup="listbox" aria-expanded="false"><span>Raças</span><span class="picker-caret">▾</span></button>
+      <div class="picker-menu" id="pickerMenu" role="listbox" aria-label="Ir para outra raça" hidden></div>
+    </div>
+    <a class="head-link" href="../index.html">Galeria</a>
+    <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">◑</button>
+  </nav>
+</header>
+
+<main id="mainContent">
+  <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Membros da raça em destaque">
+    <canvas id="fxCanvas" aria-hidden="true"></canvas>
+    <div class="hero-watermark" id="heroWatermark" aria-hidden="true">🧬</div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Raça · <span id="kickerRace">Mutantes</span></span><span class="kick-sep">·</span><span id="kickerIdx">01 / 01</span></p>
+        <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
+        <p class="hero-epithet" id="heroEpithet"></p>
+        <p class="hero-desc" id="heroDesc"></p>
+        
+        <ul class="hero-chips" id="heroChips"></ul>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="sheetBtn">Ficha completa</button>
+          
+          
+          <a class="btn btn-line" id="galleryLink" href="../index.html#02_Mutantes">Ver na galeria ↗</a>
+        </div>
       </div>
-      <nav class="head-nav" aria-label="Navegação principal">
-        <div class="race-picker">
-          <button
-            class="picker-btn"
-            id="pickerBtn"
-            aria-haspopup="listbox"
-            aria-expanded="false"
-          >
-            <span>Raças</span><span class="picker-caret">▾</span>
-          </button>
-          <div
-            class="picker-menu"
-            id="pickerMenu"
-            role="listbox"
-            aria-label="Ir para outra raça"
-            hidden
-          ></div>
+
+      <figure class="hero-stage">
+        <div class="stage-frame" id="stageFrame">
+          <div class="stage-glare" aria-hidden="true"></div>
         </div>
-        <a class="head-link" href="../index.html">Galeria</a>
-        <a class="head-link" href="../Mapa_Aetheria.html">Mapa</a>
-        <button
-          class="theme-btn"
-          id="themeBtn"
-          aria-label="Alternar tema claro/escuro"
-        >
-          ◑
-        </button>
-      </nav>
-    </header>
-
-    <main>
-      <section
-        class="hero"
-        id="hero"
-        aria-roledescription="carrossel"
-        aria-label="Membros da raça em destaque"
-      >
-        <div class="hero-watermark" aria-hidden="true">📁</div>
-        <canvas id="fxCanvas" aria-hidden="true"></canvas>
-        <div class="hero-watermark" id="heroWatermark" aria-hidden="true">
-          🧬
-        </div>
-
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <p class="hero-kicker">
-              <span>Raça · <span id="kickerRace">Mutantes</span></span
-              ><span class="kick-sep">·</span
-              ><span id="kickerIdx">01 / 01</span>
-            </p>
-            <h1 class="hero-name" id="heroName" aria-live="polite"></h1>
-            <p class="hero-epithet" id="heroEpithet"></p>
-            <p class="hero-desc" id="heroDesc"></p>
-            <ul class="hero-chips" id="heroChips"></ul>
-            <div class="hero-actions">
-              <button class="btn btn-solid" id="sheetBtn">
-                Ficha completa
-              </button>
-              <a
-                class="btn btn-line"
-                id="galleryLink"
-                href="../index.html#02_Mutantes"
-                >Ver na galeria ↗</a
-              >
-            </div>
-          </div>
-
-          <figure class="hero-stage">
-            <div class="stage-frame" id="stageFrame">
-              <div class="stage-glare" aria-hidden="true"></div>
-            </div>
-            <figcaption class="sr-only" id="stageCaption"></figcaption>
-          </figure>
-        </div>
-
-        <div class="hero-ui">
-          <button class="arrow" id="prevBtn" aria-label="Membro anterior">
-            ‹
-          </button>
-          <div
-            class="dots"
-            id="dots"
-            role="tablist"
-            aria-label="Escolher membro"
-          ></div>
-          <button class="arrow" id="nextBtn" aria-label="Próximo membro">
-            ›
-          </button>
-        </div>
-        <div class="hero-timer" aria-hidden="true">
-          <span id="timerBar"></span>
-        </div>
-      </section>
-
-      <section class="lore reveal" id="lore">
-        <div class="lore-watermark" aria-hidden="true">🧬</div>
-        <div class="lore-inner">
-          <header class="sec-head">
-            <p class="sec-kicker">Crônica das raças</p>
-            <h2 class="sec-title">Mutantes no mundo de Aetheria</h2>
-          </header>
-          <div class="lore-body">
-            <div class="stat-block">
-              <span class="stat-num" id="loreCount">0</span>
-              <span class="stat-cap">membros registrados<br />no códice</span>
-            </div>
-            <div class="lore-text">
-              <p id="loreDesc"></p>
-              <ul class="lore-chips" id="loreChips"></ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="roster reveal" id="roster">
-        <div class="roster-inner">
-          <header class="sec-head">
-            <p class="sec-kicker">Acervo completo</p>
-            <h2 class="sec-title">
-              Todos os membros<span class="sec-count" id="rosterCount">0</span>
-            </h2>
-          </header>
-          <ul class="roster-grid" id="rosterGrid"></ul>
-        </div>
-      </section>
-
-      <nav class="race-nav reveal" aria-label="Navegar entre as raças">
-        <a class="rn-big rn-prev" id="racePrev">
-          <span class="rn-arrow" aria-hidden="true">‹</span>
-          <span class="rn-body"
-            ><span class="rn-kicker">Raça anterior</span
-            ><span class="rn-name"></span
-          ></span>
-        </a>
-        <div
-          class="rn-index"
-          id="raceIndex"
-          aria-label="Índice das raças"
-        ></div>
-        <a class="rn-big rn-next" id="raceNext">
-          <span class="rn-body"
-            ><span class="rn-kicker">Próxima raça</span
-            ><span class="rn-name"></span
-          ></span>
-          <span class="rn-arrow" aria-hidden="true">›</span>
-        </a>
-      </nav>
-    </main>
-
-    <footer class="site-foot">
-      <span
-        >Æ Aetheria Codex — acervo autoral ·
-        <a href="../index.html">galeria</a> ·
-        <a href="../Mapa_Aetheria.html">mapa do mundo</a></span
-      >
-      <span class="foot-gen"
-        >Gerado por scripts/build_racas.ps1 em 27/08/2026 22:58</span
-      >
-    </footer>
-
-    <div
-      class="sheet"
-      id="sheet"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="sheetName"
-      hidden
-    >
-      <div class="sheet-bg" id="sheetBg"></div>
-      <aside class="sheet-panel">
-        <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">
-          ×
-        </button>
-        <p class="sheet-kicker">Ficha do membro</p>
-        <h3 id="sheetName"></h3>
-        <p class="sheet-epithet" id="sheetEpithet"></p>
-        <p class="sheet-desc" id="sheetDesc"></p>
-        <div class="sheet-fields" id="sheetFields"></div>
-      </aside>
+        <figcaption class="sr-only" id="stageCaption"></figcaption>
+      </figure>
     </div>
 
-    <noscript
-      ><p
-        style="padding: 6rem 2rem; text-align: center; font-family: sans-serif"
-      >
-        Ative o JavaScript para ver o showcase dos membros.
-      </p></noscript
-    >
+    <div class="hero-ui">
+      <button class="arrow" id="prevBtn" aria-label="Membro anterior">‹</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher membro"></div>
+      <button class="arrow" id="nextBtn" aria-label="Próximo membro">›</button>
+    </div>
+    <div class="hero-timer" aria-hidden="true"><span id="timerBar"></span></div>
+  </section>
 
-    <script id="race-data" type="application/json">
-      {
-        "race": {
-          "folder": "02_Mutantes",
-          "label": "Mutantes",
-          "color": "#7B4D9E",
-          "icon": "🧬",
-          "lore": "Nascidos de experimentos, adaptações extremas ou rejeição genética; banidos de toda cidade, organizam células rebeldes na única terra que os aceitou: a Fenda.",
-          "tipo": "Dispersa",
-          "regioes": ["A Grande Fenda Central"],
-          "count": 43
-        },
-        "members": [
-          {
-            "number": 1,
-            "title": "All-For-One-V-1",
-            "name": "All-For-One-V-1",
-            "id": "All-For-One-V-1",
-            "image": "../codex/02_Mutantes/All-For-One-V-1.png",
-            "description": "Uma entidade ancestral que pode roubar, acumular e redistribuir as habilidades mutagênicas de outros seres. All-For-One busca a perfeição biológica, tratando o mundo como seu laboratório pessoal e todos os mutantes como meros ingredientes.",
-            "attributes": {
-              "race": "Lorde da Singularidade Genética",
-              "physical": "Humanoide alto, postura formal e imponente, envolto em um traje de suporte de vida.",
-              "faceAndHair": "Rosto coberto por uma máscara de suporte respiratório complexa, com tubos conectados ao corpo.",
-              "palette": "Preto, cinza-metálico e vermelho-escuro.",
-              "equipment": "Máscara de suporte vital e aura de poder opressora."
-            }
-          },
-          {
-            "number": 2,
-            "title": "Aegis-Prime-V-1",
-            "name": "Aegis-Prime-V-1",
-            "id": "Aegis-Prime-V-1",
-            "image": "../codex/02_Mutantes/Aegis-Prime-V-1.png",
-            "description": "Aegis é a fusão biológica entre um elemental de pedra e esporos parasitas das fendas profundas. Sua epiderme de granito é mantida unida por um gel bioluminescente, tornando-o um tanque biológico capaz de absorver qualquer choque físico.",
-            "attributes": {
-              "race": "Titã de Rocha e Lodo",
-              "physical": "Porte colossal, postura arcada e punhos pesados apoiados no chão.",
-              "faceAndHair": "Pele cinzenta de rocha com ranhuras de lodo esverdeado e olhos sem pupilas.",
-              "palette": "Cinza-pedra, verde-musgo e marrom-terroso.",
-              "equipment": "Placas de rocha natural funcionando como armadura sobreposta."
-            }
-          },
-          {
-            "number": 3,
-            "title": "Bloodfang-V-1",
-            "name": "Bloodfang-V-1",
-            "id": "Bloodfang-V-1",
-            "image": "../codex/02_Mutantes/Bloodfang-V-1.png",
-            "description": "Nascido de um experimento nefasto para sintetizar a fúria das feras do abismo, Bloodfang exala um calor corporal que vaporiza o próprio sangue de suas vítimas. Suas garras secretam toxinas hemolíticas que impedem a cicatrização de feridas.",
-            "attributes": {
-              "race": "Berserker Abissal de Sangue",
-              "physical": "Musculoso, quadrupede flexionado pronto para o bote, garras afiadas e expostas.",
-              "faceAndHair": "Pele escura recoberta por sulcos que brilham em vermelho-fogo.",
-              "palette": "Preto-carvão, vermelho-carmesim e magma.",
-              "equipment": "Garras hipertrofiadas e espinhos no dorso de energia pura."
-            }
-          },
-          {
-            "number": 4,
-            "title": "Bone-Kore-V-1",
-            "name": "Bone-Kore-V-1",
-            "id": "Bone-Kore-V-1",
-            "image": "../codex/02_Mutantes/Bone-Kore-V-1.png",
-            "description": "Um mutante esquelético que se alimenta do osso e da essência vital de metamorfos mortos. Suas chifres ramificados atuam como antenas para captar os batimentos cardíacos das presas a quilômetros de distância.",
-            "attributes": {
-              "race": "Demônio Quimérico",
-              "physical": "Bípede, tronco esguio mas musculoso, pernas curvadas de predador.",
-              "faceAndHair": "Chifres de osso curvados, pele castanha-escura e olhos amarelos brilhantes.",
-              "palette": "Marrom-queimado, marfim e amarelo.",
-              "equipment": "Exosqueleto osseo nas costas e ombros."
-            }
-          },
-          {
-            "number": 5,
-            "title": "Borok-V-1",
-            "name": "Borok-V-1",
-            "id": "Borok-V-1",
-            "image": "../codex/02_Mutantes/Borok-V-1.png",
-            "description": "Borok habitava as caldeiras vulcânicas até seu sangue se fundir com os minérios do núcleo terrestre. Ele canaliza chamas diretamente pelo estômago e empunha armas banhadas em magma primordial.",
-            "attributes": {
-              "race": "Ogre da Forja Ígnea",
-              "physical": "Robusto, troncudo, com chifres frontais e postura ereta.",
-              "faceAndHair": "Pele de tom roxo/avermelhado, cabelos desgrenhados e adornos de batalha de bronze.",
-              "palette": "Roxo-escuro, vermelho-fogo e bronze.",
-              "equipment": "Chifres ornamentais e saia tática de couro reforçado."
-            }
-          },
-          {
-            "number": 6,
-            "title": "Crush-V-1",
-            "name": "Crush-V-1",
-            "id": "Crush-V-1",
-            "image": "../codex/02_Mutantes/Crush-V-1.png",
-            "description": "Um antigo guardião subterrâneo que fossilizou ao longo de milênios de estase, despertando quando a magia do mundo se desequilibrou. Suas mãos são capazes de moer granito em pó.",
-            "attributes": {
-              "race": "Humanoide Rochoso de Barba de Pedra",
-              "physical": "Baixo, extremamente denso e largo, com marreta de pedra de duas mãos.",
-              "faceAndHair": "Barba longa feita de musgo estático e feições esculpidas em pedra cinzenta.",
-              "palette": "Cinza-granito, marrom e verde-musgo.",
-              "equipment": "Marreta pesada entalhada na própria rocha."
-            }
-          },
-          {
-            "number": 7,
-            "title": "Dracorex-V-1",
-            "name": "Dracorex-V-1",
-            "id": "Dracorex-V-1",
-            "image": "../codex/02_Mutantes/Dracorex-V-1.png",
-            "description": "Fruto do cruzamento de dragões negros com caçadores das sombras, Dracorex possui escamas capazes de refratar a luz, permitindo que ele se camufle na escuridão enquanto prepara suas baforadas de plasma escuro.",
-            "attributes": {
-              "race": "Dracônio Bípede",
-              "physical": "Bípede ágil com cauda de equilíbrio longa e asas membranosas dobradas.",
-              "faceAndHair": "Escamas azuis e laranjas com garras retráteis e olhos flamejantes.",
-              "palette": "Azul-noite, laranja-fogo e preto.",
-              "equipment": "Cauda espinhosa e asas táticas."
-            }
-          },
-          {
-            "number": 8,
-            "title": "Echo-Kore-V-1",
-            "name": "Echo-Kore-V-1",
-            "id": "Echo-Kore-V-1",
-            "image": "../codex/02_Mutantes/Echo-Kore-V-1.png",
-            "description": "Echo habita cavernas sem fim e utiliza frequências ultrassônicas não apenas para mapear o ambiente, mas para liquefazer os órgãos internos de qualquer invasaor que entre em seu território.",
-            "attributes": {
-              "race": "Morcego Vampírico Titânico",
-              "physical": "Corpo compacto sustentado por asas gigantescas com membranas avermelhadas.",
-              "faceAndHair": "Orelhas enormes focadas na captação sônica, presas protuberantes e garras inferiores afiadas.",
-              "palette": "Cinza-escuro, vermelho-sangue e preto.",
-              "equipment": "Asas mecânicas/membranosas de grande envergadura."
-            }
-          },
-          {
-            "number": 9,
-            "title": "Fenrir-Rugidor-V-1",
-            "name": "Fenrir-Rugidor-V-1",
-            "id": "Fenrir-Rugidor-V-1",
-            "image": "../codex/02_Mutantes/Fenrir-Rugidor-V-1.png",
-            "description": "Um alfa lendário das tundras congeladas. A mutação do Fenrir Rugidor permite que seu pelo absorva o impacto deprojéteis enquanto ele emite uivos de ondas de choque capazes de derrubar árvores milenares.",
-            "attributes": {
-              "race": "Licanídeo das Neves",
-              "physical": "Quadrupede corpulento de ombros largos, pelos eriçados e juba densa.",
-              "faceAndHair": "Pelagem branca como a neve com áreas escuras e mandíbula reforçada.",
-              "palette": "Branco-neve, bege e preto.",
-              "equipment": "Juba volumosa e dentes de sabre."
-            }
-          },
-          {
-            "number": 10,
-            "title": "Frostbite-V-1",
-            "name": "Frostbite-V-1",
-            "id": "Frostbite-V-1",
-            "image": "../codex/02_Mutantes/Frostbite-V-1.png",
-            "description": "Nativo dos cumes mais altos de Aetheria, Frostbite drena a energia térmica do ar ao seu redor, criando uma aura de congelamento instantâneo por onde passa flying.",
-            "attributes": {
-              "race": "Morcego Glacial Supremo",
-              "physical": "Corpo elegante e esbelta, sustentado por asas de membrana pálida.",
-              "faceAndHair": "Pelagem e pele brancas, asas avermelhadas/rosadas com detalhes gélidos.",
-              "palette": "Branco-gelo, rosa-pálido e lilás.",
-              "equipment": "Garras de apensamento gélidas e estrutura leve de voo."
-            }
-          },
-          {
-            "number": 11,
-            "title": "Gale-V-1",
-            "name": "Gale-V-1",
-            "id": "Gale-V-1",
-            "image": "../codex/02_Mutantes/Gale-V-1.png",
-            "description": "Gale é uma criatura criada para emboscadas aéreas no deserto. Suas asas parecem feitas de couro e bronze, e ele consegue mergulhar a velocidades supersônicas criando lâminas de vento arruinadoras.",
-            "attributes": {
-              "race": "Gargula Tática das Tempestades",
-              "physical": "Postura curvada em guarda com asas prontas para impulso.",
-              "faceAndHair": "Pele escura com detalhes amarelados e garras em formato de foice nas asas.",
-              "palette": "Marrom-escuro, bege e dourado.",
-              "equipment": "Membranas reforçadas de voo e couraça ventral."
-            }
-          },
-          {
-            "number": 12,
-            "title": "Gargoyle-V-1",
-            "name": "Gargoyle-V-1",
-            "id": "Gargoyle-V-1",
-            "image": "../codex/02_Mutantes/Gargoyle-V-1.png",
-            "description": "Uma estátua viva que absorveu o sangue de batalhas antigas e ganhou vida própria. Com asas vermelhas e cornos proeminentes, ela atua como guardiã indiscutível de catacumbas ancestrais.",
-            "attributes": {
-              "race": "Gárgula Demagógica",
-              "physical": "Bípede, joelhos dobrados e asas abertas para intimidação.",
-              "faceAndHair": "Pele cinzenta petrificada com asas membranosas de cor carmesim.",
-              "palette": "Cinza-pedra e vermelho-vivo.",
-              "equipment": "Chifres na cabeça e asas estruturadas."
-            }
-          },
-          {
-            "number": 13,
-            "title": "Genzo-V-1",
-            "name": "Genzo-V-1",
-            "id": "Genzo-V-1",
-            "image": "../codex/02_Mutantes/Genzo-V-1.png",
-            "description": "Genzo é um guerreiro mascarado cuja forma física foi totalmente corrompida por parasitas sombrios. Sua armadura orgânica gera lâminas bio-metálicas a partir dos punhos.",
-            "attributes": {
-              "race": "Demônio Quimérico da Sombra",
-              "physical": "Bípede, compacto, envolto em capa orgânica e espinhos.",
-              "faceAndHair": "Músculos pretos e prateados com máscara ossea cobrindo o rosto.",
-              "palette": "Preto-ébano, prata e cinza.",
-              "equipment": "Capa de pele negra e placa peitoral blindada."
-            }
-          },
-          {
-            "number": 14,
-            "title": "Gorefist-V-1",
-            "name": "Gorefist-V-1",
-            "id": "Gorefist-V-1",
-            "image": "../codex/02_Mutantes/Gorefist-V-1.png",
-            "description": "Um guerreiro mutante cuja mão direita se fundiu com uma grande espada feita de seu próprio osso enrijecido e ferro mineral. Ele avança implacavelmente sem recuar.",
-            "attributes": {
-              "race": "Monstro Armado com Lâmina de Sangue",
-              "physical": "Físico alto, pesado, carregando uma espada colossal avermelhada.",
-              "faceAndHair": "Capacete/cabeça demoníaca com olhos brilhantes e carcaça escura.",
-              "palette": "Roxo-escuro, vermelho-sangue e preto.",
-              "equipment": "Espada biológica acoplada de grande porte."
-            }
-          },
-          {
-            "number": 15,
-            "title": "Gorgath-V-1",
-            "name": "Gorgath-V-1",
-            "id": "Gorgath-V-1",
-            "image": "../codex/02_Mutantes/Gorgath-V-1.png",
-            "description": "Gorgath possui asas de dragão, torso mutado e dentes envenenados. Ele é o pesadelo dos céus das florestas tropicais de Aetheria, pulverizando presas com veneno ácido.",
-            "attributes": {
-              "race": "Dragão Quimérico Mantícoro",
-              "physical": "Postura de dragão bípede com asas abertas e cauda farpada.",
-              "faceAndHair": "Escamas verdes, barriga amarela e asas com membranas vermelhas e amarelas.",
-              "palette": "Verde-esmeralda, amarelo-ouro e vermelho.",
-              "equipment": "Asas multicoloridas e ferrão na cauda."
-            }
-          },
-          {
-            "number": 16,
-            "title": "Grimm-V-1",
-            "name": "Grimm-V-1",
-            "id": "Grimm-V-1",
-            "image": "../codex/02_Mutantes/Grimm-V-1.png",
-            "description": "Grimm é o resultado de primatas que viveram próximos a cristais de energia mágica mutagênica nas profundezas. Sua força bruta é acompanhada por uma agilidade aterradora.",
-            "attributes": {
-              "race": "Primata Mutante do Abismo",
-              "physical": "Primata robusto, braços longos apoiados no chão e olhar feroz.",
-              "faceAndHair": "Pelagem azul-brilhante vibrante com tórax e abdômen amarelos.",
-              "palette": "Azul-elétrico, amarelo e preto.",
-              "equipment": "Postura de macaco de grande porte com pelos ionizados."
-            }
-          },
-          {
-            "number": 17,
-            "title": "Malakar",
-            "name": "Malakar",
-            "id": "Malakar",
-            "image": "../codex/02_Mutantes/Malakar.png",
-            "description": "Um homem atingido pela maldição da Lua Negra. Nesta forma, ele preserva certa inteligência tática, mas sua sede de sangue é incontrolável.",
-            "attributes": {
-              "race": "Licantropo Alfa",
-              "physical": "Bípede/semiquadrupede, físico forte e atarracado.",
-              "faceAndHair": "Pelagem cinza-escuro com cabeça lupina proeminente e dentes afiados.",
-              "palette": "Cinza-chumbo, preto e marrom.",
-              "equipment": "Garras de três pontas e orelhas eretas."
-            }
-          },
-          {
-            "number": 18,
-            "title": "Vermis",
-            "name": "Vermis",
-            "id": "Vermis",
-            "image": "../codex/02_Mutantes/Vermis.png",
-            "description": "Uma variante ancestral dos lobisomens que não depende das fases da lua para se transformar. Ele vive no isolamento de vales abandonados.",
-            "attributes": {
-              "race": "Licantropo Primordial",
-              "physical": "Agachado em guarda, ombros volumosos e garra levantada.",
-              "faceAndHair": "Pelo cinza com textura fosca e mandíbula hipertrofiada.",
-              "palette": "Cinza, preto e creme.",
-              "equipment": "Postura baixa e musculatura nas costas."
-            }
-          },
-          {
-            "number": 19,
-            "title": "Lobisomem-V-1",
-            "name": "Lobisomem-V-1",
-            "id": "Lobisomem-V-1",
-            "image": "../codex/02_Mutantes/Lobisomem-V-1.png",
-            "description": "Especialista em perseguir presas por terrenos acidentados, o Lobisomem-V-1 usa suas garras traseiras para escalar árvores e montanhas num piscar de olhos.",
-            "attributes": {
-              "race": "Licanídeo Rastreador",
-              "physical": "Bípede com inclinação para frente e cauda felina/lupina.",
-              "faceAndHair": "Pelagem azulada/escura com tórax claro e olhos alertas.",
-              "palette": "Azul-escuro, cinza e creme.",
-              "equipment": "Cauda alongada e postura de salto."
-            }
-          },
-          {
-            "number": 20,
-            "title": "Malagor-V-1",
-            "name": "Malagor-V-1",
-            "id": "Malagor-V-1",
-            "image": "../codex/02_Mutantes/Malagor-V-1.png",
-            "description": "Malagor reina sobre os pântanos podres de Aetheria. Com quatro chifres e asas rasgadas, ele exala um gás tóxico que decompõe matéria orgânica instantaneamente.",
-            "attributes": {
-              "race": "Senhor Demônio da Praga",
-              "physical": "Bípede monumental, asas abertas e peitoral decorado com um orbe de energia.",
-              "faceAndHair": "Escamas escuras, múltiplos chifres em coroa e olhos vermelhos.",
-              "palette": "Marrom-pântano, vermelho-magma e dourado.",
-              "equipment": "Orbe mágico incrustado no peito e coroamento de chifres."
-            }
-          },
-          {
-            "number": 21,
-            "title": "Nomu-V-1",
-            "name": "Nomu-V-1",
-            "id": "Nomu-V-1",
-            "image": "../codex/02_Mutantes/Nomu-V-1.png",
-            "description": "Um cadáver reanimado e geneticamente modificado para não sentir dor. Seu cérebro fica exposto para facilitar a recepção de comandos telepáticos do seu criador.",
-            "attributes": {
-              "race": "Super-Soldado Bioquímico",
-              "physical": "Gigante, musculoso, postura pesada de soco.",
-              "faceAndHair": "Cérebro exposto na parte superior do crânio, bico/mandíbula pontiaguda e pele roxa.",
-              "palette": "Roxo-escuro, rosa-cérebro e bege.",
-              "equipment": "Cérebro desprotegido e musculatura hipertrofiada."
-            }
-          },
-          {
-            "number": 22,
-            "title": "Pyrowolf-V-1",
-            "name": "Pyrowolf-V-1",
-            "id": "Pyrowolf-V-1",
-            "image": "../codex/02_Mutantes/Pyrowolf-V-1.png",
-            "description": "Nascido nos campos de cinzas vulcânicas, Pyrowolf incendeia o próprio pelo durante a caça para encurralar presas em anéis de fogo.",
-            "attributes": {
-              "race": "Licanídeo da Chama Eterna",
-              "physical": "Quadrupedal ágil envolto por chamas e fumaça.",
-              "faceAndHair": "Pelagem vermelha acesa com pontas pretas e olhos luminosos.",
-              "palette": "Vermelho-fogo, laranja-vibrante e preto-carvão.",
-              "equipment": "Aura flamejante emanando do dorso."
-            }
-          },
-          {
-            "number": 23,
-            "title": "Rage-Kore-V-1",
-            "name": "Rage-Kore-V-1",
-            "id": "Rage-Kore-V-1",
-            "image": "../codex/02_Mutantes/Rage-Kore-V-1.png",
-            "description": "Uma criatura bizarra cujas vísceras e ossos se projetam para fora do corpo como armas farpadas. Rage-Kore vive no estado permanente de agonia e fúria.",
-            "attributes": {
-              "race": "Demônio Parasita Cósmico",
-              "physical": "Bípede, desengonçado com múltiplos espinhos saindo das articulações.",
-              "faceAndHair": "Pele cinzenta com rachaduras vermelhas e chifres assimétricos.",
-              "palette": "Cinza, vermelho-sangue e marrom.",
-              "equipment": "Espinhos viscerais externos."
-            }
-          },
-          {
-            "number": 24,
-            "title": "Rin-Kore-V-1",
-            "name": "Rin-Kore-V-1",
-            "id": "Rin-Kore-V-1",
-            "image": "../codex/02_Mutantes/Rin-Kore-V-1.png",
-            "description": "Rin-Kore espreita nos tetos de cavernas e ruínas antigas. Ela fia teias de seda negra reforçadas com toxinas neurotóxicas que paralisam a presa em segundos.",
-            "attributes": {
-              "race": "Aranha Humanóide das Sombras",
-              "physical": "Postura baixa e aracnídea com múltiplos membros finos e afiados.",
-              "faceAndHair": "Cabelos pretos caóticos e carcaça escura com detalhes dourados.",
-              "palette": "Preto-absoluto, marrom e dourado.",
-              "equipment": "Múltiplas pernas finas parecidas com espadas."
-            }
-          },
-          {
-            "number": 25,
-            "title": "Savage-Mane-V-1",
-            "name": "Savage-Mane-V-1",
-            "id": "Savage-Mane-V-1",
-            "image": "../codex/02_Mutantes/Savage-Mane-V-1.png",
-            "description": "O terror dos picos intransponíveis. Savage-Mane usa sua pelagem branca para se camuflar em tempestades de neve e esmagar expedições inteiras com socos devastadores.",
-            "attributes": {
-              "race": "Yeti Albino das Neves",
-              "physical": "Bípede colossal, braços extremamente longos e volumosos.",
-              "faceAndHair": "Pelagem branca densa cobrindo todo o corpo, exalando fumaça fria.",
-              "palette": "Branco-puro, azul-gelo e cinza.",
-              "equipment": "Juba branca hipertrofiada e garras congelantes."
-            }
-          },
-          {
-            "number": 26,
-            "title": "Savage-V-1",
-            "name": "Savage-V-1",
-            "id": "Savage-V-1",
-            "image": "../codex/02_Mutantes/Savage-V-1.png",
-            "description": "Um mutante caçador de sangue frio que habita regiões pantanosas escuras. Ele consegue dilacerar placas de aço com suas garras curvadas.",
-            "attributes": {
-              "race": "Abominação de Garras de Ferro",
-              "physical": "Curvado, passos pesados e mãos enormes prontas para rasgar.",
-              "faceAndHair": "Pele marrom-acinzentada rugosa e olhos sem pálpebras.",
-              "palette": "Cinza-marrom, marrom-terra e preto.",
-              "equipment": "Garras dianteiras disproportionais."
-            }
-          },
-          {
-            "number": 27,
-            "title": "Scraptron-V-1",
-            "name": "Scraptron-V-1",
-            "id": "Scraptron-V-1",
-            "image": "../codex/02_Mutantes/Scraptron-V-1.png",
-            "description": "Scraptron devora minérios metálicos para fortalecer sua própria carcaça biomecânica, tornando-se uma praga viva para minas e cidades industriais.",
-            "attributes": {
-              "race": "Insetóide de Carcaça Metálica",
-              "physical": "Insetóide bípede/quadrupede pesado com pinças gigantes.",
-              "faceAndHair": "Exosqueleto de tom bronze/dourado reluzente com articulações mecânicas.",
-              "palette": "Bronze, dourado e preto.",
-              "equipment": "Pinças metálicas de alta pressão."
-            }
-          },
-          {
-            "number": 28,
-            "title": "Tri-Gorgon-V-1",
-            "name": "Tri-Gorgon-V-1",
-            "id": "Tri-Gorgon-V-1",
-            "image": "../codex/02_Mutantes/Tri-Gorgon-V-1.png",
-            "description": "Tri-Gorgon possui escamas venenosas e chifres cobertos por toxinas. Qualquer arranhão provocado por sua investida causa paralisia imediata no sistema nervoso.",
-            "attributes": {
-              "race": "Quimera Réptil de Três Chifres",
-              "physical": "Réptil bípede e atarracado com três chifres frontais de investida.",
-              "faceAndHair": "Escamas cinzentas com espinhos ao longo da coluna e olhos amarelos.",
-              "palette": "Cinza-escuro, amarelo e preto.",
-              "equipment": "Cabeça em formato de tridente osseo."
-            }
-          },
-          {
-            "number": 29,
-            "title": "Ulthar",
-            "name": "Ulthar",
-            "id": "Ulthar",
-            "image": "../codex/02_Mutantes/Ulthar.png",
-            "description": "Ulthar é uma criatura espiritual/mutante de pele albina que se alimenta dos sonhos de guerreiros moribundos no campo de batalha.",
-            "attributes": {
-              "race": "Besta Branca das Sombras",
-              "physical": "Bípede agachado com garras compridas e cauda sutil.",
-              "faceAndHair": "Corpo totalmente branco com sombras pretas marcadas nas articulações.",
-              "palette": "Branco-puro e preto-carvão.",
-              "equipment": "Alto contraste entre pelagem albina e feições obscuras."
-            }
-          },
-          {
-            "number": 30,
-            "title": "Valerion-V-1",
-            "name": "Valerion-V-1",
-            "id": "Valerion-V-1",
-            "image": "../codex/02_Mutantes/Valerion-V-1.png",
-            "description": "Valerion era uma entidade celestial cujas asas foram corrompidas por esporos abissais. Hoje ele combate com elegância trágica usando sua espada de luz corrompida.",
-            "attributes": {
-              "race": "Anjo Caído Mutante",
-              "physical": "Bípede esbelto, postura majestosa com asas penadas brancas estendidas.",
-              "faceAndHair": "Armadura dourada e preta sobre corpo esbelto e cabelos prateados.",
-              "palette": "Branco, dourado e preto.",
-              "equipment": "Espada longa e asas de penas de grande envergadura."
-            }
-          },
-          {
-            "number": 31,
-            "title": "Valthier-V-1",
-            "name": "Valthier-V-1",
-            "id": "Valthier-V-1",
-            "image": "../codex/02_Mutantes/Valthier-V-1.png",
-            "description": "Um nobre mutado pelo vírus vampírico primordial. Valthier manipula névoa de sangue e se move rápido demais para ser atingido por lâminas comuns.",
-            "attributes": {
-              "race": "Cavaleiro Vampírico das Sombras",
-              "physical": "Alto, magro, envolto em um manto vermelho rasgado.",
-              "faceAndHair": "Cabelos brancos compridos, pele pálida e armadura negra gótica.",
-              "palette": "Vermelho-carmesim, preto e branco-pálido.",
-              "equipment": "Espada de duelo e capa de sombras."
-            }
-          },
-          {
-            "number": 32,
-            "title": "Vector-X-V-1",
-            "name": "Vector-X-V-1",
-            "id": "Vector-X-V-1",
-            "image": "../codex/02_Mutantes/Vector-X-V-1.png",
-            "description": "Vector-X é uma manifestação viva de energia psíquica e fogo escuro. Seu corpo não possui ossos, sendo mantido coeso por sua imensa força de vontade.",
-            "attributes": {
-              "race": "Demônio das Chamas Espirituais",
-              "physical": "Bípede leve, levitando levemente com chamas emanando da cabeça.",
-              "faceAndHair": "Carcaça negra com rachaduras brilhantes de energia prateada/branca.",
-              "palette": "Preto, prata-brilhante e branco.",
-              "equipment": "Cabeça de fogo e garras flutuantes."
-            }
-          },
-          {
-            "number": 33,
-            "title": "Vespera",
-            "name": "Vespera",
-            "id": "Vespera",
-            "image": "../codex/02_Mutantes/Vespera.png",
-            "description": "Vespera é a rainha da colmeia de besouros vulcânicos. Ela expele ácidos ferventes que derretem escudos de metal em questão de segundos.",
-            "attributes": {
-              "race": "Insetóide Quitinosa Flamejante",
-              "physical": "Inseto humanoide com antena proeminente e abdômen rígido.",
-              "faceAndHair": "Carcaça vermelha/marrom coberta por texturas de placas quitinosas.",
-              "palette": "Marrom-avermelhado, terracota e preto.",
-              "equipment": "Antenas longas e carcaça de besouro."
-            }
-          },
-          {
-            "number": 34,
-            "title": "Vyrn-Wing-V-1",
-            "name": "Vyrn-Wing-V-1",
-            "id": "Vyrn-Wing-V-1",
-            "image": "../codex/02_Mutantes/Vyrn-Wing-V-1.png",
-            "description": "Vyrn-Wing vive nas cristas mais altas das cordilheiras, descendo em mergulhos silenciosos para capturar presas maiores do que seu próprio corpo.",
-            "attributes": {
-              "race": "Gargula Sombria de Dentes Longos",
-              "physical": "Encolhido com asas dobradas cobrindo o corpo como um escudo.",
-              "faceAndHair": "Escamas pretas e chifres traseiros longos.",
-              "palette": "Preto-absoluto, marrom e cinza.",
-              "equipment": "Asas protetoras de casulo."
-            }
-          },
-          {
-            "number": 35,
-            "title": "Wargen-V-1",
-            "name": "Wargen-V-1",
-            "id": "Wargen-V-1",
-            "image": "../codex/02_Mutantes/Wargen-V-1.png",
-            "description": "Wargen é uma fera infernal com espinhos dorsais que são disparados como projéteis guidados pelo odor do sangue da vítima.",
-            "attributes": {
-              "race": "Besta Demônio de Espinhos",
-              "physical": "Quadrupede corpulento de postura agressiva de ataque.",
-              "faceAndHair": "Pele marrom-avermelhada com grandes espinhos de osso projetando-se das costas.",
-              "palette": "Vermelho-terra, marrom e marfim.",
-              "equipment": "Espinhos de projeção dorsal."
-            }
-          },
-          {
-            "number": 36,
-            "title": "Xylion-V-1",
-            "name": "Xylion-V-1",
-            "id": "Xylion-V-1",
-            "image": "../codex/02_Mutantes/Xylion-V-1.png",
-            "description": "Xylion é um humanoide composto inteiramente por cristais bioluminescentes que absorvem magia e a devolvem como feixes de luz destrutivos.",
-            "attributes": {
-              "race": "Ser Cristalino de Luz Escura",
-              "physical": "Bípede atlético, ereto com linhas geométricas cristalinas.",
-              "faceAndHair": "Corpo feito de placas brancas e azuis com brilho interno.",
-              "palette": "Azul-celeste, branco-cristal e prata.",
-              "equipment": "Estrutura corporal geométrica e cristalina."
-            }
-          },
-          {
-            "number": 37,
-            "title": "Zephyros-V-1",
-            "name": "Zephyros-V-1",
-            "id": "Zephyros-V-1",
-            "image": "../codex/02_Mutantes/Zephyros-V-1.png",
-            "description": "Zephyros manipula brisas e furacões ao seu redor. Sua pelagem e trajes flutuam em uma dança constante mesmo em ambientes sem vento.",
-            "attributes": {
-              "race": "Feiticeira Mutante dos Ventos",
-              "physical": "Pequena, esbelta, envolta em trajes extravagantes de plumas e tecido.",
-              "faceAndHair": "Cabelos/plumas brancas volumosas com maquiagem tribal.",
-              "palette": "Branco, roxo e dourado.",
-              "equipment": "Cabelo de fumaça/pluma flutuante."
-            }
-          },
-          {
-            "number": 38,
-            "title": "Zylithor-V-1",
-            "name": "Zylithor-V-1",
-            "id": "Zylithor-V-1",
-            "image": "../codex/02_Mutantes/Zylithor-V-1.png",
-            "description": "Zylithor lidera os enxames gigantes do vale das flores carnívoras. Suas asas produzem um zumbido capaz de desorientar a mente de exércitos inteiros.",
-            "attributes": {
-              "race": "Abelha Guerreira Rainha",
-              "physical": "Insetóide voador robusto com listras amarelas e pretas.",
-              "faceAndHair": "Corpo peludo de abelha gigante com ferrão volumoso e asas transparentes.",
-              "palette": "Amarelo-ouro, preto e translúcido.",
-              "equipment": "Abdomen listrado de abelha e asas vibratórias."
-            }
-          },
-          {
-            "number": 39,
-            "title": "Kruul-V-1, o Guardião da Crosta Primordial",
-            "name": "Kruul-V-1",
-            "id": "Kruul-V-1",
-            "image": "../codex/02_Mutantes/Kruul-V-1.png",
-            "description": "Kruul nasceu no coração de um desfiladeiro onde a terra parecia respirar. Sua pele de pedra viva se recompõe a cada impacto, fazendo dele uma fortaleza ambulante usada para quebrar linhas inimigas.",
-            "attributes": {
-              "race": "Colosso Rochoso Biológico",
-              "physical": "Corpo colossal, postura baixa e avançando como um muro.",
-              "faceAndHair": "Epiderme pétrea com fissuras luminosas em âmbar.",
-              "palette": "Cinza-pedra, marrom-terroso e laranja-brasa.",
-              "equipment": "Reação de endurecimento instantâneo e placas naturais nas costas."
-            }
-          },
-          {
-            "number": 40,
-            "title": "Morrigan-V-1, a Soberana da Lua Corrompida",
-            "name": "Morrigan-V-1",
-            "id": "Morrigan-V-1",
-            "image": "../codex/02_Mutantes/Morrigan-V-1.png",
-            "description": "Morrigan governa rituais lunares proibidos e converte energia da noite em lâminas arcanas. Sua presença desestabiliza a mente de caçadores e feiticeiros, como se a própria lua observasse o campo de batalha.",
-            "attributes": {
-              "race": "Bruxa Abissal de Sangue",
-              "physical": "Silhueta elegante, postura ereta e gestos precisos.",
-              "faceAndHair": "Cabelos longos escuros, olhos violeta e marcas místicas no pescoço.",
-              "palette": "Violeta, preto e prata pálida.",
-              "equipment": "Aura lunar e fragmentos de energia orbitando os ombros."
-            }
-          },
-          {
-            "number": 41,
-            "title": "Tusker-V-1, o Búfalo de Guerra Infinita",
-            "name": "Tusker-V-1",
-            "id": "Tusker-V-1",
-            "image": "../codex/02_Mutantes/Tusker-V-1.png",
-            "description": "Tusker foi moldado para romper cercos e muralhas. Ele carrega a fúria de rebanhos inteiros em cada investida, e seus chifres blindados podem atravessar ferro como se fosse couro.",
-            "attributes": {
-              "race": "Besta de Choque Titanizada",
-              "physical": "Quadrúpede massivo, peito largo e cabeça baixa de carga.",
-              "faceAndHair": "Chifres enormes, couro espesso e musculatura explosiva.",
-              "palette": "Marrom-escuro, ferrugem e bege-osso.",
-              "equipment": "Investida sísmica e resistência extrema a impacto."
-            }
-          },
-          {
-            "number": 42,
-            "title": "Venath-V-1, a Predadora da Névoa Rubra",
-            "name": "Venath-V-1",
-            "id": "Venath-V-1",
-            "image": "../codex/02_Mutantes/Venath-V-1.png",
-            "description": "Venath caça dentro de neblinas tóxicas e aparece apenas quando a presa já perdeu o rumo. Seu corpo foi adaptado para movimentos quase impossíveis, fazendo dela uma das caçadoras mais temidas do clã.",
-            "attributes": {
-              "race": "Assassina Nebular",
-              "physical": "Corpo esguio, postura inclinada e pronta para disparo.",
-              "faceAndHair": "Máscara facial estreita, garras finas e olhos vermelhos intensos.",
-              "palette": "Vermelho-sangue, cinza-neblina e preto.",
-              "equipment": "Fusão com névoa tóxica e deslocamento silencioso."
-            }
-          },
-          {
-            "number": 43,
-            "title": "Vespis-V-1, a Rainha dos Ferrões de Prata",
-            "name": "Vespis-V-1",
-            "id": "Vespis-V-1",
-            "image": "../codex/02_Mutantes/Vespis-V-1.png",
-            "description": "Vespis comanda enxames menores como extensões do próprio corpo. Seu ferrão carrega toxinas paralisantes e sua movimentação aérea é tão agressiva quanto precisa.",
-            "attributes": {
-              "race": "Insetóide de Assalto",
-              "physical": "Bípede alado, tórax rígido e asas vibrantes.",
-              "faceAndHair": "Quitina clara, olhos compostos e ferrão alongado.",
-              "palette": "Amarelo, preto e prata.",
-              "equipment": "Voo de alta velocidade e descarga tóxica por ferrão."
-            }
-          }
-        ],
-        "neighbors": {
-          "prev": {
-            "href": "humanos.html",
-            "label": "Humanos",
-            "color": "#4A90D9",
-            "icon": "🧑"
-          },
-          "next": {
-            "href": "ordenseguerreiros.html",
-            "label": "Ordens e Guerreiros",
-            "color": "#C0392B",
-            "icon": "⚔️"
-          }
-        },
-        "allRaces": [
-          {
-            "href": "humanos.html",
-            "label": "Humanos",
-            "color": "#4A90D9",
-            "icon": "🧑",
-            "count": 24
-          },
-          {
-            "href": "mutantes.html",
-            "label": "Mutantes",
-            "color": "#7B4D9E",
-            "icon": "🧬",
-            "count": 43
-          },
-          {
-            "href": "ordenseguerreiros.html",
-            "label": "Ordens e Guerreiros",
-            "color": "#C0392B",
-            "icon": "⚔️",
-            "count": 22
-          },
-          {
-            "href": "onis.html",
-            "label": "Onis",
-            "color": "#E74C3C",
-            "icon": "👹",
-            "count": 27
-          },
-          {
-            "href": "demonios.html",
-            "label": "Demônios",
-            "color": "#8E44AD",
-            "icon": "😈",
-            "count": 42
-          },
-          {
-            "href": "desconhecidos.html",
-            "label": "Desconhecidos",
-            "color": "#7F8C8D",
-            "icon": "❓",
-            "count": 15
-          },
-          {
-            "href": "gigantes.html",
-            "label": "Gigantes",
-            "color": "#D68910",
-            "icon": "🗿",
-            "count": 26
-          },
-          {
-            "href": "monstros.html",
-            "label": "Monstros",
-            "color": "#2E4053",
-            "icon": "👾",
-            "count": 37
-          },
-          {
-            "href": "semideuses.html",
-            "label": "Semideuses",
-            "color": "#F1C40F",
-            "icon": "⚡",
-            "count": 31
-          },
-          {
-            "href": "osobservadores.html",
-            "label": "Os Observadores",
-            "color": "#1ABC9C",
-            "icon": "👁️",
-            "count": 9
-          },
-          {
-            "href": "seresdovazio.html",
-            "label": "Seres do Vazio",
-            "color": "#34495E",
-            "icon": "🌀",
-            "count": 20
-          },
-          {
-            "href": "magos.html",
-            "label": "Magos",
-            "color": "#16A085",
-            "icon": "🔮",
-            "count": 23
-          },
-          {
-            "href": "deuses.html",
-            "label": "Deuses",
-            "color": "#F39C12",
-            "icon": "🌟",
-            "count": 18
-          },
-          {
-            "href": "demoniosdocaos.html",
-            "label": "Demônios do Caos",
-            "color": "#E67E22",
-            "icon": "🔥",
-            "count": 11
-          },
-          {
-            "href": "osaspectos.html",
-            "label": "Os Aspectos",
-            "color": "#9B59B6",
-            "icon": "🎭",
-            "count": 9
-          },
-          {
-            "href": "alvamortos.html",
-            "label": "Alvamortos",
-            "color": "#BDC3C7",
-            "icon": "💀",
-            "count": 20
-          },
-          {
-            "href": "meiosangue.html",
-            "label": "Meio-Sangue",
-            "color": "#D35400",
-            "icon": "🩸",
-            "count": 18
-          },
-          {
-            "href": "canibais.html",
-            "label": "Canibais",
-            "color": "#A04000",
-            "icon": "🍖",
-            "count": 21
-          },
-          {
-            "href": "barbaros.html",
-            "label": "Bárbaros",
-            "color": "#CA6F1E",
-            "icon": "🪓",
-            "count": 17
-          },
-          {
-            "href": "amaldicoados.html",
-            "label": "Amaldiçoados",
-            "color": "#5D6D7E",
-            "icon": "🌑",
-            "count": 8
-          },
-          {
-            "href": "demoniosakumagani.html",
-            "label": "Demônios Akuma-Gani",
-            "color": "#AD1457",
-            "icon": "👑",
-            "count": 18
-          },
-          {
-            "href": "bersek.html",
-            "label": "Bersek",
-            "color": "#e3491b",
-            "icon": "📁",
-            "count": 5
-          }
-        ],
-        "generatedAt": "2026-08-27"
-      }
-    </script>
-    <script src="assets/raca.js" defer></script>
-  </body>
+  <section class="lore reveal" id="lore">
+    <div class="lore-watermark" aria-hidden="true">🧬</div>
+    <div class="lore-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Crônica das raças</p>
+        <h2 class="sec-title">Mutantes no mundo de Aetheria</h2>
+      </header>
+      <div class="lore-body">
+        <div class="stat-block">
+          <span class="stat-num" id="loreCount">0</span>
+          <span class="stat-cap">membros registrados<br>no códice</span>
+        </div>
+        <div class="lore-text">
+          <p id="loreDesc"></p>
+          <ul class="lore-chips" id="loreChips"></ul>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="roster reveal" id="roster">
+    <div class="roster-inner">
+      <header class="sec-head">
+        <p class="sec-kicker">Acervo completo</p>
+        <h2 class="sec-title">Todos os membros<span class="sec-count" id="rosterCount">0</span></h2>
+      </header>
+      <ul class="roster-grid" id="rosterGrid"></ul>
+    </div>
+  </section>
+
+  <nav class="race-nav reveal" aria-label="Navegar entre as raças">
+    <a class="rn-big rn-prev" id="racePrev">
+      <span class="rn-arrow" aria-hidden="true">‹</span>
+      <span class="rn-body"><span class="rn-kicker">Raça anterior</span><span class="rn-name"></span></span>
+    </a>
+    <div class="rn-index" id="raceIndex" aria-label="Índice das raças"></div>
+    <a class="rn-big rn-next" id="raceNext">
+      <span class="rn-body"><span class="rn-kicker">Próxima raça</span><span class="rn-name"></span></span>
+      <span class="rn-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+</main>
+
+<footer class="site-foot">
+  <span>Æ Aetheria Codex — acervo autoral · <a href="../index.html">galeria</a> · <a href="../Mapa_Aetheria.html">mapa do mundo</a></span>
+  <span class="foot-gen">Gerado por scripts/build_racas.ps1 em 02/09/2026 19:29</span>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <aside class="sheet-panel">
+    <button class="sheet-close" id="sheetClose" aria-label="Fechar ficha">×</button>
+    <p class="sheet-kicker">Ficha do membro</p>
+    <h3 id="sheetName"></h3>
+    <p class="sheet-epithet" id="sheetEpithet"></p>
+    <p class="sheet-desc" id="sheetDesc"></p>
+    <div class="sheet-fields" id="sheetFields"></div>
+  </aside>
+</div>
+
+<noscript><p style="padding:6rem 2rem;text-align:center;font-family:sans-serif;">Ative o JavaScript para ver o showcase dos membros.</p></noscript>
+
+<script id="race-data" type="application/json">{"race":{"folder":"02_Mutantes","label":"Mutantes","color":"#7B4D9E","icon":"🧬","lore":"Nascidos de experimentos, adaptações extremas ou rejeição genética; banidos de toda cidade, organizam células rebeldes na única terra que os aceitou: a Fenda.","tipo":"Dispersa","regioes":["A Grande Fenda Central"],"count":48},"rituais":[],"members":[{"number":1,"title":"All-For-One-V-1","name":"All-For-One-V-1","id":"All-For-One-V-1","image":"../codex/02_Mutantes/All-For-One-V-1.png","description":"Uma entidade ancestral que pode roubar, acumular e redistribuir as habilidades mutagênicas de outros seres. All-For-One busca a perfeição biológica, tratando o mundo como seu laboratório pessoal e todos os mutantes como meros ingredientes.","attributes":{"race":"Lorde da Singularidade Genética","physical":"Humanoide alto, postura formal e imponente, envolto em um traje de suporte de vida.","faceAndHair":"Rosto coberto por uma máscara de suporte respiratório complexa, com tubos conectados ao corpo.","palette":"Preto, cinza-metálico e vermelho-escuro.","equipment":"Máscara de suporte vital e aura de poder opressora."}},{"number":2,"title":"Aegis-Prime-V-1","name":"Aegis-Prime-V-1","id":"Aegis-Prime-V-1","image":"../codex/02_Mutantes/Aegis-Prime-V-1.png","description":"Aegis é a fusão biológica entre um elemental de pedra e esporos parasitas das fendas profundas. Sua epiderme de granito é mantida unida por um gel bioluminescente, tornando-o um tanque biológico capaz de absorver qualquer choque físico.","attributes":{"race":"Titã de Rocha e Lodo","physical":"Porte colossal, postura arcada e punhos pesados apoiados no chão.","faceAndHair":"Pele cinzenta de rocha com ranhuras de lodo esverdeado e olhos sem pupilas.","palette":"Cinza-pedra, verde-musgo e marrom-terroso.","equipment":"Placas de rocha natural funcionando como armadura sobreposta."}},{"number":3,"title":"Bloodfang-V-1","name":"Bloodfang-V-1","id":"Bloodfang-V-1","image":"../codex/02_Mutantes/Bloodfang-V-1.png","description":"Nascido de um experimento nefasto para sintetizar a fúria das feras do abismo, Bloodfang exala um calor corporal que vaporiza o próprio sangue de suas vítimas. Suas garras secretam toxinas hemolíticas que impedem a cicatrização de feridas.","attributes":{"race":"Berserker Abissal de Sangue","physical":"Musculoso, quadrupede flexionado pronto para o bote, garras afiadas e expostas.","faceAndHair":"Pele escura recoberta por sulcos que brilham em vermelho-fogo.","palette":"Preto-carvão, vermelho-carmesim e magma.","equipment":"Garras hipertrofiadas e espinhos no dorso de energia pura."}},{"number":4,"title":"Bone-Kore-V-1","name":"Bone-Kore-V-1","id":"Bone-Kore-V-1","image":"../codex/02_Mutantes/Bone-Kore-V-1.png","description":"Um mutante esquelético que se alimenta do osso e da essência vital de metamorfos mortos. Suas chifres ramificados atuam como antenas para captar os batimentos cardíacos das presas a quilômetros de distância.","attributes":{"race":"Demônio Quimérico","physical":"Bípede, tronco esguio mas musculoso, pernas curvadas de predador.","faceAndHair":"Chifres de osso curvados, pele castanha-escura e olhos amarelos brilhantes.","palette":"Marrom-queimado, marfim e amarelo.","equipment":"Exosqueleto osseo nas costas e ombros."}},{"number":5,"title":"Borok-V-1","name":"Borok-V-1","id":"Borok-V-1","image":"../codex/02_Mutantes/Borok-V-1.png","description":"Borok habitava as caldeiras vulcânicas até seu sangue se fundir com os minérios do núcleo terrestre. Ele canaliza chamas diretamente pelo estômago e empunha armas banhadas em magma primordial.","attributes":{"race":"Ogre da Forja Ígnea","physical":"Robusto, troncudo, com chifres frontais e postura ereta.","faceAndHair":"Pele de tom roxo/avermelhado, cabelos desgrenhados e adornos de batalha de bronze.","palette":"Roxo-escuro, vermelho-fogo e bronze.","equipment":"Chifres ornamentais e saia tática de couro reforçado."}},{"number":6,"title":"Crush-V-1","name":"Crush-V-1","id":"Crush-V-1","image":"../codex/02_Mutantes/Crush-V-1.png","description":"Um antigo guardião subterrâneo que fossilizou ao longo de milênios de estase, despertando quando a magia do mundo se desequilibrou. Suas mãos são capazes de moer granito em pó.","attributes":{"race":"Humanoide Rochoso de Barba de Pedra","physical":"Baixo, extremamente denso e largo, com marreta de pedra de duas mãos.","faceAndHair":"Barba longa feita de musgo estático e feições esculpidas em pedra cinzenta.","palette":"Cinza-granito, marrom e verde-musgo.","equipment":"Marreta pesada entalhada na própria rocha."}},{"number":7,"title":"Dracorex-V-1","name":"Dracorex-V-1","id":"Dracorex-V-1","image":"../codex/02_Mutantes/Dracorex-V-1.png","description":"Fruto do cruzamento de dragões negros com caçadores das sombras, Dracorex possui escamas capazes de refratar a luz, permitindo que ele se camufle na escuridão enquanto prepara suas baforadas de plasma escuro.","attributes":{"race":"Dracônio Bípede","physical":"Bípede ágil com cauda de equilíbrio longa e asas membranosas dobradas.","faceAndHair":"Escamas azuis e laranjas com garras retráteis e olhos flamejantes.","palette":"Azul-noite, laranja-fogo e preto.","equipment":"Cauda espinhosa e asas táticas."}},{"number":8,"title":"Echo-Kore-V-1","name":"Echo-Kore-V-1","id":"Echo-Kore-V-1","image":"../codex/02_Mutantes/Echo-Kore-V-1.png","description":"Echo habita cavernas sem fim e utiliza frequências ultrassônicas não apenas para mapear o ambiente, mas para liquefazer os órgãos internos de qualquer invasaor que entre em seu território.","attributes":{"race":"Morcego Vampírico Titânico","physical":"Corpo compacto sustentado por asas gigantescas com membranas avermelhadas.","faceAndHair":"Orelhas enormes focadas na captação sônica, presas protuberantes e garras inferiores afiadas.","palette":"Cinza-escuro, vermelho-sangue e preto.","equipment":"Asas mecânicas/membranosas de grande envergadura."}},{"number":9,"title":"Fenrir-Rugidor-V-1","name":"Fenrir-Rugidor-V-1","id":"Fenrir-Rugidor-V-1","image":"../codex/02_Mutantes/Fenrir-Rugidor-V-1.png","description":"Um alfa lendário das tundras congeladas. A mutação do Fenrir Rugidor permite que seu pelo absorva o impacto deprojéteis enquanto ele emite uivos de ondas de choque capazes de derrubar árvores milenares.","attributes":{"race":"Licanídeo das Neves","physical":"Quadrupede corpulento de ombros largos, pelos eriçados e juba densa.","faceAndHair":"Pelagem branca como a neve com áreas escuras e mandíbula reforçada.","palette":"Branco-neve, bege e preto.","equipment":"Juba volumosa e dentes de sabre."}},{"number":10,"title":"Frostbite-V-1","name":"Frostbite-V-1","id":"Frostbite-V-1","image":"../codex/02_Mutantes/Frostbite-V-1.png","description":"Nativo dos cumes mais altos de Aetheria, Frostbite drena a energia térmica do ar ao seu redor, criando uma aura de congelamento instantâneo por onde passa flying.","attributes":{"race":"Morcego Glacial Supremo","physical":"Corpo elegante e esbelta, sustentado por asas de membrana pálida.","faceAndHair":"Pelagem e pele brancas, asas avermelhadas/rosadas com detalhes gélidos.","palette":"Branco-gelo, rosa-pálido e lilás.","equipment":"Garras de apensamento gélidas e estrutura leve de voo."}},{"number":11,"title":"Gale-V-1","name":"Gale-V-1","id":"Gale-V-1","image":"../codex/02_Mutantes/Gale-V-1.png","description":"Gale é uma criatura criada para emboscadas aéreas no deserto. Suas asas parecem feitas de couro e bronze, e ele consegue mergulhar a velocidades supersônicas criando lâminas de vento arruinadoras.","attributes":{"race":"Gargula Tática das Tempestades","physical":"Postura curvada em guarda com asas prontas para impulso.","faceAndHair":"Pele escura com detalhes amarelados e garras em formato de foice nas asas.","palette":"Marrom-escuro, bege e dourado.","equipment":"Membranas reforçadas de voo e couraça ventral."}},{"number":12,"title":"Gargoyle-V-1","name":"Gargoyle-V-1","id":"Gargoyle-V-1","image":"../codex/02_Mutantes/Gargoyle-V-1.png","description":"Uma estátua viva que absorveu o sangue de batalhas antigas e ganhou vida própria. Com asas vermelhas e cornos proeminentes, ela atua como guardiã indiscutível de catacumbas ancestrais.","attributes":{"race":"Gárgula Demagógica","physical":"Bípede, joelhos dobrados e asas abertas para intimidação.","faceAndHair":"Pele cinzenta petrificada com asas membranosas de cor carmesim.","palette":"Cinza-pedra e vermelho-vivo.","equipment":"Chifres na cabeça e asas estruturadas."}},{"number":13,"title":"Genzo-V-1","name":"Genzo-V-1","id":"Genzo-V-1","image":"../codex/02_Mutantes/Genzo-V-1.png","description":"Genzo é um guerreiro mascarado cuja forma física foi totalmente corrompida por parasitas sombrios. Sua armadura orgânica gera lâminas bio-metálicas a partir dos punhos.","attributes":{"race":"Demônio Quimérico da Sombra","physical":"Bípede, compacto, envolto em capa orgânica e espinhos.","faceAndHair":"Músculos pretos e prateados com máscara ossea cobrindo o rosto.","palette":"Preto-ébano, prata e cinza.","equipment":"Capa de pele negra e placa peitoral blindada."}},{"number":14,"title":"Gorefist-V-1","name":"Gorefist-V-1","id":"Gorefist-V-1","image":"../codex/02_Mutantes/Gorefist-V-1.png","description":"Um guerreiro mutante cuja mão direita se fundiu com uma grande espada feita de seu próprio osso enrijecido e ferro mineral. Ele avança implacavelmente sem recuar.","attributes":{"race":"Monstro Armado com Lâmina de Sangue","physical":"Físico alto, pesado, carregando uma espada colossal avermelhada.","faceAndHair":"Capacete/cabeça demoníaca com olhos brilhantes e carcaça escura.","palette":"Roxo-escuro, vermelho-sangue e preto.","equipment":"Espada biológica acoplada de grande porte."}},{"number":15,"title":"Gorgath-V-1","name":"Gorgath-V-1","id":"Gorgath-V-1","image":"../codex/02_Mutantes/Gorgath-V-1.png","description":"Gorgath possui asas de dragão, torso mutado e dentes envenenados. Ele é o pesadelo dos céus das florestas tropicais de Aetheria, pulverizando presas com veneno ácido.","attributes":{"race":"Dragão Quimérico Mantícoro","physical":"Postura de dragão bípede com asas abertas e cauda farpada.","faceAndHair":"Escamas verdes, barriga amarela e asas com membranas vermelhas e amarelas.","palette":"Verde-esmeralda, amarelo-ouro e vermelho.","equipment":"Asas multicoloridas e ferrão na cauda."}},{"number":16,"title":"Grimm-V-1","name":"Grimm-V-1","id":"Grimm-V-1","image":"../codex/02_Mutantes/Grimm-V-1.png","description":"Grimm é o resultado de primatas que viveram próximos a cristais de energia mágica mutagênica nas profundezas. Sua força bruta é acompanhada por uma agilidade aterradora.","attributes":{"race":"Primata Mutante do Abismo","physical":"Primata robusto, braços longos apoiados no chão e olhar feroz.","faceAndHair":"Pelagem azul-brilhante vibrante com tórax e abdômen amarelos.","palette":"Azul-elétrico, amarelo e preto.","equipment":"Postura de macaco de grande porte com pelos ionizados."}},{"number":17,"title":"Malakar","name":"Malakar","id":"Malakar","image":"../codex/02_Mutantes/Malakar.png","description":"Um homem atingido pela maldição da Lua Negra. Nesta forma, ele preserva certa inteligência tática, mas sua sede de sangue é incontrolável.","attributes":{"race":"Licantropo Alfa","physical":"Bípede/semiquadrupede, físico forte e atarracado.","faceAndHair":"Pelagem cinza-escuro com cabeça lupina proeminente e dentes afiados.","palette":"Cinza-chumbo, preto e marrom.","equipment":"Garras de três pontas e orelhas eretas."}},{"number":18,"title":"Vermis","name":"Vermis","id":"Vermis","image":"../codex/02_Mutantes/Vermis.png","description":"Uma variante ancestral dos lobisomens que não depende das fases da lua para se transformar. Ele vive no isolamento de vales abandonados.","attributes":{"race":"Licantropo Primordial","physical":"Agachado em guarda, ombros volumosos e garra levantada.","faceAndHair":"Pelo cinza com textura fosca e mandíbula hipertrofiada.","palette":"Cinza, preto e creme.","equipment":"Postura baixa e musculatura nas costas."}},{"number":19,"title":"Lobisomem-V-1","name":"Lobisomem-V-1","id":"Lobisomem-V-1","image":"../codex/02_Mutantes/Lobisomem-V-1.png","description":"Especialista em perseguir presas por terrenos acidentados, o Lobisomem-V-1 usa suas garras traseiras para escalar árvores e montanhas num piscar de olhos.","attributes":{"race":"Licanídeo Rastreador","physical":"Bípede com inclinação para frente e cauda felina/lupina.","faceAndHair":"Pelagem azulada/escura com tórax claro e olhos alertas.","palette":"Azul-escuro, cinza e creme.","equipment":"Cauda alongada e postura de salto."}},{"number":20,"title":"Malagor-V-1","name":"Malagor-V-1","id":"Malagor-V-1","image":"../codex/02_Mutantes/Malagor-V-1.png","description":"Malagor reina sobre os pântanos podres de Aetheria. Com quatro chifres e asas rasgadas, ele exala um gás tóxico que decompõe matéria orgânica instantaneamente.","attributes":{"race":"Senhor Demônio da Praga","physical":"Bípede monumental, asas abertas e peitoral decorado com um orbe de energia.","faceAndHair":"Escamas escuras, múltiplos chifres em coroa e olhos vermelhos.","palette":"Marrom-pântano, vermelho-magma e dourado.","equipment":"Orbe mágico incrustado no peito e coroamento de chifres."}},{"number":21,"title":"Nomu-V-1","name":"Nomu-V-1","id":"Nomu-V-1","image":"../codex/02_Mutantes/Nomu-V-1.png","description":"Um cadáver reanimado e geneticamente modificado para não sentir dor. Seu cérebro fica exposto para facilitar a recepção de comandos telepáticos do seu criador.","attributes":{"race":"Super-Soldado Bioquímico","physical":"Gigante, musculoso, postura pesada de soco.","faceAndHair":"Cérebro exposto na parte superior do crânio, bico/mandíbula pontiaguda e pele roxa.","palette":"Roxo-escuro, rosa-cérebro e bege.","equipment":"Cérebro desprotegido e musculatura hipertrofiada."}},{"number":22,"title":"Pyrowolf-V-1","name":"Pyrowolf-V-1","id":"Pyrowolf-V-1","image":"../codex/02_Mutantes/Pyrowolf-V-1.png","description":"Nascido nos campos de cinzas vulcânicas, Pyrowolf incendeia o próprio pelo durante a caça para encurralar presas em anéis de fogo.","attributes":{"race":"Licanídeo da Chama Eterna","physical":"Quadrupedal ágil envolto por chamas e fumaça.","faceAndHair":"Pelagem vermelha acesa com pontas pretas e olhos luminosos.","palette":"Vermelho-fogo, laranja-vibrante e preto-carvão.","equipment":"Aura flamejante emanando do dorso."}},{"number":23,"title":"Rage-Kore-V-1","name":"Rage-Kore-V-1","id":"Rage-Kore-V-1","image":"../codex/02_Mutantes/Rage-Kore-V-1.png","description":"Uma criatura bizarra cujas vísceras e ossos se projetam para fora do corpo como armas farpadas. Rage-Kore vive no estado permanente de agonia e fúria.","attributes":{"race":"Demônio Parasita Cósmico","physical":"Bípede, desengonçado com múltiplos espinhos saindo das articulações.","faceAndHair":"Pele cinzenta com rachaduras vermelhas e chifres assimétricos.","palette":"Cinza, vermelho-sangue e marrom.","equipment":"Espinhos viscerais externos."}},{"number":24,"title":"Rin-Kore-V-1","name":"Rin-Kore-V-1","id":"Rin-Kore-V-1","image":"../codex/02_Mutantes/Rin-Kore-V-1.png","description":"Rin-Kore espreita nos tetos de cavernas e ruínas antigas. Ela fia teias de seda negra reforçadas com toxinas neurotóxicas que paralisam a presa em segundos.","attributes":{"race":"Aranha Humanóide das Sombras","physical":"Postura baixa e aracnídea com múltiplos membros finos e afiados.","faceAndHair":"Cabelos pretos caóticos e carcaça escura com detalhes dourados.","palette":"Preto-absoluto, marrom e dourado.","equipment":"Múltiplas pernas finas parecidas com espadas."}},{"number":25,"title":"Savage-Mane-V-1","name":"Savage-Mane-V-1","id":"Savage-Mane-V-1","image":"../codex/02_Mutantes/Savage-Mane-V-1.png","description":"O terror dos picos intransponíveis. Savage-Mane usa sua pelagem branca para se camuflar em tempestades de neve e esmagar expedições inteiras com socos devastadores.","attributes":{"race":"Yeti Albino das Neves","physical":"Bípede colossal, braços extremamente longos e volumosos.","faceAndHair":"Pelagem branca densa cobrindo todo o corpo, exalando fumaça fria.","palette":"Branco-puro, azul-gelo e cinza.","equipment":"Juba branca hipertrofiada e garras congelantes."}},{"number":26,"title":"Savage-V-1","name":"Savage-V-1","id":"Savage-V-1","image":"../codex/02_Mutantes/Savage-V-1.png","description":"Um mutante caçador de sangue frio que habita regiões pantanosas escuras. Ele consegue dilacerar placas de aço com suas garras curvadas.","attributes":{"race":"Abominação de Garras de Ferro","physical":"Curvado, passos pesados e mãos enormes prontas para rasgar.","faceAndHair":"Pele marrom-acinzentada rugosa e olhos sem pálpebras.","palette":"Cinza-marrom, marrom-terra e preto.","equipment":"Garras dianteiras disproportionais."}},{"number":27,"title":"Scraptron-V-1","name":"Scraptron-V-1","id":"Scraptron-V-1","image":"../codex/02_Mutantes/Scraptron-V-1.png","description":"Scraptron devora minérios metálicos para fortalecer sua própria carcaça biomecânica, tornando-se uma praga viva para minas e cidades industriais.","attributes":{"race":"Insetóide de Carcaça Metálica","physical":"Insetóide bípede/quadrupede pesado com pinças gigantes.","faceAndHair":"Exosqueleto de tom bronze/dourado reluzente com articulações mecânicas.","palette":"Bronze, dourado e preto.","equipment":"Pinças metálicas de alta pressão."}},{"number":28,"title":"Tri-Gorgon-V-1","name":"Tri-Gorgon-V-1","id":"Tri-Gorgon-V-1","image":"../codex/02_Mutantes/Tri-Gorgon-V-1.png","description":"Tri-Gorgon possui escamas venenosas e chifres cobertos por toxinas. Qualquer arranhão provocado por sua investida causa paralisia imediata no sistema nervoso.","attributes":{"race":"Quimera Réptil de Três Chifres","physical":"Réptil bípede e atarracado com três chifres frontais de investida.","faceAndHair":"Escamas cinzentas com espinhos ao longo da coluna e olhos amarelos.","palette":"Cinza-escuro, amarelo e preto.","equipment":"Cabeça em formato de tridente osseo."}},{"number":29,"title":"Ulthar","name":"Ulthar","id":"Ulthar","image":"../codex/02_Mutantes/Ulthar.png","description":"Ulthar é uma criatura espiritual/mutante de pele albina que se alimenta dos sonhos de guerreiros moribundos no campo de batalha.","attributes":{"race":"Besta Branca das Sombras","physical":"Bípede agachado com garras compridas e cauda sutil.","faceAndHair":"Corpo totalmente branco com sombras pretas marcadas nas articulações.","palette":"Branco-puro e preto-carvão.","equipment":"Alto contraste entre pelagem albina e feições obscuras."}},{"number":30,"title":"Valerion-V-1","name":"Valerion-V-1","id":"Valerion-V-1","image":"../codex/02_Mutantes/Valerion-V-1.png","description":"Valerion era uma entidade celestial cujas asas foram corrompidas por esporos abissais. Hoje ele combate com elegância trágica usando sua espada de luz corrompida.","attributes":{"race":"Anjo Caído Mutante","physical":"Bípede esbelto, postura majestosa com asas penadas brancas estendidas.","faceAndHair":"Armadura dourada e preta sobre corpo esbelto e cabelos prateados.","palette":"Branco, dourado e preto.","equipment":"Espada longa e asas de penas de grande envergadura."}},{"number":31,"title":"Valthier-V-1","name":"Valthier-V-1","id":"Valthier-V-1","image":"../codex/02_Mutantes/Valthier-V-1.png","description":"Um nobre mutado pelo vírus vampírico primordial. Valthier manipula névoa de sangue e se move rápido demais para ser atingido por lâminas comuns.","attributes":{"race":"Cavaleiro Vampírico das Sombras","physical":"Alto, magro, envolto em um manto vermelho rasgado.","faceAndHair":"Cabelos brancos compridos, pele pálida e armadura negra gótica.","palette":"Vermelho-carmesim, preto e branco-pálido.","equipment":"Espada de duelo e capa de sombras."}},{"number":32,"title":"Vector-X-V-1","name":"Vector-X-V-1","id":"Vector-X-V-1","image":"../codex/02_Mutantes/Vector-X-V-1.png","description":"Vector-X é uma manifestação viva de energia psíquica e fogo escuro. Seu corpo não possui ossos, sendo mantido coeso por sua imensa força de vontade.","attributes":{"race":"Demônio das Chamas Espirituais","physical":"Bípede leve, levitando levemente com chamas emanando da cabeça.","faceAndHair":"Carcaça negra com rachaduras brilhantes de energia prateada/branca.","palette":"Preto, prata-brilhante e branco.","equipment":"Cabeça de fogo e garras flutuantes."}},{"number":33,"title":"Vespera","name":"Vespera","id":"Vespera","image":"../codex/02_Mutantes/Vespera.png","description":"Vespera é a rainha da colmeia de besouros vulcânicos. Ela expele ácidos ferventes que derretem escudos de metal em questão de segundos.","attributes":{"race":"Insetóide Quitinosa Flamejante","physical":"Inseto humanoide com antena proeminente e abdômen rígido.","faceAndHair":"Carcaça vermelha/marrom coberta por texturas de placas quitinosas.","palette":"Marrom-avermelhado, terracota e preto.","equipment":"Antenas longas e carcaça de besouro."}},{"number":34,"title":"Vyrn-Wing-V-1","name":"Vyrn-Wing-V-1","id":"Vyrn-Wing-V-1","image":"../codex/02_Mutantes/Vyrn-Wing-V-1.png","description":"Vyrn-Wing vive nas cristas mais altas das cordilheiras, descendo em mergulhos silenciosos para capturar presas maiores do que seu próprio corpo.","attributes":{"race":"Gargula Sombria de Dentes Longos","physical":"Encolhido com asas dobradas cobrindo o corpo como um escudo.","faceAndHair":"Escamas pretas e chifres traseiros longos.","palette":"Preto-absoluto, marrom e cinza.","equipment":"Asas protetoras de casulo."}},{"number":35,"title":"Wargen-V-1","name":"Wargen-V-1","id":"Wargen-V-1","image":"../codex/02_Mutantes/Wargen-V-1.png","description":"Wargen é uma fera infernal com espinhos dorsais que são disparados como projéteis guidados pelo odor do sangue da vítima.","attributes":{"race":"Besta Demônio de Espinhos","physical":"Quadrupede corpulento de postura agressiva de ataque.","faceAndHair":"Pele marrom-avermelhada com grandes espinhos de osso projetando-se das costas.","palette":"Vermelho-terra, marrom e marfim.","equipment":"Espinhos de projeção dorsal."}},{"number":36,"title":"Xylion-V-1","name":"Xylion-V-1","id":"Xylion-V-1","image":"../codex/02_Mutantes/Xylion-V-1.png","description":"Xylion é um humanoide composto inteiramente por cristais bioluminescentes que absorvem magia e a devolvem como feixes de luz destrutivos.","attributes":{"race":"Ser Cristalino de Luz Escura","physical":"Bípede atlético, ereto com linhas geométricas cristalinas.","faceAndHair":"Corpo feito de placas brancas e azuis com brilho interno.","palette":"Azul-celeste, branco-cristal e prata.","equipment":"Estrutura corporal geométrica e cristalina."}},{"number":37,"title":"Zephyros-V-1","name":"Zephyros-V-1","id":"Zephyros-V-1","image":"../codex/02_Mutantes/Zephyros-V-1.png","description":"Zephyros manipula brisas e furacões ao seu redor. Sua pelagem e trajes flutuam em uma dança constante mesmo em ambientes sem vento.","attributes":{"race":"Feiticeira Mutante dos Ventos","physical":"Pequena, esbelta, envolta em trajes extravagantes de plumas e tecido.","faceAndHair":"Cabelos/plumas brancas volumosas com maquiagem tribal.","palette":"Branco, roxo e dourado.","equipment":"Cabelo de fumaça/pluma flutuante."}},{"number":38,"title":"Zylithor-V-1","name":"Zylithor-V-1","id":"Zylithor-V-1","image":"../codex/02_Mutantes/Zylithor-V-1.png","description":"Zylithor lidera os enxames gigantes do vale das flores carnívoras. Suas asas produzem um zumbido capaz de desorientar a mente de exércitos inteiros.","attributes":{"race":"Abelha Guerreira Rainha","physical":"Insetóide voador robusto com listras amarelas e pretas.","faceAndHair":"Corpo peludo de abelha gigante com ferrão volumoso e asas transparentes.","palette":"Amarelo-ouro, preto e translúcido.","equipment":"Abdomen listrado de abelha e asas vibratórias."}},{"number":39,"title":"Kruul-V-1, o Guardião da Crosta Primordial","name":"Kruul-V-1","id":"Kruul-V-1","image":"../codex/02_Mutantes/Kruul-V-1.png","description":"Kruul nasceu no coração de um desfiladeiro onde a terra parecia respirar. Sua pele de pedra viva se recompõe a cada impacto, fazendo dele uma fortaleza ambulante usada para quebrar linhas inimigas.","attributes":{"race":"Colosso Rochoso Biológico","physical":"Corpo colossal, postura baixa e avançando como um muro.","faceAndHair":"Epiderme pétrea com fissuras luminosas em âmbar.","palette":"Cinza-pedra, marrom-terroso e laranja-brasa.","equipment":"Reação de endurecimento instantâneo e placas naturais nas costas."}},{"number":40,"title":"Morrigan-V-1, a Soberana da Lua Corrompida","name":"Morrigan-V-1","id":"Morrigan-V-1","image":"../codex/02_Mutantes/Morrigan-V-1.png","description":"Morrigan governa rituais lunares proibidos e converte energia da noite em lâminas arcanas. Sua presença desestabiliza a mente de caçadores e feiticeiros, como se a própria lua observasse o campo de batalha.","attributes":{"race":"Bruxa Abissal de Sangue","physical":"Silhueta elegante, postura ereta e gestos precisos.","faceAndHair":"Cabelos longos escuros, olhos violeta e marcas místicas no pescoço.","palette":"Violeta, preto e prata pálida.","equipment":"Aura lunar e fragmentos de energia orbitando os ombros."}},{"number":41,"title":"Tusker-V-1, o Búfalo de Guerra Infinita","name":"Tusker-V-1","id":"Tusker-V-1","image":"../codex/02_Mutantes/Tusker-V-1.png","description":"Tusker foi moldado para romper cercos e muralhas. Ele carrega a fúria de rebanhos inteiros em cada investida, e seus chifres blindados podem atravessar ferro como se fosse couro.","attributes":{"race":"Besta de Choque Titanizada","physical":"Quadrúpede massivo, peito largo e cabeça baixa de carga.","faceAndHair":"Chifres enormes, couro espesso e musculatura explosiva.","palette":"Marrom-escuro, ferrugem e bege-osso.","equipment":"Investida sísmica e resistência extrema a impacto."}},{"number":42,"title":"Venath-V-1, a Predadora da Névoa Rubra","name":"Venath-V-1","id":"Venath-V-1","image":"../codex/02_Mutantes/Venath-V-1.png","description":"Venath caça dentro de neblinas tóxicas e aparece apenas quando a presa já perdeu o rumo. Seu corpo foi adaptado para movimentos quase impossíveis, fazendo dela uma das caçadoras mais temidas do clã.","attributes":{"race":"Assassina Nebular","physical":"Corpo esguio, postura inclinada e pronta para disparo.","faceAndHair":"Máscara facial estreita, garras finas e olhos vermelhos intensos.","palette":"Vermelho-sangue, cinza-neblina e preto.","equipment":"Fusão com névoa tóxica e deslocamento silencioso."}},{"number":43,"title":"Vespis-V-1, a Rainha dos Ferrões de Prata","name":"Vespis-V-1","id":"Vespis-V-1","image":"../codex/02_Mutantes/Vespis-V-1.png","description":"Vespis comanda enxames menores como extensões do próprio corpo. Seu ferrão carrega toxinas paralisantes e sua movimentação aérea é tão agressiva quanto precisa.","attributes":{"race":"Insetóide de Assalto","physical":"Bípede alado, tórax rígido e asas vibrantes.","faceAndHair":"Quitina clara, olhos compostos e ferrão alongado.","palette":"Amarelo, preto e prata.","equipment":"Voo de alta velocidade e descarga tóxica por ferrão."}},{"number":44,"title":"Amalgam-V-1, o Colosso da Mente Parasita","name":"Amalgam-V-1","id":"Amalgam-V-1","image":"../codex/02_Mutantes/Amalgam.png","description":"Amalgam é o resultado grotesco da assimilação de múltiplos guerreiros em um único organismo quimérico. Seu corpo musculoso de tom pétreo serve de base para um segundo hospedeiro fundido diretamente em seu braço esquerdo, cuja consciência e vigor físico amplificam brutalmente seu poder de combate.","attributes":{"race":"Abominação Mutante Fusionada","physical":"Bípede extremamente corpulento, atarracado e denso, com pernas curtas e braços hipertrofiados. Mantém uma postura baixa de carga.","faceAndHair":"Cabeça sem rosto definido recoberta por placas de pedra/carcaça com fissuras brilhantes; vasta cabeleira branca flutuante e espessa; manto carmesim rasgado nos ombros. O braço esquerdo possui uma segunda entidade totalmente assimilada, com torso, braço extra e cabeça humana de olhos brancos.","palette":"Cinza-pedra, marrom-pétreo, branco-prateado e vermelho-carmesim (capa).","equipment":"Duplicidade de corpos fundidos (parasitismo vivo), cabelo esvoaçante de energia estática e aura de olhos incandescentes na carcaça facial."}},{"number":45,"title":"Clawbound-V-1, o Gigante Muscular de Titã","name":"Clawbound-V-1","id":"Clawbound-V-1","image":"../codex/02_Mutantes/Clawbound.png","description":"Um guerreiro humano que sofreu uma mutação violenta e incontrolável no braço direito, fazendo com que suas fibras musculares e tecido ósseo crescessem desproporcionalmente, formando uma garra colossal de carne endurecida. Movido pelo sorriso sádico da insanidade, ele usa sua massa muscular como um martelo vivo.","attributes":{"race":"Berserker Humanoide Hipertrofiado","physical":"Humanoide colossal de tronco largo e abdômen trincado, descalço, com calças rasgadas e postura provocadora.","faceAndHair":"Cabelo loiro espetado, cicatrizes profundas no rosto e no tórax, sorriso insano exibindo dentes afiados. O braço direito é gigantesco, composto por tranças pesadas de fibra muscular mutada e placas de tecido endurecido parecendo madeira ou casca.","palette":"Tom de pele bronzeado/humano, loiro-claro, marrom-muscular e roxo-escuro/cinza (calça).","equipment":"Braço direito hiper-mutado estilo garra de carne/madeira e cicatriz ocular violenta."}},{"number":46,"title":"Umbracryst-V-1, o Guardião de Amestista Obscura","name":"Umbracryst-V-1","id":"Umbracryst-V-1","image":"../codex/02_Mutantes/Umbracryst-V-1.png","description":"Surgido das profundezas de minas radioativas impregnadas por ametistas místicas, Umbracryst é uma abominação de pelagem branca como a neve com cristas, cauda e machado formados por cristais roxos indestrutíveis. Ele é acompanhado por uma familiar besta quadrúpede cristalina que atua como seu cão de caça.","attributes":{"race":"Besta Quimérica Abissal de Cristal","physical":"Bípede robusto e corpulento recoberto por pelagem densa, acompanhado por um lacaio quadrupede em simbiose cristalina.","faceAndHair":"Máscara peitoral/facial composta por quatro crânios horned com cavidades brilhantes; ombros e cauda coberta de espinhos de cristal roxo reluzente. Empunha um machado biológico de lâmina de cristal roxo puro.","palette":"Roxo-ametista vibrante, branco-neve, preto e lilás bioluminescente.","equipment":"Quatro máscaras de crânio sobrepostas, machado biocristalino e besta cristalina servindo como extensão."}},{"number":47,"title":"Gargor-V-1, o Senhor das Asas de Granito","name":"Gargor-V-1","id":"Gargor-V-1","image":"../codex/02_Mutantes/Gargor-V-1.png","description":"Uma gárgula colossal esculpida em granito negro que absorveu o poder de um dragão ancestral. Com olhos vermelhos brilhantes e asas de envergadura devastadora, Gargor permanece imóvel como uma estátua até detectar invasores em seu domínio, esmagando-os com força física avassaladora.","attributes":{"race":"Gárgula Titânica de Pedra","physical":"Postura bípede intimidadora e simétrica, com tórax e membros imensamente musculosos esculpidos em rocha.","faceAndHair":"Cabeça draconiana com coroa de chifres ramificados de rocha fria, olhos vermelhos flamejantes, espinhos afiados nos ombros e joelhos, e asas membranosas de morcego totalmente estendidas. Possui uma cauda de réptil anelada.","palette":"Cinza-granito escuro, preto-rocha e vermelho-brasa nos olhos.","equipment":"Asas colossais de membrana de pedra, chifres ramificados tipo coroa e musculatura rochosa impecável."}},{"number":48,"title":"Lupus-V-1, o Berserker Lupino de Olhos Heterocromáticos","name":"Lupus-V-1","id":"Lupus-V-1","image":"../codex/02_Mutantes/Lupus-V-1.png","description":"Lupus é um licantropo alfa possuído por energia sombria. Sua pelagem negra é quase invisível na noite, exceto por suas garras afiadas, o pano vermelho em sua cintura e seus marcantes olhos heterocromáticos (amarelo e vermelho), que paralisam qualquer presa de pavor antes do bote final.","attributes":{"race":"Licanídeo Berserker Abissal","physical":"Bípede/semiquadrúpede musculoso com garras estendidas em postura de ataque e rugido feroz.","faceAndHair":"Cabeça de lobo raivoso com presas afiadas expostas e salivação; juba negra abundante eriçada nas costas e ombros; marca ou tatuagem tribal rosa no ombro direito. Possui heterocromia ocular marcante (olho direito amarelo, olho esquerdo vermelho).","palette":"Preto-carvão, azul-acinzentado (mãos e pés), vermelho-sangue (pano ventral) e rosa-choque (marca tribal).","equipment":"Olhos heterocromáticos (amarelo/vermelho), marca tribal rosa no ombro e garras longas e negras."}}],"neighbors":{"prev":{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑"},"next":{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️"}},"allRaces":[{"href":"humanos.html","label":"Humanos","color":"#4A90D9","icon":"🧑","count":24},{"href":"mutantes.html","label":"Mutantes","color":"#7B4D9E","icon":"🧬","count":48},{"href":"ordenseguerreiros.html","label":"Ordens e Guerreiros","color":"#C0392B","icon":"⚔️","count":22},{"href":"onis.html","label":"Onis","color":"#E74C3C","icon":"👹","count":31},{"href":"demonios.html","label":"Demônios","color":"#8E44AD","icon":"😈","count":41},{"href":"desconhecidos.html","label":"Desconhecidos","color":"#7F8C8D","icon":"❓","count":15},{"href":"gigantes.html","label":"Gigantes","color":"#D68910","icon":"🗿","count":26},{"href":"monstros.html","label":"Monstros","color":"#2E4053","icon":"👾","count":37},{"href":"semideuses.html","label":"Semideuses","color":"#F1C40F","icon":"⚡","count":30},{"href":"osobservadores.html","label":"Os Observadores","color":"#1ABC9C","icon":"👁️","count":9},{"href":"seresdovazio.html","label":"Seres do Vazio","color":"#34495E","icon":"🌀","count":20},{"href":"magos.html","label":"Magos","color":"#16A085","icon":"🔮","count":23},{"href":"deuses.html","label":"Deuses","color":"#F39C12","icon":"🌟","count":18},{"href":"demoniosdocaos.html","label":"Demônios do Caos","color":"#E67E22","icon":"🔥","count":11},{"href":"osaspectos.html","label":"Os Aspectos","color":"#9B59B6","icon":"🎭","count":9},{"href":"alvamortos.html","label":"Alvamortos","color":"#BDC3C7","icon":"💀","count":20},{"href":"meiosangue.html","label":"Meio-Sangue","color":"#D35400","icon":"🩸","count":18},{"href":"canibais.html","label":"Canibais","color":"#A04000","icon":"🍖","count":21},{"href":"barbaros.html","label":"Bárbaros","color":"#CA6F1E","icon":"🪓","count":17},{"href":"amaldicoados.html","label":"Amaldiçoados","color":"#5D6D7E","icon":"🌑","count":8},{"href":"demoniosakumagani.html","label":"Demônios Akuma-Gani","color":"#AD1457","icon":"👑","count":30},{"href":"bersek.html","label":"Bersek","color":"#6E2C00","icon":"🪓","count":9}],"generatedAt":"2026-09-02"}</script>
+<script src="assets/raca.js?v=20260902" defer></script>
+</body>
 </html>
